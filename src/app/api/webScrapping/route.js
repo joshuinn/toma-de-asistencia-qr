@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 import { conn } from "@/lib/mysql";
 
+
 export async function POST(request) {
   const data = await request.json();
   const result = serchData(data.url);
