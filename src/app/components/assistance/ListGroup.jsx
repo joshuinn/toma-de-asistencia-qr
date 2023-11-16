@@ -17,6 +17,7 @@ export default function ListGroup() {
     ciclo: "",
     grupo: "",
   });
+  const [isLoading, setIsLoading] = useState(true)
   const {dataUser} = useContext(SessionContext);
   const [isError, setIsError] = useState(false);
   const handleSubmit = (e) => {
@@ -39,6 +40,7 @@ export default function ListGroup() {
     });
   };
   useEffect(() => {
+    setIsLoading(true)
     const getGroup = async () => {
       try {
         const response = await axios.get("/api/groups");
@@ -49,6 +51,7 @@ export default function ListGroup() {
         setIsError(true);
         console.log(e);
       }
+      setIsLoading(false)
     };
     getGroup();
   }, [refreshGroups]);
@@ -117,6 +120,9 @@ export default function ListGroup() {
               <li className=" md:block hidden">Maestro</li>
               <li className=" flex justify-end  w-full">Tomar lista</li>
             </ul>
+            { isLoading ? 
+              <Loading />
+              :
             <ul className="w-full p-2">
               {groups.length > 0 ? (
                 groups.map((item) => (
@@ -145,6 +151,7 @@ export default function ListGroup() {
                 </div>
               )}
             </ul>
+}
           </section>
         </Suspense>
       </div>

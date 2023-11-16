@@ -12,17 +12,16 @@ import { BsFileEarmarkBarGraph, BsFillGearFill } from "react-icons/bs";
 import { SessionContext } from "./SessionContext";
 import { Toaster } from "sonner";
 import Loading from "./Loading";
+
 function Sidebar({ children }) {
   const [page, setPage] = useState("dashboard");
   const { isLogged, handleLogout } = useContext(SessionContext);
   return (
     <>
-      {!isLogged ? (
-        <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading />}>
+        {!isLogged ? (
           <div>{children}</div>
-        </Suspense>
-      ) : (
-        <Suspense>
+        ) : (
           <div className="flex bg-gradient-to-r from-slate-100 to-indigo-50">
             <div className="fixed bg-white m-2 w-[12rem] h-[95vh] p-3 flex flex-col justify-evenly rounded-2xl shadow-lg">
               <Link href="/">
@@ -124,8 +123,8 @@ function Sidebar({ children }) {
               {children}
             </div>
           </div>
-        </Suspense>
-      )}
+        )}
+      </Suspense>
     </>
   );
 }

@@ -2,6 +2,9 @@
 import axios from "axios";
 import React, { useState, useEffect, Suspense } from "react";
 import { AiFillCloseCircle, AiOutlineQrcode } from "react-icons/ai";
+import { RiInboxUnarchiveFill } from "react-icons/ri";
+import Loading from "../Loading";
+import { toast } from "sonner";
 const DATA = [
   {
     id_grupo: 12,
@@ -33,23 +36,25 @@ const DATA = [
   },
 ];
 
-function ListStudent({ id_grupo }) {
+function ListStudent({ id_lista_asitencia }) {
   const [students, setStudents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [dataForm, setDataForm] = useState({
     url: "",
-    id_grupo: id_grupo,
+    id_lista_asitencia: id_lista_asitencia,
     maquina: "",
   });
+  /*
   useEffect(() => {
     //setStudents(DATA);
   }, []);
+  */
   const handleSubmit = (e) => {
     e.preventDefault();
     getDataStudent();
     setDataForm({
       url: "",
-      id_grupo: "",
+      id_lista_asitencia: "",
       maquina: "",
     });
   };
@@ -80,6 +85,9 @@ function ListStudent({ id_grupo }) {
       console.log(e);
     }
   };
+  const handleEndList = () =>{
+    toast.success("Se ha guardado correctamente la lista de asistencia")
+  }
   const FormRegister = () => {
     return (
       <div
@@ -111,18 +119,10 @@ function ListStudent({ id_grupo }) {
               value={dataForm.url}
             />
             <input
-              className="bg-gray-100 p-2 rounded-md outline-none border-b-2 focus:border-indigo-950"
               type="text"
-              name="maquina"
-              placeholder="maquina"
-              onChange={handleInput}
-              value={dataForm.maquina}
-            />
-            <input
-              type="text"
-              value={dataForm.id_grupo}
+              value={dataForm.id_lista_asitencia}
               className="hidden"
-              name="id_grupo"
+              name="id_lista_asitencia"
               onChange={handleInput}
             />
             <button className="bg-green-700 hover:bg-green-600 text-white p-2 rounded-lg">
@@ -134,7 +134,7 @@ function ListStudent({ id_grupo }) {
     );
   };
   return (
-    <Suspense>
+    <Suspense fallback={<Loading />}>
       <div className="bg-white h-[83vh] rounded-lg p-3 shadow-lg z-10">
         <div className="flex justify-end">
           <button
@@ -156,12 +156,19 @@ function ListStudent({ id_grupo }) {
               <p>{student.apellido_alumno}</p>
               <p>{student.nombre_alumno}</p>
               <p>{student.boleta}</p>
-              <p>{student.maquina}</p>
+              <input
+                type="text"
+                placeholder="00"
+                value={student.maquina ?? "00"}
+              />
             </li>
           ))}
         </ul>
         <div className="flex justify-end">
-          <button className="bg-red-500 p-3 mt-2 rounded-lg text-white">Terminar registro</button>
+          <button className="border border-red-500 text-red-500 hover:bg-red-500 p-3 mt-2 rounded-lg hover:text-white flex items-center gap-1" onClick={handleEndList}>
+            <p>Terminar registro</p>
+            <RiInboxUnarchiveFill size={25}/>
+          </button>
         </div>
       </div>
       <FormRegister />
