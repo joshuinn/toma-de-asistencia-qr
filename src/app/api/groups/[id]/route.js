@@ -4,7 +4,7 @@ import { conn } from "@/lib/mysql";
 export async function GET(request,{params}){
     try {
         
-        const result = await conn.query('SELECT * FROM groups WHERE id_grupo = ?',[params.id])
+        const result = await conn.query('SELECT * FROM ctb_lista_asistencia WHERE id_lista_asistencia = ?',[params.id])
         if(result.length ===0){
             return NextResponse.json({message:"Not found"},{status:404})
         }

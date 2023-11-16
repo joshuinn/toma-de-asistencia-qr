@@ -9,7 +9,6 @@ export default async function middleware(req) {
   if (userToken == undefined) {
     return NextResponse.redirect(new URL("/pages/login", req.url));
   }
-
   //}
   return NextResponse.next();
 }

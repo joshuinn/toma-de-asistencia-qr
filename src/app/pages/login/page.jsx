@@ -6,7 +6,7 @@ import { SessionContext } from "@/app/components/SessionContext";
 function LoginPage() {
   const [credentials, setCredentials] = useState({
     boleta: "",
-    password: "",
+    contrasenia: "",
   });
   const [isError, setIsError] = useState(false)
   const {handleLogin} = useContext(SessionContext)
@@ -21,8 +21,10 @@ function LoginPage() {
     e.preventDefault();
     try{
       const response = await axios.post("/api/auth", credentials, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       if(response.status == 200){
         handleLogin()
       }
@@ -43,8 +45,8 @@ function LoginPage() {
         />
         <input
           type="password"
-          name="password"
-          placeholder="password"
+          name="contrasenia"
+          placeholder="contrasenia"
           className="bg-gray-100 p-3 rounded-md outline-none border-b-2 focus:border-indigo-950 shadow-md"
           onChange={handleChange}
         />

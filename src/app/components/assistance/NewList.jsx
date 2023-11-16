@@ -7,8 +7,8 @@ import { toast } from "sonner";
 function NewList({handleRefreshGroups}) {
   const [data, setData] = useState({
     grupo: "",
-    profesor: "",
-    lab: "",
+    maestro: "",
+    laboratorio: "",
     materia: "",
     ciclo: "",
   });
@@ -99,13 +99,13 @@ function NewList({handleRefreshGroups}) {
               />
             </div>
             <div className="flex gap-1 items-center justify-between w-full">
-              <label>Profesor</label>
+              <label>Maestro</label>
               <input
                 type="text"
-                placeholder="Profesor"
-                name="profesor"
+                placeholder="Maestro"
+                name="maestro"
                 className="border rounded-lg p-1 bg-gray-100"
-                value={data.profesor}
+                value={data.maestro}
                 required
                 onChange={handleInput}
               />
@@ -115,10 +115,10 @@ function NewList({handleRefreshGroups}) {
               <input
                 type="text"
                 placeholder="Laboratorio"
-                name="lab"
+                name="laboratorio"
                 className="border rounded-lg p-1 bg-gray-100"
                 required
-                value={data.lab}
+                value={data.laboratorio}
                 onChange={handleInput}
               />
             </div>

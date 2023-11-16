@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import jwt, { verify } from "jsonwebtoken";
 
 import crypto from "crypto-js";
+import { conn } from "@/lib/mysql";
 
 /*
 force insert
@@ -28,24 +29,23 @@ export async function POST(req){
 
 export async function POST(req) {
   try {
-    const data = await req.formData();
-    const boleta = data.get("boleta");
-    const password = data.get("password");
     if (req.cookies.get("userToken")) return NextResponse.json("ok");
-    const result = await conn.query("SELECT * FROM users WHERE boleta= ?", [
+    
+    const {boleta, contrasenia} = await req.json()
+    const result = await conn.query("SELECT * FROM ctb_usuario WHERE boleta= ?", [
       boleta,
     ]);
     if (result[0]) {
       const dbPass = crypto.AES.decrypt(
-        result[0].password,
+        result[0].contrasenia,
         process.env.SECRET_KEY
       ).toString(crypto.enc.Utf8);
-      if (password === dbPass) {
-        console.log("some");
+      if (contrasenia === dbPass) {
         const token = jwt.sign(
           {
             exp: Math.floor(Date.now() / 1000) + 60*60*24*30,
             boleta: boleta,
+            id_usuario:result[0].id_usuario
           },
           process.env.SECRET_KEY 
         );
@@ -56,6 +56,7 @@ export async function POST(req) {
     }
     return NextResponse.json({ message: "unAuth" }, { status: 401 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       {
         message: error.message,
@@ -65,6 +66,7 @@ export async function POST(req) {
       }
     );
   }
+  
 }
 
 export async function DELETE(req) {
@@ -86,7 +88,7 @@ export async function GET(req) {
     if (userToken) {
       try {
          const token = verify(userToken.value, process.env.SECRET_KEY)
-         return NextResponse.json({ message: "Already logged", status: 200 });
+         return NextResponse.json(token);
       } catch (error) {
         return DELETE(req)
       }

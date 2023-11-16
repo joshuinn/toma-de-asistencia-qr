@@ -4,9 +4,9 @@ import ListStudent from "@/app/components/assistance/ListStudent";
 import axios from "axios";
 import React, { Suspense } from "react";
 
-const loadGroup = async (groupId) => {
+const loadGroup = async (listaId) => {
   try {
-    const response = await axios.get("http://localhost:3000/api/groups/" + groupId);
+    const response = await axios.get("http://localhost:3000/api/groups/" + listaId);
     if (response.status == 404) {
       return { status: 404 };
     }

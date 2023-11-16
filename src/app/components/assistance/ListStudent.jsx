@@ -33,26 +33,25 @@ const DATA = [
   },
 ];
 
-function ListStudent({id_grupo}) {
-  
+function ListStudent({ id_grupo }) {
   const [students, setStudents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [dataForm, setDataForm] = useState({
     url: "",
     id_grupo: id_grupo,
-    maquina:""
+    maquina: "",
   });
   useEffect(() => {
-    setStudents(DATA);
+    //setStudents(DATA);
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     getDataStudent();
     setDataForm({
-      url:"",
-      id_grupo:"",
-      maquina:""
-    })
+      url: "",
+      id_grupo: "",
+      maquina: "",
+    });
   };
   const handleForm = () => {
     setShowForm(!showForm);
@@ -65,8 +64,18 @@ function ListStudent({id_grupo}) {
   };
   const getDataStudent = async () => {
     try {
-      const response = await axios.post("/api/webScrapping", dataForm);
-      console.log(response);
+      const { data } = await axios.post("/api/webScrapping", dataForm);
+      if (data) {
+        setStudents([
+          ...students,
+          {
+            boleta: data.boleta,
+            apellido_alumno: data.nombre.apellido,
+            nombre_alumno: data.nombre.nombre,
+            id: crypto.randomUUID(),
+          },
+        ]);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -109,7 +118,13 @@ function ListStudent({id_grupo}) {
               onChange={handleInput}
               value={dataForm.maquina}
             />
-            <input type="text" value={dataForm.id_grupo} className="hidden" name="id_grupo" onChange={handleInput} />
+            <input
+              type="text"
+              value={dataForm.id_grupo}
+              className="hidden"
+              name="id_grupo"
+              onChange={handleInput}
+            />
             <button className="bg-green-700 hover:bg-green-600 text-white p-2 rounded-lg">
               Agregar
             </button>
@@ -130,21 +145,24 @@ function ListStudent({id_grupo}) {
           </button>
         </div>
         <ul className="grid grid-cols-4">
+          <li>Apellido</li>
           <li>Nombre</li>
           <li>Boleta</li>
           <li>No. maquina</li>
-          <li>Asistencia</li>
         </ul>
-        <ul>
-          {DATA.map((student) => (
-            <li key={student.id_grupo} className="grid grid-cols-4">
-              <p>{student.name}</p>
+        <ul className="h-[63vh] overflow-y-scroll">
+          {students.map((student) => (
+            <li key={student.id} className="grid grid-cols-4">
+              <p>{student.apellido_alumno}</p>
+              <p>{student.nombre_alumno}</p>
               <p>{student.boleta}</p>
               <p>{student.maquina}</p>
-              <p>Nose</p>
             </li>
           ))}
         </ul>
+        <div className="flex justify-end">
+          <button className="bg-red-500 p-3 mt-2 rounded-lg text-white">Terminar registro</button>
+        </div>
       </div>
       <FormRegister />
     </Suspense>

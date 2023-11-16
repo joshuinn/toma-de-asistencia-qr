@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import NewList from "./NewList";
 import { BiListCheck, BiMessageRoundedError } from "react-icons/bi";
 import axios from "axios";
@@ -7,6 +7,8 @@ import { AiOutlineReload, AiFillCheckCircle } from "react-icons/ai";
 import { toast } from "sonner";
 import Loading from "../Loading";
 import Link from "next/link";
+import { SessionContext } from "../SessionContext";
+
 export default function ListGroup() {
   const [groups, setGroups] = useState([]);
   const [data, setData] = useState([]);
@@ -15,6 +17,7 @@ export default function ListGroup() {
     ciclo: "",
     grupo: "",
   });
+  const {dataUser} = useContext(SessionContext);
   const [isError, setIsError] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -111,7 +114,7 @@ export default function ListGroup() {
             <ul className="p-2 grid grid-cols-3 md:grid-cols-4 justify-evenly items-center ">
               <li className="">Ciclo</li>
               <li className="">Grupo</li>
-              <li className=" md:block hidden">Profesor</li>
+              <li className=" md:block hidden">Maestro</li>
               <li className=" flex justify-end  w-full">Tomar lista</li>
             </ul>
             <ul className="w-full p-2">
@@ -122,9 +125,10 @@ export default function ListGroup() {
                     className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center ">
                     <p className="">{item.ciclo}</p>
                     <p className="">{item.grupo}</p>
-                    <p className="md:block hidden">{item.profesor}</p>
+                    <p className="md:block hidden">{item.maestro}</p>
                     <div className="flex justify-end  w-full">
-                      <Link href={`/pages/assistence/${item.id_grupo}`}>
+                      <Link
+                        href={`/pages/assistence/${item.id_lista_asistencia}`}>
                         <p className="flex items-center p-2 bg-indigo-950 hover:bg-indigo-800 text-white rounded-lg justify-between">
                           Tomar lista
                           <BiListCheck size={25} />
@@ -136,7 +140,7 @@ export default function ListGroup() {
               ) : (
                 <div className="bg-indigo-950 p-3 text-center rounded-lg">
                   <h2 className="font-bold text-2xl text-white">
-                    No hay elementos para la busqueda ingresada
+                    No hay elementos
                   </h2>
                 </div>
               )}

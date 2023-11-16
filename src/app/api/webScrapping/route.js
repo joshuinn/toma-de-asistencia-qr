@@ -2,29 +2,58 @@ import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 import { conn } from "@/lib/mysql";
 
-
 export async function POST(request) {
   const data = await request.json();
-  const result = serchData(data.url);
-  if(result.name && result.boleta){
-    const responsedb = await conn.query('SELECT * FROM students WHERE ? ',{
-        id_grupo:data.id_grupo,
-        boleta:result.boleta
+  const result = await serchData(data.url);
+
+  if (result.name && result.boleta) {
+    const nombre = getFormatedName(result.name);
+    return NextResponse.json({nombre:nombre, boleta:result.boleta})
+    /*
+    const response = await conn.query('SELECT * FROM ctb_alumno WHERE ? ',{
+      boleta:result.boleta
     })
-    if(responsedb.length ==0){
-        const res = await conn.query('INSERT INTO students SET ?',{
-            id_grupo: data.id_grupo,
-            name:result.name,
-            boleta:result.boleta,
-            maquina:data.maquina
+    if(response.length ==0){
+      const nombre = getFormatedName(result.name);
+      const res = await conn.query('INSERT INTO ctb_alumno SET ?',{
+          boleta:result.boleta,
+          nombre_alumno:nombre.nombre,
+          apellido_alumno:nombre.apellido
         })
+    }else{
+      console.log(response);
     }
+    */
     return NextResponse.json("ok");
-  }else{
-    return NextResponse.json({message:"No found information"},{status:404})
+  } else {
+    return NextResponse.json(
+      { message: "No found information" },
+      { status: 404 }
+    );
   }
 }
-
+function getFormatedName(name) {
+  let splitName = name.split(" ");
+  let imax = splitName.length - 1;
+  let lastName = [];
+  lastName[1] = splitName[imax - 1];
+  lastName[2] = splitName[imax];
+  let nombre = "";
+  if (splitName[imax - 2].length < 4) {
+    lastName[0] = splitName[imax - 2];
+    for (let i = 0; i <= imax-3; i++) {
+      nombre += splitName[i]+" ";
+    }
+    return {
+      apellido: lastName[0] + " " + lastName[1] + " " + lastName[2],
+      nombre: nombre,
+    };
+  }
+  for (let i = 0; i <= imax-2; i++) {
+    nombre += splitName[i]+" ";
+  }
+  return { appellido: lastName[1] + " " + lastName[2], nombre: nombre };
+}
 async function serchData(url) {
   try {
     const browser = await puppeteer.launch({
@@ -38,10 +67,11 @@ async function serchData(url) {
       return { name, boleta };
     });
     await browser.close();
-    if(result){
-        return result;
+    if (result) {
+      return result;
     }
   } catch (e) {
-    return {error:"Error"}
+    console.log(e);
+    return { error: "Error" };
   }
 }
