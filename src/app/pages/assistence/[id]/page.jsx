@@ -12,7 +12,8 @@ const loadGroup = async (listaId) => {
     }
     return response.data;
   } catch (e) {
-    return { status: 404 };
+    console.log(e);
+    return { status: 500 };
   }
 };
 
@@ -26,20 +27,20 @@ async function ListAssistance({ params }) {
       <Header title="Lista de asistencia" />
       <Suspense fallback={<Loading />}>
         <div className="flex flex-col gap-3">
-          <div className="flex gap-4 bg-white p-3 rounded-lg flex-wrap justify-between shadow-md">
-            <div className="bg-gray-200 p-2 rounded-lg">
+          <div className="flex gap-4 p-2 rounded-lg flex-wrap justify-between text-white">
+            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
               <p className="">Ciclo:{data.ciclo} </p>
             </div>
-            <div className="bg-gray-200 p-2 rounded-lg">
+            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
               <p className="">Grupo: {data.grupo} </p>
             </div>
-            <div className="bg-gray-200 p-2 rounded-lg">
-              <p className="">Profesor: {data.profesor} </p>
+            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
+              <p className="">Profesor: {data.maestro} </p>
             </div>
-            <div className="bg-gray-200 p-2 rounded-lg">
-              <p className="">Numero de Laboratorio: {data.numero_lab} </p>
+            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
+              <p className="">Numero de Laboratorio: {data.laboratorio} </p>
             </div>
-            <div className="bg-gray-200 p-2 rounded-lg">
+            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
               <p className="">Materia: {data.materia} </p>
             </div>
           </div>

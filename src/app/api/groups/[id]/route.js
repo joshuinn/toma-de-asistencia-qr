@@ -9,10 +9,22 @@ export async function GET(request, { params }) {
       " JOIN ctb_ciclo ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
     const joinMestro =
       " JOIN ctb_maestro ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
-    const result = await conn.query(
-      "SELECT * FROM ctb_lista_asistencia WHERE id_lista_asistencia = "+params.id+joinGrupo+joinCiclo+joinMestro
-    );
+    const joinLab =
+      " JOIN ctb_laboratorio ON ctb_lista_asistencia.id_laboratorio = ctb_laboratorio.id_laboratorio ";
+      const joinMateria =
+      " JOIN ctb_materia ON ctb_lista_asistencia.id_materia = ctb_materia.id_materia ";
     
+    const result = await conn.query(
+      "SELECT * FROM ctb_lista_asistencia" +
+        joinGrupo +
+        joinCiclo +
+        joinMestro +
+        joinLab+
+        joinMateria+
+        "WHERE id_lista_asistencia = " +
+        params.id
+    );
+    console.log(result);
     if (result.length === 0) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }

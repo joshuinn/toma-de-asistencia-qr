@@ -42,7 +42,7 @@ function NewList({handleRefreshGroups}) {
           "Content-Type": "application/json",
         },
       });
-      setData({ grupo: "", profesor: "", lab: "", materia: "", ciclo: "" });
+      setData({ grupo: "", maestro: "", laboratorio: "", materia: "", ciclo: "" });
       setShow(false)
       setShowConfirm(false)
       if (response.status == 200) {
@@ -74,7 +74,7 @@ function NewList({handleRefreshGroups}) {
         absolute
         ${show ? "bg-[rgb(0,0,0,0.5)] left-[13rem] " : "right-full opacity-0"} 
         `}>
-        <div className="bg-white p-4 flex flex-col justify-center rounded-lg shadow-2xl">
+        <div className="bg-blue-700 p-4 flex flex-col justify-center rounded-lg shadow-2xl">
           <div className="w-full flex justify-end">
             <AiFillCloseCircle
               size={30}
@@ -84,7 +84,7 @@ function NewList({handleRefreshGroups}) {
           </div>
           <h2 className="text-center mb-2 bold text-2xl">Ingrese</h2>
           <form
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center gap-2 text-gray-500"
             onSubmit={handleSubmit}>
             <div className="flex gap-1 items-center justify-between w-full">
               <label>Grupo</label>
@@ -92,7 +92,7 @@ function NewList({handleRefreshGroups}) {
                 type="text"
                 placeholder="grupo"
                 name="grupo"
-                className="border rounded-lg p-1 bg-gray-100"
+                className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 value={data.grupo}
                 onChange={handleInput}
                 required
@@ -104,7 +104,7 @@ function NewList({handleRefreshGroups}) {
                 type="text"
                 placeholder="Maestro"
                 name="maestro"
-                className="border rounded-lg p-1 bg-gray-100"
+                className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 value={data.maestro}
                 required
                 onChange={handleInput}
@@ -116,7 +116,7 @@ function NewList({handleRefreshGroups}) {
                 type="text"
                 placeholder="Laboratorio"
                 name="laboratorio"
-                className="border rounded-lg p-1 bg-gray-100"
+                className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 required
                 value={data.laboratorio}
                 onChange={handleInput}
@@ -128,7 +128,7 @@ function NewList({handleRefreshGroups}) {
                 type="text"
                 placeholder="Meteria"
                 name="materia"
-                className="border rounded-lg p-1 bg-gray-100"
+                className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 required
                 value={data.materia}
                 onChange={handleInput}
@@ -140,13 +140,13 @@ function NewList({handleRefreshGroups}) {
                 type="text"
                 placeholder="Ciclo"
                 name="ciclo"
-                className="border rounded-lg p-1 bg-gray-100"
+                className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 required
                 value={data.ciclo}
                 onChange={handleInput}
               />
             </div>
-            <button className="border p-2 rounded-lg border-green-600 text-green-600 hover:text-white hover:bg-green-600 transition">
+            <button className="border p-2 rounded-lg border-green text-green hover:text-pink hover:border-pink transition">
               Terminar registro
             </button>
           </form>
@@ -162,18 +162,18 @@ function NewList({handleRefreshGroups}) {
             justify-center
             transition-all
             `}>
-            <div className="bg-white w-1/3 h-1/3 flex flex-col p-3 rounded-xl items-center justify-center gap-5 shadow-2xl">
-              <AiOutlineWarning size={60} className="text-yellow-400" />
+            <div className="bg-blue-700 h-1/3 flex flex-col p-3 rounded-xl items-center justify-center gap-5 shadow-2xl">
+              <AiOutlineWarning size={60} className="text-yellow" />
               <p>La lista se guardara y no podra ser modificada</p>
               <p className="font-bold text-xl">¿Está seguro?</p>
               <div className="flex gap-3">
                 <button
                   onClick={handleShowConfirm}
-                  className="bg-white border border-red-600 text-red-600 p-3 rounded-lg hover:bg-red-600 hover:text-white">
+                  className="border border-pink text-pink p-3 rounded-lg hover:text-white">
                   Regresar
                 </button>
                 <button
-                  className="bg-green-700 text-white p-3 rounded-lg hover:bg-green-600"
+                  className="bg-green  p-3 rounded-lg hover:text-gray-100"
                   onClick={submitGroup}>
                   Confirmar
                 </button>
@@ -184,7 +184,7 @@ function NewList({handleRefreshGroups}) {
         </div>
       </div>
       <button
-        className="p-2 bg-indigo-950 hover:bg-indigo-800 text-white rounded-lg flex gap-3 items-center"
+        className="p-4 bg-gradient-to-tl from-pink to-purple flex gap-3 items-center rounded-lg hover:text-gray-300 shadow-lg"
         onClick={handleShow}>
         Registrar nueva lista
         <BiListPlus size={25} />
