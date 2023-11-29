@@ -114,7 +114,7 @@ export default function ListGroup() {
           </div>
         </div>
         <Suspense fallback={<Loading />}>
-          <section className="bg-blue-800 rounded-lg overflow-y-scroll h-[82vh] text-white shadow-lg">
+          <section className="bg-blue-800 rounded-lg overflow-y-scroll h-full xl:h-[81vh] text-white shadow-lg">
             <ul className="p-2 grid grid-cols-3 md:grid-cols-4 justify-evenly items-center ">
               <li className="">Ciclo</li>
               <li className="">Grupo</li>

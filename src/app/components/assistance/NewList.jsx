@@ -66,13 +66,13 @@ function NewList({handleRefreshGroups}) {
       <div
         className={`
         mt-10 w-[calc(100%-13rem)] flex flex-col items-center justify-center overflow-hidden
-        p-3 top-[-3rem] h-full
+        p-3 top-[-2.5rem] h-full
         transition-all
         delay-100
         duration-200
         ease-in-out
         absolute
-        ${show ? "bg-[rgb(0,0,0,0.5)] left-[13rem] " : "right-full opacity-0"} 
+        ${show ? "bg-[rgb(0,0,0,0.5)] left-[12.5rem] " : "right-full opacity-0"} 
         `}>
         <div className="bg-blue-700 p-4 flex flex-col justify-center rounded-lg shadow-2xl">
           <div className="w-full flex justify-end">

@@ -18,12 +18,12 @@ import { BsFileEarmarkBarGraph, BsFillGearFill } from "react-icons/bs";
 import { SessionContext } from "./SessionContext";
 import { Toaster } from "sonner";
 import Loading from "./Loading";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 function Sidebar({ children }) {
   const [page, setPage] = useState("dashboard");
   const { isLogged, handleLogout } = useContext(SessionContext);
-  const router = useRouter();
+  const pathname = usePathname();
   const indicatorRef = useRef();
   const topPagesRef = useRef();
   const pages = [
@@ -36,10 +36,9 @@ function Sidebar({ children }) {
   ];
   const handleIndicator = async () => {
     const indicator = indicatorRef.current;
-    const topI = (await topPagesRef.current.getBoundingClientRect().y) ?? 200;
+    const topIndicatorY = await topPagesRef.current.getBoundingClientRect().y;
     const ipage = pages.findIndex((item) => item == page);
-    console.log(pathname);
-    indicator.style.transform = `translateY(${topI + ipage * 47}px)`;
+    indicator.style.transform = `translateY(${topIndicatorY + ipage * 47}px)`;
   };
   useEffect(() => {
     if (isLogged) {
@@ -47,8 +46,9 @@ function Sidebar({ children }) {
     }
   }, [page, isLogged]);
   useEffect(() => {
-    //pathname
-  }, []);
+    const actualPage = pathname.split("/");
+    setPage(actualPage[2]);
+  }, [pathname]);
   return (
     <>
       <Suspense fallback={<Loading />}>
@@ -58,11 +58,7 @@ function Sidebar({ children }) {
           <div className="flex bg-blue-700">
             <div className="fixed bg-blue-800 w-[12rem] h-screen p-3 flex flex-col justify-evenly">
               <Link href="/">
-                <div
-                  className="flex justify-center items-center text-white rounded-lg"
-                  onClick={() => {
-                    setPage("dashboard");
-                  }}>
+                <div className="flex justify-center items-center text-white rounded-lg">
                   <BiSolidDashboard size={80} />
                 </div>
               </Link>
@@ -70,10 +66,7 @@ function Sidebar({ children }) {
                 <Link href="/">
                   <div
                     className={`flex items-center p-2 gap-2
-                ${page == "dashboard" ? "text-white " : " text-gray-500"}`}
-                    onClick={() => {
-                      setPage("dashboard");
-                    }}>
+                ${page == "dashboard" ? "text-white " : " text-gray-500"}`}>
                     <BiSolidDashboard />
                     <p>Dashboard</p>
                   </div>
@@ -85,10 +78,7 @@ function Sidebar({ children }) {
                   page == "assistence"
                     ? "bg-indigo-950 text-white "
                     : "text-gray-500"
-                }`}
-                    onClick={() => {
-                      setPage("assistence");
-                    }}>
+                }`}>
                     <BiListPlus />
                     <p>Assistence</p>
                   </div>
@@ -100,8 +90,7 @@ function Sidebar({ children }) {
                   page == "reports"
                     ? "bg-indigo-950 text-white "
                     : "text-gray-500"
-                }`}
-                    onClick={() => setPage("reports")}>
+                }`}>
                     <BiListUl />
                     Reports
                   </div>
@@ -113,8 +102,7 @@ function Sidebar({ children }) {
                   page == "incident"
                     ? "bg-indigo-950 text-white "
                     : "text-gray-500"
-                }`}
-                    onClick={() => setPage("incident")}>
+                }`}>
                     <AiFillWarning />
                     <p>Incident</p>
                   </div>
@@ -126,8 +114,7 @@ function Sidebar({ children }) {
                   page == "graphs"
                     ? "bg-indigo-950 text-white "
                     : "text-gray-500"
-                }`}
-                    onClick={() => setPage("graphs")}>
+                }`}>
                     <BsFileEarmarkBarGraph />
                     <p>Graphs</p>
                   </div>
@@ -139,8 +126,7 @@ function Sidebar({ children }) {
                   page == "config"
                     ? "bg-indigo-950 text-white "
                     : "text-gray-500"
-                }`}
-                    onClick={() => setPage("config")}>
+                }`}>
                     <BsFillGearFill />
                     <p>Account</p>
                   </div>
@@ -174,7 +160,9 @@ function Sidebar({ children }) {
               </div>
             </div>
             <div className="w-full h-screen ml-[13rem] p-3 overflow-hidden">
-              <Toaster />
+              <div className="absolute top-0 right-0">
+                <Toaster />
+              </div>
               {children}
             </div>
           </div>

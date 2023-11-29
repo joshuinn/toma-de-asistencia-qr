@@ -6,6 +6,7 @@ import { RiInboxUnarchiveFill } from "react-icons/ri";
 import Loading from "../Loading";
 import { toast } from "sonner";
 import studenLoader from "./ListStudent.module.css";
+import { useRouter } from "next/navigation";
 const DATA = [
   {
     id_grupo: 12,
@@ -41,6 +42,7 @@ function ListStudent({ id_lista_asitencia }) {
   const [students, setStudents] = useState([]);
   const [studentQueue, setStudentQueue] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const router = useRouter()
   const [dataForm, setDataForm] = useState({
     url: "",
     id_lista_asitencia: id_lista_asitencia,
@@ -61,6 +63,8 @@ function ListStudent({ id_lista_asitencia }) {
     }
   };
   const handleEndList = () => {
+    router.push("/pages/assistence")
+    router.refresh()
     toast.success("Se ha guardado correctamente la lista de asistencia");
   };
   useEffect(() => {
@@ -205,7 +209,7 @@ function ListStudent({ id_lista_asitencia }) {
           <li>Boleta</li>
           <li>No. maquina</li>
         </ul>
-        <ul className=" h-[65vh] overflow-y-scroll">
+        <ul className="h-full lg:h-[65vh] overflow-y-scroll">
           {students.map((student) => (
             <li key={student.id}>
               {student.boleta == "waiting" ? (
@@ -237,9 +241,16 @@ function ListStudent({ id_lista_asitencia }) {
         </ul>
         <div className="flex justify-end">
           <button
-            className="border border-pink text-pink p-3 mt-2 rounded-lg hover:text-green hover:border-green flex items-center gap-1"
-            onClick={handleEndList}
-            disabled={students.length == 0}>
+            className={
+              `border  p-3 mt-2 rounded-lg  flex items-center gap-1 
+                ${studentQueue.length >0 || students.length == 0
+                ? "text-gray-500 border-gray-500"
+                : "border-pink text-pink hover:text-green hover:border-green"}
+            `}
+            onClick={() => {
+              handleEndList();
+            }}
+            disabled={students.length == 0 || studentQueue.length>0}>
             <p>Terminar registro</p>
             <RiInboxUnarchiveFill size={25} />
           </button>
