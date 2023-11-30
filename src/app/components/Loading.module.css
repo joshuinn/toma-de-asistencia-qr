@@ -1,7 +1,7 @@
 /* HTML: <div class="loader"></div> */
 .loader {
     /*position: absolute;*/
-    --c:no-repeat linear-gradient(purple 0 0);
+    --c:no-repeat linear-gradient(#ed3a98 0 0);
     background: 
       var(--c),var(--c),var(--c),
       var(--c),var(--c),var(--c),

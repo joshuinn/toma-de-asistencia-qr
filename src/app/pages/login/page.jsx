@@ -70,7 +70,7 @@ function LoginPage() {
         </div>
 
         {isError && (
-          <p className="text-pink-light">Boleta o contraseña incorrectos</p>
+          <p className="text-pink">Boleta o contraseña incorrectos</p>
         )}
         <button className="p-3 px-4 text-white bg-blue-600 rounded-lg shadow-xl">
           Login

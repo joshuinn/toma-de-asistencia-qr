@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useState, useEffect, Suspense } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Loading from "./Loading";
 
 export const SessionContext = createContext(null);
@@ -13,6 +13,7 @@ const SessionProvider = ({ children }) => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
   useEffect(() => {
     setIsLoading(true);
     const checkLogged = async () => {
@@ -57,13 +58,14 @@ const SessionProvider = ({ children }) => {
   };
   return (
     <SessionContext.Provider
-      value={{ isLogged, dataUser, handleLogout, handleLogin }}>
+      value={{ isLogged, dataUser, handleLogout, handleLogin }}
+    >
       {isLoading ? (
         <div className="h-[100vh]">
           <Loading />
         </div>
       ) : (
-        <div>{children}</div>
+          <div>{children}</div>
       )}
     </SessionContext.Provider>
   );

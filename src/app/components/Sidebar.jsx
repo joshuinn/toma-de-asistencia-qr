@@ -46,8 +46,11 @@ function Sidebar({ children }) {
     }
   }, [page, isLogged]);
   useEffect(() => {
-    const actualPage = pathname.split("/");
-    setPage(actualPage[2]);
+    console.log("Some");
+    if(isLogged){
+      const actualPage = pathname.split("/");
+      setPage(actualPage[2]);
+    }
   }, [pathname]);
   return (
     <>

@@ -70,7 +70,7 @@ INSERT INTO `ctb_ciclo` (`id_ciclo`, `ciclo`) VALUES
 
 CREATE TABLE `ctb_grupo` (
   `id_grupo` int(11) NOT NULL,
-  `grupo` varchar(4) NOT NULL
+  `grupo` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

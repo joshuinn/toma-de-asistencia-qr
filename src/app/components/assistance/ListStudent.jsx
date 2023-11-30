@@ -42,7 +42,7 @@ function ListStudent({ id_lista_asitencia }) {
   const [students, setStudents] = useState([]);
   const [studentQueue, setStudentQueue] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const [dataForm, setDataForm] = useState({
     url: "",
     id_lista_asitencia: id_lista_asitencia,
@@ -63,8 +63,16 @@ function ListStudent({ id_lista_asitencia }) {
     }
   };
   const handleEndList = () => {
-    router.push("/pages/assistence")
-    router.refresh()
+    
+    /*router.push("/pages/assistence");
+    router.refresh();
+    */
+   try {
+    const response = axios.post("/api/assistanceList", students);
+    console.log(response);
+   } catch (error) {
+    
+   }
     toast.success("Se ha guardado correctamente la lista de asistencia");
   };
   useEffect(() => {
@@ -150,7 +158,8 @@ function ListStudent({ id_lista_asitencia }) {
       ${
         showForm ? " bg-[rgb(0,0,0,0.5)] left-[13rem]" : "right-full opacity-0 "
       }
-      `}>
+      `}
+      >
         <div className="bg-blue-700 text-white p-5 flex flex-col items-center justify-center rounded-lg">
           <div className="flex justify-end w-full">
             <AiFillCloseCircle
@@ -166,7 +175,8 @@ function ListStudent({ id_lista_asitencia }) {
                 url: "https://servicios.dae.ipn.mx/vcred/?h=b65180be30f3f9dcf9713f09a04a799d88ceec72341b468c9336c38acf3dc2bf",
               })
             }
-            className="m-2 bg-blue p-3 rounded">
+            className="m-2 bg-blue p-3 rounded"
+          >
             Example
           </button>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
@@ -198,7 +208,8 @@ function ListStudent({ id_lista_asitencia }) {
         <div className="flex justify-end">
           <button
             className="bg-gradient-to-tl from-green to-blue p-3 rounded-lg flex items-center"
-            onClick={handleForm}>
+            onClick={handleForm}
+          >
             <AiOutlineQrcode size={25} />
             <p>Iniciar registro con QR</p>
           </button>
@@ -209,7 +220,7 @@ function ListStudent({ id_lista_asitencia }) {
           <li>Boleta</li>
           <li>No. maquina</li>
         </ul>
-        <ul className="h-full lg:h-[65vh] overflow-y-scroll">
+        <ul className="h-full xl:h-[50vh] overflow-y-scroll">
           {students.map((student) => (
             <li key={student.id}>
               {student.boleta == "waiting" ? (
@@ -241,16 +252,18 @@ function ListStudent({ id_lista_asitencia }) {
         </ul>
         <div className="flex justify-end">
           <button
-            className={
-              `border  p-3 mt-2 rounded-lg  flex items-center gap-1 
-                ${studentQueue.length >0 || students.length == 0
-                ? "text-gray-500 border-gray-500"
-                : "border-pink text-pink hover:text-green hover:border-green"}
+            className={`border  p-3 mt-2 rounded-lg  flex items-center gap-1 
+                ${
+                  studentQueue.length > 0 || students.length == 0
+                    ? "text-gray-500 border-gray-500"
+                    : "border-pink text-pink hover:text-green hover:border-green"
+                }
             `}
             onClick={() => {
               handleEndList();
             }}
-            disabled={students.length == 0 || studentQueue.length>0}>
+            disabled={students.length == 0 || studentQueue.length > 0}
+          >
             <p>Terminar registro</p>
             <RiInboxUnarchiveFill size={25} />
           </button>
