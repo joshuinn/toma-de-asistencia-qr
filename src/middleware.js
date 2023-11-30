@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { verify } from "jsonwebtoken";
 export default async function middleware(req) {
  try{
 

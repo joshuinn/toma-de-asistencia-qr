@@ -63,8 +63,9 @@ function ListStudent({ id_lista_asitencia }) {
     }
   };
   const handleEndList = () => {
-    router.push("/pages/assistence")
-    router.refresh()
+   /* router.push("/pages/assistence")
+    router.refresh()*/
+  
     toast.success("Se ha guardado correctamente la lista de asistencia");
   };
   useEffect(() => {
