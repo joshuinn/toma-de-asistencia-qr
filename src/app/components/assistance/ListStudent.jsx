@@ -1,40 +1,25 @@
 "use client";
 import axios from "axios";
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useContext } from "react";
 import { AiFillCloseCircle, AiOutlineQrcode } from "react-icons/ai";
 import { RiInboxUnarchiveFill } from "react-icons/ri";
 import Loading from "../Loading";
 import { toast } from "sonner";
 import studenLoader from "./ListStudent.module.css";
 import { useRouter } from "next/navigation";
+import { SessionContext } from "../SessionContext";
 const DATA = [
   {
-    id_grupo: 12,
-    name: "juan",
-    boleta: "202020",
-    maquina: "22",
-    date: "20-20-20",
+    id: "fb70de3d-658b-4826-8ff2-c3426468910c",
+    boleta: "2021350820",
+    apellido_alumno: "DEL MONTE ORTEGA",
+    nombre_alumno: "JOSHUA ALEXANDER ",
   },
   {
-    id_grupo: 15,
-    name: "PEdro",
-    boleta: "202020",
-    maquina: "22",
-    date: "20-20-20",
-  },
-  {
-    id_grupo: 112,
-    name: "Some",
-    boleta: "202020",
-    maquina: "22",
-    date: "20-20-20",
-  },
-  {
-    id_grupo: 18,
-    name: "some",
-    boleta: "202020",
-    maquina: "22",
-    date: "20-20-20",
+    id: "9417c6cd-a188-4b7d-8c10-9e1cd056908e",
+    boleta: "2020202020",
+    apellido_alumno: "Torres Perez",
+    nombre_alumno: "Pedrito Ayala",
   },
 ];
 
@@ -43,10 +28,10 @@ function ListStudent({ id_lista_asitencia }) {
   const [studentQueue, setStudentQueue] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const router = useRouter();
+  const { dataUser } = useContext(SessionContext);
   const [dataForm, setDataForm] = useState({
     url: "",
     id_lista_asitencia: id_lista_asitencia,
-    maquina: "",
   });
   const getDataStudent = async (student) => {
     try {
@@ -62,18 +47,24 @@ function ListStudent({ id_lista_asitencia }) {
       console.log(e);
     }
   };
-  const handleEndList = () => {
-    
-    /*router.push("/pages/assistence");
-    router.refresh();
-    */
-   try {
-    const response = axios.post("/api/assistanceList", students);
-    console.log(response);
-   } catch (error) {
-    
-   }
-    toast.success("Se ha guardado correctamente la lista de asistencia");
+  const handleEndList = async () => {
+    try {
+      const response = await axios.post("/api/assistanceList", [
+        students,
+        dataUser,
+        id_lista_asitencia,
+      ]);
+      //console.log(response);
+      if (response.status == 200) {
+        toast.success("Se ha guardado correctamente la lista de asistencia");
+        router.push("/pages/assistence");
+        router.refresh();
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    toast.error("Ha ocurrido un error");
   };
   useEffect(() => {
     const updateStudent = async () => {
@@ -81,20 +72,20 @@ function ListStudent({ id_lista_asitencia }) {
         const id_queue = await studentQueue[0].id;
         try {
           const data = await getDataStudent(studentQueue[0].data);
-          const newStudents = students.filter((student) => {
-            if (student.id !== id_queue) {
+
+          setStudents((prevStudents) => {
+            return prevStudents.map((student) => {
+              if (student.id == id_queue) {
+                return {
+                  ...student,
+                  boleta: data.boleta,
+                  apellido_alumno: data.apellido,
+                  nombre_alumno: data.nombre,
+                };
+              }
               return student;
-            }
+            });
           });
-          setStudents([
-            ...newStudents,
-            {
-              id: crypto.randomUUID(),
-              boleta: data.boleta,
-              apellido_alumno: data.apellido,
-              nombre_alumno: data.nombre,
-            },
-          ]);
           const NewQue = studentQueue.filter((student) => {
             if (student.id !== id_queue) {
               return student;
@@ -146,7 +137,16 @@ function ListStudent({ id_lista_asitencia }) {
       [e.target.name]: e.target.value,
     });
   };
-  const handleMaquina = (e) => {};
+  const handleMaquina = (e) => {
+    setStudents((prevStudents) => {
+      return prevStudents.map((student) => {
+        if (student.id == e.target.id) {
+          return { ...student, numero_maquina: e.target.value };
+        }
+        return student;
+      });
+    });
+  };
   const FormRegister = () => {
     return (
       <div
@@ -158,8 +158,7 @@ function ListStudent({ id_lista_asitencia }) {
       ${
         showForm ? " bg-[rgb(0,0,0,0.5)] left-[13rem]" : "right-full opacity-0 "
       }
-      `}
-      >
+      `}>
         <div className="bg-blue-700 text-white p-5 flex flex-col items-center justify-center rounded-lg">
           <div className="flex justify-end w-full">
             <AiFillCloseCircle
@@ -175,8 +174,7 @@ function ListStudent({ id_lista_asitencia }) {
                 url: "https://servicios.dae.ipn.mx/vcred/?h=b65180be30f3f9dcf9713f09a04a799d88ceec72341b468c9336c38acf3dc2bf",
               })
             }
-            className="m-2 bg-blue p-3 rounded"
-          >
+            className="m-2 bg-blue p-3 rounded">
             Example
           </button>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
@@ -188,13 +186,6 @@ function ListStudent({ id_lista_asitencia }) {
               onChange={handleInput}
               value={dataForm.url}
               autoFocus
-            />
-            <input
-              type="text"
-              value={dataForm.id_lista_asitencia}
-              className="hidden"
-              name="id_lista_asitencia"
-              onChange={handleInput}
             />
             <button className="bg-green p-2 rounded-lg">Agregar</button>
           </form>
@@ -208,8 +199,7 @@ function ListStudent({ id_lista_asitencia }) {
         <div className="flex justify-end">
           <button
             className="bg-gradient-to-tl from-green to-blue p-3 rounded-lg flex items-center"
-            onClick={handleForm}
-          >
+            onClick={handleForm}>
             <AiOutlineQrcode size={25} />
             <p>Iniciar registro con QR</p>
           </button>
@@ -220,7 +210,7 @@ function ListStudent({ id_lista_asitencia }) {
           <li>Boleta</li>
           <li>No. maquina</li>
         </ul>
-        <ul className="h-full xl:h-[50vh] overflow-y-scroll">
+        <ul className=" h-full sm:h-[calc(100vh-25rem)] lg:h-[calc(100vh-20rem)]  overflow-y-scroll">
           {students.map((student) => (
             <li key={student.id}>
               {student.boleta == "waiting" ? (
@@ -238,9 +228,10 @@ function ListStudent({ id_lista_asitencia }) {
                   <div className="flex justify-evenly">
                     <input
                       key={student.id}
+                      id={student.id}
                       type="text"
                       placeholder="00"
-                      value={student.maquina ?? "00"}
+                      value={student.numero_maquina ?? 0}
                       onChange={handleMaquina}
                       className="bg-blue-600 p-2 rounded-full outline-none w-20 text-center"
                     />
@@ -262,8 +253,7 @@ function ListStudent({ id_lista_asitencia }) {
             onClick={() => {
               handleEndList();
             }}
-            disabled={students.length == 0 || studentQueue.length > 0}
-          >
+            disabled={students.length == 0 || studentQueue.length > 0}>
             <p>Terminar registro</p>
             <RiInboxUnarchiveFill size={25} />
           </button>

@@ -11,35 +11,35 @@ function page() {
         <Link href="/pages/assistence">
           <div className="">
             <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-purple shadow-lg hover:bg-blue-700">
-              Assitence
+              Tomar asistencia
             </button>
           </div>
         </Link>
         <Link href="/pages/reports">
           <div className="">
             <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-blue shadow-lg hover:bg-blue-700 ">
-              Reports
+              Reportes
             </button>
           </div>
         </Link>
         <Link href="/pages/incident">
           <div>
             <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-green shadow-lg hover:bg-blue-700">
-              Incident
+              Incidencia
             </button>
           </div>
         </Link>
         <Link href="/pages/graphs">
           <div>
             <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-pink shadow-lg hover:bg-blue-700">
-              Graphs
+              Gráficas
             </button>
           </div>
         </Link>
         <Link href="/pages/config">
           <div>
             <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-yellow shadow-lg hover:bg-blue-700">
-              Account
+              Cuenta
             </button>
           </div>
         </Link>

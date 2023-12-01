@@ -45,7 +45,7 @@ async function ListAssistance({ params }) {
             </div>
           </div>
           <div>
-            <ListStudent id_grupo={params.id} />
+            <ListStudent id_lista_asitencia={params.id} />
           </div>
         </div>
       </Suspense>

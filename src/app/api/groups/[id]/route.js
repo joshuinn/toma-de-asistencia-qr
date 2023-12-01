@@ -24,7 +24,7 @@ export async function GET(request, { params }) {
         "WHERE id_lista_asistencia = " +
         params.id
     );
-    console.log(result);
+    //console.log(result);
     if (result.length === 0) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }

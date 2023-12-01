@@ -46,8 +46,7 @@ function Sidebar({ children }) {
     }
   }, [page, isLogged]);
   useEffect(() => {
-    console.log("Some");
-    if(isLogged){
+    if (isLogged) {
       const actualPage = pathname.split("/");
       setPage(actualPage[2]);
     }
@@ -83,7 +82,7 @@ function Sidebar({ children }) {
                     : "text-gray-500"
                 }`}>
                     <BiListPlus />
-                    <p>Assistence</p>
+                    <p>Asistencia</p>
                   </div>
                 </Link>
                 <Link href="/pages/reports">
@@ -95,7 +94,7 @@ function Sidebar({ children }) {
                     : "text-gray-500"
                 }`}>
                     <BiListUl />
-                    Reports
+                    Reportes
                   </div>
                 </Link>
                 <Link href="/pages/incident">
@@ -107,7 +106,7 @@ function Sidebar({ children }) {
                     : "text-gray-500"
                 }`}>
                     <AiFillWarning />
-                    <p>Incident</p>
+                    <p>Incidencia</p>
                   </div>
                 </Link>
                 <Link href="/pages/graphs">
@@ -119,7 +118,7 @@ function Sidebar({ children }) {
                     : "text-gray-500"
                 }`}>
                     <BsFileEarmarkBarGraph />
-                    <p>Graphs</p>
+                    <p>Gráficas</p>
                   </div>
                 </Link>
                 <Link href="/pages/config">
@@ -131,7 +130,7 @@ function Sidebar({ children }) {
                     : "text-gray-500"
                 }`}>
                     <BsFillGearFill />
-                    <p>Account</p>
+                    <p>Cuenta</p>
                   </div>
                 </Link>
               </div>
@@ -139,7 +138,7 @@ function Sidebar({ children }) {
                 onClick={handleLogout}
                 className="flex items-center gap-2 p-2 text-gray-500">
                 <BiLogOut size={20} />
-                Logout
+                Cerrar Sesión
               </button>
               <div className="flex justify-end bg-gray-300 absolute top-0 w-full">
                 <div
@@ -166,7 +165,7 @@ function Sidebar({ children }) {
               <div className="absolute top-0 right-0">
                 <Toaster />
               </div>
-              {children}
+              <div className="h-screen">{children}</div>
             </div>
           </div>
         )}

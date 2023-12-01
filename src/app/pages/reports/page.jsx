@@ -1,8 +1,12 @@
-import React from 'react'
+import Header from '@/app/components/Header'
+import ReportsList from '@/app/components/ReportsList'
 
 function page() {
   return (
-    <div>page</div>
+    <div className='text-white'>
+      <Header title={"Reportes de asistencia"}/>
+      <ReportsList />
+    </div>
   )
 }
 

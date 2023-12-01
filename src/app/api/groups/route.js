@@ -35,7 +35,7 @@ export async function POST(request) {
         id_laboratorio: resultLab.insertId,
       }
     );
-    console.log(resultLista);
+    //console.log(resultLista);
     return NextResponse.json({ status: 200 });
   } catch (error) {
     console.log(error);

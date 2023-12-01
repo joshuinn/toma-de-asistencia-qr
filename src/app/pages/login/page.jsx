@@ -39,7 +39,7 @@ function LoginPage() {
   }
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen bg-blue-700">
-      <h1 className="text-[60px] font-extrabold text-white">Hello!</h1>
+      <h1 className="text-[60px] font-extrabold text-white">Welcome!</h1>
       <form onSubmit={handelSubmit} className="flex flex-col gap-4 ">
         <div className="flex w-fit justify-center items-center text-white">
           <input
@@ -73,11 +73,11 @@ function LoginPage() {
           <p className="text-pink">Boleta o contraseña incorrectos</p>
         )}
         <button className="p-3 px-4 text-white bg-blue-600 rounded-lg shadow-xl">
-          Login
+          Iniciar sesión
         </button>
         <Link href="/pages/forgotPassword">
           <p className="text-sm text-right text-white hover:text-gray-300">
-            i forgot my pass
+            Olvidé mi contraseña
           </p>
         </Link>
       </form>
