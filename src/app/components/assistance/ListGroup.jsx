@@ -82,7 +82,7 @@ export default function ListGroup() {
             <label className="t">Ciclo</label>
             <input
               className="rounded-full p-2 outline-none bg-blue-800"
-              type="text"
+              type="search"
               placeholder="Ciclo"
               name="ciclo"
               value={dataSearch.ciclo}
@@ -92,7 +92,7 @@ export default function ListGroup() {
             <label>Grupo</label>
             <input
               className="rounded-full p-2 outline-none bg-blue-800"
-              type="text"
+              type="search"
               placeholder="Grupo"
               name="grupo"
               value={dataSearch.grupo}

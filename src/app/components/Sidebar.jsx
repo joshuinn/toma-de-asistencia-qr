@@ -68,7 +68,7 @@ function Sidebar({ children }) {
                 <Link href="/">
                   <div
                     className={`flex items-center p-2 gap-2
-                ${page == "dashboard" ? "text-white " : " text-gray-500"}`}>
+                ${page == "dashboard" ? "text-white " : " text-gray-500 hover:text-gray-300"}`}>
                     <BiSolidDashboard />
                     <p>Dashboard</p>
                   </div>
@@ -79,7 +79,7 @@ function Sidebar({ children }) {
                 ${
                   page == "assistence"
                     ? "bg-indigo-950 text-white "
-                    : "text-gray-500"
+                    : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <BiListPlus />
                     <p>Asistencia</p>
@@ -91,7 +91,7 @@ function Sidebar({ children }) {
                 ${
                   page == "reports"
                     ? "bg-indigo-950 text-white "
-                    : "text-gray-500"
+                    : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <BiListUl />
                     Reportes
@@ -103,7 +103,7 @@ function Sidebar({ children }) {
                 ${
                   page == "incident"
                     ? "bg-indigo-950 text-white "
-                    : "text-gray-500"
+                    : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <AiFillWarning />
                     <p>Incidencia</p>
@@ -115,7 +115,7 @@ function Sidebar({ children }) {
                 ${
                   page == "graphs"
                     ? "bg-indigo-950 text-white "
-                    : "text-gray-500"
+                    : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <BsFileEarmarkBarGraph />
                     <p>Gráficas</p>
@@ -127,7 +127,7 @@ function Sidebar({ children }) {
                 ${
                   page == "config"
                     ? "bg-indigo-950 text-white "
-                    : "text-gray-500"
+                    : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <BsFillGearFill />
                     <p>Cuenta</p>

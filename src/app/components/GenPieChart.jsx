@@ -16,30 +16,7 @@ const BORDER_GREEN = "rgba(79, 230, 228,1)";
 const BORDER_PINK = "rgba(237, 58, 152,1)";
 const BORDER_YELLOW = "rgba(247, 146, 17,1)";
 
-const data = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2],
-      backgroundColor: [
-        BACK_PINK,
-        BACK_BLUE,
-        BACK_YELLOW,
-        BACK_GREEN,
-        BACK_PURPLE,
-      ],
-      borderColor: [
-        BORDER_PINK,
-        BORDER_BLUE,
-        BORDER_YELLOW,
-        BORDER_GREEN,
-        BORDER_PURPLE,
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
+
 const allColors = [
   {
     backgroundColor: BACK_PINK,

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Loading from "./Loading";
 import { AiOutlineReload } from "react-icons/ai";
 import axios from "axios";
+import style from "./ReportsList.module.css";
+import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 
 const DATA = [
   {
@@ -27,6 +29,7 @@ function ReportsList() {
   const [reports, setReports] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefresing] = useState(false);
+  const [changeTypeSearch, setChangeTypeSearch] = useState(false);
   useEffect(() => {
     setIsLoading(true);
     const getReport = async () => {
@@ -50,39 +53,53 @@ function ReportsList() {
   const handleRefresh = () => {
     setIsRefresing(true);
   };
+  const handleChangeTypeSearch = () => {
+    setChangeTypeSearch(!changeTypeSearch);
+  };
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap">
-        <form onSubmit={handleSearch}>
-          <div className="flex gap-2 flex-wrap items-center bg-blue-600 p-4 rounded-lg shadow-lg">
-            <label> Ciclo</label>
-            <input
-              type="text"
-              placeholder="Ciclo"
-              className="rounded-full p-2 bg-blue-800 outline-none"
-            />
-            <p>y</p>
-            <label>Grupo o fecha</label>
-            <input
-              type="text"
-              placeholder="Grupo o fecha"
-              className="rounded-full p-2 bg-blue-800 outline-none"
-            />
-            <button className="p-3 border hover:border-blue hover:text-blue rounded-lg transition-all">
-              Buscar
+        <div className="flex items-center flex-wrap gap-5">
+          <form onSubmit={handleSearch}>
+            <div className="flex gap-2 flex-wrap items-center p-3 bg-blue-600 rounded-lg shadow-lg">
+              <label> Ciclo</label>
+              <input
+                type="search"
+                placeholder="Ciclo"
+                className="rounded-full p-2 bg-blue-800 outline-none"
+              />
+              <p>y</p>
+              <label>Grupo o fecha</label>
+              <div className="flex items-center gap-3">
+                <input
+                  type={changeTypeSearch?"text":"date"}
+                  placeholder="Grupo o fecha"
+                  className="rounded-full p-2 bg-blue-800 outline-none w-40"
+                />
+                <div className="mr-4 hover:text-blue cursor-pointer">
+                <HiOutlineSwitchHorizontal size={20} onClick={handleChangeTypeSearch} />
+                </div>
+              </div>
+              <button
+                className="p-3 border hover:border-blue hover:text-blue rounded-lg transition-all"
+                type="submit"
+              >
+                Buscar
+              </button>
+            </div>
+          </form>
+          <div>
+            <button
+              className="p-4 bg-blue-600 flex items-center gap-2 rounded-lg shadow-lg hover:text-blue"
+              onClick={handleRefresh}
+            >
+              <span>Refrescar</span>
+              <AiOutlineReload
+                size={20}
+                className="hover:rotate-45 transition-all"
+              />
             </button>
           </div>
-        </form>
-        <div>
-          <button
-            className="p-4 bg-blue-600 flex items-center gap-2 rounded-lg shadow-lg hover:text-blue"
-            onClick={handleRefresh}>
-            <span>Refrescar</span>
-            <AiOutlineReload
-              size={20}
-              className="hover:rotate-45 transition-all"
-            />
-          </button>
         </div>
         <div className="flex gap-10 mt-2 bg-blue-600 p-4 rounded-lg shadow-lg">
           <button className="p-3 bg-purple rounded-lg hover:bg-blue-600 hover:text-purple border border-purple transition-all">
@@ -118,13 +135,23 @@ function ReportsList() {
                     return (
                       <li
                         key={report.id_lista_asistencia}
-                        className="border border-x-0 grid grid-cols-2 p-3">
+                        className="border border-x-0 grid grid-cols-2 p-3"
+                      >
                         <div className="">
                           <span>{report.grupo}</span>
                         </div>
 
                         <div className="ml-4">
-                          <input type="checkbox" name="" id="" />
+                          <div className={style.checkboxWrapper}>
+                            <input
+                              type="checkbox"
+                              id={report.id_lista_asistencia}
+                            />
+                            <label
+                              className={style.checkInput}
+                              htmlFor={report.id_lista_asistencia}
+                            ></label>
+                          </div>
                         </div>
                       </li>
                     );

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^3.1.14",
     "axios": "^1.5.1",
     "chart.js": "^4.4.0",
     "cookie": "^0.5.0",
