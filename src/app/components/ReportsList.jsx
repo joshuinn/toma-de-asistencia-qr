@@ -5,6 +5,11 @@ import { AiOutlineReload } from "react-icons/ai";
 import axios from "axios";
 import style from "./ReportsList.module.css";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import { CiSearch } from "react-icons/ci";
+import { formatText } from "./formatTextList.helper";
+import { FaFilePdf } from "react-icons/fa";
+import { SiMicrosoftexcel } from "react-icons/si";
+import { FaListCheck } from "react-icons/fa6";
 
 const DATA = [
   {
@@ -30,6 +35,11 @@ function ReportsList() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefresing] = useState(false);
   const [changeTypeSearch, setChangeTypeSearch] = useState(false);
+  const [dataSearch, setDataSearch] = useState({
+    ciclo: "",
+    grupo: "",
+    fecha: "",
+  });
   useEffect(() => {
     setIsLoading(true);
     const getReport = async () => {
@@ -38,7 +48,6 @@ function ReportsList() {
         if (response.status == 200) {
           setReports(response.data);
         }
-        console.log(response);
       } catch (error) {}
       setIsLoading(false);
       setIsRefresing(false);
@@ -56,6 +65,13 @@ function ReportsList() {
   const handleChangeTypeSearch = () => {
     setChangeTypeSearch(!changeTypeSearch);
   };
+  const handleInput = (e) => {
+    const textFormated = formatText(e.target.name, e.target.value);
+    setDataSearch({
+      ...dataSearch,
+      [e.target.name]: textFormated,
+    });
+  };
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap">
@@ -67,32 +83,40 @@ function ReportsList() {
                 type="search"
                 placeholder="Ciclo"
                 className="rounded-full p-2 bg-blue-800 outline-none"
+                name="ciclo"
+                onChange={handleInput}
+                value={dataSearch.ciclo}
               />
               <p>y</p>
               <label>Grupo o fecha</label>
               <div className="flex items-center gap-3">
                 <input
-                  type={changeTypeSearch?"text":"date"}
+                  type={changeTypeSearch ? "text" : "date"}
                   placeholder="Grupo o fecha"
                   className="rounded-full p-2 bg-blue-800 outline-none w-40"
+                  name={changeTypeSearch ? "grupo" : "fecha"}
+                  onChange={handleInput}
+                  value={changeTypeSearch ? dataSearch.grupo : dataSearch.fecha}
                 />
                 <div className="mr-4 hover:text-blue cursor-pointer">
-                <HiOutlineSwitchHorizontal size={20} onClick={handleChangeTypeSearch} />
+                  <HiOutlineSwitchHorizontal
+                    size={20}
+                    onClick={handleChangeTypeSearch}
+                  />
                 </div>
               </div>
               <button
-                className="p-3 border hover:border-blue hover:text-blue rounded-lg transition-all"
-                type="submit"
-              >
+                className="p-3 border hover:border-blue hover:text-blue rounded-lg transition-all flex gap-2 items-center"
+                type="submit">
                 Buscar
+                <CiSearch size={20} />
               </button>
             </div>
           </form>
           <div>
             <button
               className="p-4 bg-blue-600 flex items-center gap-2 rounded-lg shadow-lg hover:text-blue"
-              onClick={handleRefresh}
-            >
+              onClick={handleRefresh}>
               <span>Refrescar</span>
               <AiOutlineReload
                 size={20}
@@ -101,15 +125,18 @@ function ReportsList() {
             </button>
           </div>
         </div>
-        <div className="flex gap-10 mt-2 bg-blue-600 p-4 rounded-lg shadow-lg">
-          <button className="p-3 bg-purple rounded-lg hover:bg-blue-600 hover:text-purple border border-purple transition-all">
+        <div className="flex gap-10 mt-2 bg-blue-600 p-3 rounded-lg shadow-lg">
+          <button className="p-3 bg-purple rounded-lg hover:bg-blue-600 hover:text-purple border border-purple transition-all flex items-center gap-2">
             Seleccionar Todo
+            <FaListCheck size={20} />
           </button>
-          <button className="p-3 bg-pink rounded-lg border border-pink hover:text-pink hover:bg-blue-600 transition-all">
+          <button className="p-3 bg-pink rounded-lg border border-pink hover:text-pink hover:bg-blue-600 transition-all flex items-center gap-2">
             PDF
+            <FaFilePdf size={20} />
           </button>
-          <button className="p-3 bg-green rounded-lg border border-green hover:text-green hover:bg-blue-600 transition-all">
+          <button className="p-3 bg-green rounded-lg border border-green hover:text-green hover:bg-blue-600 transition-all flex items-center gap-2">
             Excel
+            <SiMicrosoftexcel size={20} />
           </button>
         </div>
       </div>
@@ -135,8 +162,7 @@ function ReportsList() {
                     return (
                       <li
                         key={report.id_lista_asistencia}
-                        className="border border-x-0 grid grid-cols-2 p-3"
-                      >
+                        className="border border-x-0 grid grid-cols-2 p-3">
                         <div className="">
                           <span>{report.grupo}</span>
                         </div>
@@ -149,8 +175,7 @@ function ReportsList() {
                             />
                             <label
                               className={style.checkInput}
-                              htmlFor={report.id_lista_asistencia}
-                            ></label>
+                              htmlFor={report.id_lista_asistencia}></label>
                           </div>
                         </div>
                       </li>

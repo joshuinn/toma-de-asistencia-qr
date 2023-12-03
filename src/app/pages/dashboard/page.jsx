@@ -1,46 +1,41 @@
 import Header from "@/app/components/Header";
 import Link from "next/link";
+import styles from "./dashboard.module.css";
 function page() {
   return (
-    <div className="h-screen">
+    <div className="h-screen ]">
       <Header title="Welcome back!" extra="Choose an option" />
-      <div className="flex flex-col gap-4 h-[93vh] justify-center items-center  rounded-2xl">
-        <div>
-          <h1 className="font-bold text-2xl text-white "> Some intresting things happened this morining!</h1>
-        </div>
-        <Link href="/pages/assistence">
-          <div className="">
-            <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-purple shadow-lg hover:bg-blue-700">
-              Tomar asistencia
-            </button>
+      <div className="flex justify-center m-4">
+        <h1 className="font-bold text-2xl text-white ">
+          Some intresting things happened this morining!
+        </h1>
+      </div>
+      <div className="flex flex-col md:grid md:grid-cols-2 items-center justify-center p-10 gap-4 h-[90vh]">
+        <Link href="/pages/assistence" className={styles.card}>
+          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-purple transition-all">
+            <h2>Tomar asistencia</h2>
           </div>
         </Link>
-        <Link href="/pages/reports">
-          <div className="">
-            <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-blue shadow-lg hover:bg-blue-700 ">
-              Reportes
-            </button>
+        <Link href="/pages/reports" className={styles.card}>
+          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-blue transition-all">
+            <h2>Reportes</h2>
           </div>
         </Link>
-        <Link href="/pages/incident">
-          <div>
-            <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-green shadow-lg hover:bg-blue-700">
-              Incidencia
-            </button>
+        <Link href="/pages/incident" className={styles.card}>
+          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-green transition-all">
+            <h2>Incidencia</h2>
           </div>
         </Link>
-        <Link href="/pages/graphs">
-          <div>
-            <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-pink shadow-lg hover:bg-blue-700">
-              Gráficas
-            </button>
+        <Link href="/pages/graphs" className={styles.card}>
+          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-pink transition-all">
+            <h2>Gráficas</h2>
           </div>
         </Link>
-        <Link href="/pages/config">
-          <div>
-            <button className="bg-blue-600 text-white w-[20rem] p-4 rounded-lg hover:bg-indigo-950 hover:text-yellow shadow-lg hover:bg-blue-700">
-              Cuenta
-            </button>
+        <Link
+          href="/pages/config"
+          className={"col-start-1 col-end-3 " + styles.card}>
+           <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-yellow transition-all">
+            <h2>Cuenta</h2>
           </div>
         </Link>
       </div>

@@ -1,10 +1,15 @@
 "use client";
 import axios from "axios";
 import React, { useState } from "react";
-import { AiFillCloseCircle, AiOutlineWarning, AiFillCheckCircle } from "react-icons/ai";
+import {
+  AiFillCloseCircle,
+  AiOutlineWarning,
+  AiFillCheckCircle,
+} from "react-icons/ai";
 import { BiListPlus, BiErrorCircle } from "react-icons/bi";
 import { toast } from "sonner";
-function NewList({handleRefreshGroups}) {
+import { formatText } from "../formatTextList.helper";
+function NewList({ handleRefreshGroups }) {
   const [data, setData] = useState({
     grupo: "",
     maestro: "",
@@ -25,15 +30,15 @@ function NewList({handleRefreshGroups}) {
     setShowConfirm(!showConfirm);
   };
   const notifySuccess = () => {
-    toast.success("Se ha guardado correctamente",{
-      icon: <AiFillCheckCircle  size={25} className="text-green-700"/>,
-      duration:5000
-    })
+    toast.success("Se ha guardado correctamente", {
+      icon: <AiFillCheckCircle size={25} className="text-green-700" />,
+      duration: 5000,
+    });
   };
-  const notifyError= () => {
-    toast.error("Ha ocurrido un error, vuelva a intentar",{
-      icon: <BiErrorCircle  size={25} className="text-red-700"/>,
-    })
+  const notifyError = () => {
+    toast.error("Ha ocurrido un error, vuelva a intentar", {
+      icon: <BiErrorCircle size={25} className="text-red-700" />,
+    });
   };
   const submitGroup = async () => {
     try {
@@ -42,25 +47,34 @@ function NewList({handleRefreshGroups}) {
           "Content-Type": "application/json",
         },
       });
-      setData({ grupo: "", maestro: "", laboratorio: "", materia: "", ciclo: "" });
-      setShow(false)
-      setShowConfirm(false)
+      setData({
+        grupo: "",
+        maestro: "",
+        laboratorio: "",
+        materia: "",
+        ciclo: "",
+      });
+      setShow(false);
+      setShowConfirm(false);
       if (response.status == 200) {
-        notifySuccess()
-        handleRefreshGroups()
-      }else{
-        notifyError()
+        notifySuccess();
+        handleRefreshGroups();
+      } else {
+        notifyError();
       }
     } catch (error) {
       console.log(error);
     }
   };
+  
   const handleInput = (e) => {
+    const textFormated = formatText(e.target.name, e.target.value);
     setData({
       ...data,
-      [e.target.name]: e.target.value,
+      [e.target.name]: textFormated,
     });
   };
+
   return (
     <>
       <div
@@ -72,7 +86,9 @@ function NewList({handleRefreshGroups}) {
         duration-200
         ease-in-out
         absolute
-        ${show ? "bg-[rgb(0,0,0,0.5)] left-[12.5rem] " : "right-full opacity-0"} 
+        ${
+          show ? "bg-[rgb(0,0,0,0.5)] left-[12.5rem] " : "right-full opacity-0"
+        } 
         `}>
         <div className="bg-blue-700 p-4 flex flex-col justify-center rounded-lg shadow-2xl">
           <div className="w-full flex justify-end">
@@ -184,7 +200,7 @@ function NewList({handleRefreshGroups}) {
         </div>
       </div>
       <button
-        className="p-4 bg-gradient-to-tl from-pink to-purple flex gap-3 items-center rounded-lg hover:text-gray-300 shadow-lg"
+        className="p-4 flex gap-3 items-center rounded-lg shadow-lg border border-purple text-white bg-purple hover:bg-blue-700 hover:text-purple transition-all"
         onClick={handleShow}>
         Registrar nueva lista
         <BiListPlus size={25} />

@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import Loading from "../Loading";
 import Link from "next/link";
-import { SessionContext } from "../SessionContext";
+import { formatText } from "../formatTextList.helper";
 
 export default function ListGroup() {
   const [groups, setGroups] = useState([]);
@@ -19,7 +19,6 @@ export default function ListGroup() {
     grupo: "",
   });
   const [isLoading, setIsLoading] = useState(true);
-  const { dataUser } = useContext(SessionContext);
   const [isError, setIsError] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,9 +34,10 @@ export default function ListGroup() {
     setGroups(newList);
   };
   const handleInput = (e) => {
+    const text = formatText(e.target.name, e.target.value)
     setDataSearch({
       ...dataSearch,
-      [e.target.name]: e.target.value,
+      [e.target.name]: text,
     });
   };
   useEffect(() => {
@@ -75,7 +75,7 @@ export default function ListGroup() {
   return (
     <>
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between flex-wrap gap-3  text-white">
+        <div className="flex justify-between flex-wrap gap-3 text-white">
           <form
             className="flex gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg"
             onSubmit={handleSubmit}>
@@ -98,14 +98,14 @@ export default function ListGroup() {
               value={dataSearch.grupo}
               onChange={handleInput}
             />
-            <button className="rounded border p-3 flex gap-1 items-center hover:text-purple">
+            <button className="rounded border p-3 flex gap-1 items-center hover:text-purple transition-all">
               Buscar
-              <CiSearch size={20}/>
+              <CiSearch size={20} />
             </button>
           </form>
           <button
             onClick={handleRefreshGroups}
-            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple">
+            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple transition-all">
             <span>Refrescar</span>
             <AiOutlineReload className="cursor-pointer" size={20} />
           </button>
@@ -126,7 +126,7 @@ export default function ListGroup() {
             ) : (
               <ul className="w-full p-2">
                 {groups.length > 0 ? (
-                  groups.map((item,i) => (
+                  groups.map((item, i) => (
                     <li
                       key={item.id_grupo}
                       className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center ">
@@ -136,7 +136,14 @@ export default function ListGroup() {
                       <div className="flex justify-end  w-full">
                         <Link
                           href={`/pages/assistence/${item.id_lista_asistencia}`}>
-                          <p className={`flex items-center p-2 text-white rounded-lg justify-between ${i % 2 ==0 ?"bg-yellow":"bg-blue"} hover:text-blue-800 transition-all`}>
+                          <p
+                            className={`flex items-center p-2 text-white rounded-lg justify-between
+                            border transition-all
+                            ${
+                              i % 2 == 0
+                                ? "bg-purple hover:text-purple hover:bg-blue-800 border-purple"
+                                : "bg-blue border-blue hover:text-blue hover:bg-blue-800"
+                            } `}>
                             Tomar lista
                             <BiListCheck size={25} />
                           </p>

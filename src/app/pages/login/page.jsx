@@ -22,11 +22,7 @@ function LoginPage() {
   const handelSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/auth", credentials, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post("/api/auth", credentials);
       if (response.status == 200) {
         handleLogin();
       }
@@ -34,20 +30,21 @@ function LoginPage() {
       setIsError(true);
     }
   };
-  const handleShowPass = () =>{
+  const handleShowPass = () => {
     setShowPass(!showPass);
-  }
+  };
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen bg-blue-700">
       <h1 className="text-[60px] font-extrabold text-white">Welcome!</h1>
-      <form onSubmit={handelSubmit} className="flex flex-col gap-4 ">
+      <form onSubmit={handelSubmit} className="flex flex-col gap-5 ">
         <div className="flex w-fit justify-center items-center text-white">
           <input
             type="text"
             placeholder="Boleta"
-            className="bg-blue-800 p-3 rounded-3xl "
+            className="bg-blue-800 p-3 rounded-3xl shadow-lg"
             name="boleta"
             onChange={handleChange}
+            required
           />
           <div className="w-full flex justify-end items-center ">
             <FaUserCircle className="absolute mr-4 " size={20} />
@@ -55,28 +52,38 @@ function LoginPage() {
         </div>
         <div className="flex w-fit justify-center items-center text-white">
           <input
-            type={showPass?"text":"password"}
+            type={showPass ? "text" : "password"}
             name="contrasenia"
             placeholder="contraseña"
-            className="bg-blue-800 p-3 rounded-3xl"
+            className="bg-blue-800 p-3 rounded-3xl shadow-lg"
             onChange={handleChange}
+            required
           />
           <div className="w-full flex justify-end items-center">
-            {showPass? 
-            <FaRegEyeSlash className="absolute mr-4 cursor-pointer"size={20} onClick={handleShowPass}  />:
-            <FaEye className="absolute mr-4 cursor-pointer" size={20} onClick={handleShowPass}/>
-          }
+            {showPass ? (
+              <FaRegEyeSlash
+                className="absolute mr-4 cursor-pointer"
+                size={20}
+                onClick={handleShowPass}
+              />
+            ) : (
+              <FaEye
+                className="absolute mr-4 cursor-pointer"
+                size={20}
+                onClick={handleShowPass}
+              />
+            )}
           </div>
         </div>
 
         {isError && (
           <p className="text-pink">Boleta o contraseña incorrectos</p>
         )}
-        <button className="p-3 px-4 text-white bg-blue-600 rounded-lg shadow-xl">
+        <button className="p-3 px-4 text-white bg-pink border border-pink hover:bg-blue-700 hover:text-pink rounded-lg shadow-xl transition-all">
           Iniciar sesión
         </button>
         <Link href="/pages/forgotPassword">
-          <p className="text-sm text-right text-white hover:text-gray-300">
+          <p className="text-sm text-right text-white hover:text-gray-300 transition-all">
             Olvidé mi contraseña
           </p>
         </Link>
