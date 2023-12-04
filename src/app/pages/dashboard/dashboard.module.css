@@ -5,7 +5,7 @@
 }
 
 .card {
-  --card-height: 10rem;
+  --card-height:10rem;
   --card-width: 100%;
 }
 
@@ -80,5 +80,11 @@
   }
   100% {
     --rotate: 360deg;
+  }
+}
+
+@media (max-width:1400px) {
+  .card{
+    --card-height:7rem;
   }
 }
