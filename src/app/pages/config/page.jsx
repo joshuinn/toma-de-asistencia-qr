@@ -1,4 +1,3 @@
-"use client";
 import Header from "@/app/components/Header";
 import ChangePass from '@/app/components/ChangePass'
 function page() {
@@ -13,6 +12,7 @@ function page() {
             placeholder="nombre"
             id="nombre"
             className="rounded-full bg-blue-800 p-3"
+            disabled
           />
         </div>
         <div className="flex gap-3 bg-blue-600 rounded-lg p-3 items-center w-1/2 justify-center shadow-lg">
@@ -22,6 +22,7 @@ function page() {
             placeholder="Boleta"
             id="boleta"
             className="rounded-full bg-blue-800 p-3"
+            disabled
           />
         </div>
         <div className="flex gap-3 bg-blue-600 rounded-lg p-3 items-center w-1/2 justify-center shadow-lg">
@@ -31,6 +32,7 @@ function page() {
             placeholder="Correo"
             id="correo"
             className="rounded-full bg-blue-800 p-3"
+            disabled
           />
         </div>
         <ChangePass />

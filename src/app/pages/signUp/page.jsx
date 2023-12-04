@@ -1,10 +1,32 @@
 "use client";
-import { formatText } from "@/app/components/formatTextList.helper";
+import {
+  formatText,
+  isEmailValid,
+  isPasswordValid,
+} from "@/app/components/formatTextList.helper";
+import { toastSucces } from "@/app/components/toast.helper";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
+import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { TbLogin2 } from "react-icons/tb";
+const showPassreducer = (state, action) => {
+  switch (action.type) {
+    case "contrasenia":
+      return { ...state, pass1: !state.pass1 };
+    case "confirmarContrasenia":
+      return { ...state, pass2: !state.pass2 };
+    default:
+      return state;
+  }
+};
+
 function page() {
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [isRegistered, setIsRegistered] = useState("");
+  const [error, setError] = useState(false);
+  const [showPass, setShowPass] = useReducer(showPassreducer, {
+    pass1: false,
+    pass2: false,
+  });
   const [data, setData] = useState({
     nombre: "",
     boleta: "",
@@ -19,10 +41,32 @@ function page() {
       [e.target.name]: textFormated,
     });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!isEmailValid(data.correo)) {
+      return setError("El correo no es válido");
+    }
+    if(!isPasswordValid(data.contrasenia)){
+      return setError("La contraseña debe ser mayor a 6 caracteres")
+    }
     setIsRegistered(true);
   };
+
+  useEffect(() => {
+    if (error.length > 0) {
+      if (error.includes("correo")) {
+        setError("");
+      }
+    }
+  }, [data.correo]);
+  useEffect(() => {
+    if (error.length > 0) {
+      if (error.includes("contraseña")) {
+        setError("");
+      }
+    }
+  }, [data.contrasenia]);
   return (
     <div className="flex justify-center items-center h-screen w-full">
       <div className="text-white bg-blue-600 p-4 shadow-lg rounded-lg w-9/12 h-5/6 flex justify-center items-center">
@@ -42,7 +86,7 @@ function page() {
           <form
             onSubmit={handleSubmit}
             className="flex flex-col justify-center items-center gap-4">
-            <h1 className="text-pink text-4xl font-bold">Registro</h1>
+            <h1 className="text-purple text-4xl font-bold">Registro</h1>
             <h3>Por favor ingrese los siguientes datos</h3>
             <div className="flex gap-3 items-center justify-between w-80">
               <label htmlFor="nombre">Nombre</label>
@@ -73,7 +117,7 @@ function page() {
             <div className="flex gap-3 items-center justify-between w-80">
               <label htmlFor="correo">Correo</label>
               <input
-                type="text"
+                type="email"
                 name="correo"
                 id="correo"
                 placeholder="Correo"
@@ -85,30 +129,74 @@ function page() {
             </div>
             <div className="flex gap-3 items-center justify-between w-80">
               <label htmlFor="contrasenia">Contraseña</label>
-              <input
-                type="text"
-                name="contrasenia"
-                id="contrasenia"
-                placeholder="Contraseña"
-                className="rounded-full bg-blue-800 p-3 outline-none shadow-lg"
-                onChange={handleInput}
-                value={data.contrasenia}
-                required
-              />
+              <div className="flex w-fit justify-center items-center">
+                <input
+                  type={showPass.pass1?"text":"password"}
+                  name="contrasenia"
+                  id="contrasenia"
+                  placeholder="Contraseña"
+                  className="rounded-full bg-blue-800 p-3 outline-none shadow-lg"
+                  onChange={handleInput}
+                  value={data.contrasenia}
+                  required
+                />
+                <div className="w-full flex justify-end items-center">
+                  {showPass.pass1 ? (
+                    <FaRegEyeSlash
+                      className="absolute mr-4 cursor-pointer"
+                      size={20}
+                      onClick={() =>
+                        setShowPass({ type: "contrasenia" })
+                      }
+                    />
+                  ) : (
+                    <FaEye
+                      className="absolute mr-4 cursor-pointer"
+                      size={20}
+                      onClick={() =>
+                        setShowPass({ type: "contrasenia" })
+                      }
+                    />
+                  )}
+                </div>
+              </div>
             </div>
+
             <div className="flex gap-3 items-center justify-between w-80">
               <label htmlFor="confirmarContrasenia">Confirmar contraseña</label>
-              <input
-                type="text"
-                name="confirmarContrasenia"
-                id="confirmarContrasenia"
-                placeholder="Confirmar contraseña"
-                className="rounded-full bg-blue-800 p-3 outline-none shadow-lg"
-                onChange={handleInput}
-                value={data.confirmarContrasenia}
-                required
-              />
+              <div className="flex w-fit justify-center items-center">
+                <input
+                  type={showPass.pass2 ? "text" : "password"}
+                  name="confirmarContrasenia"
+                  id="confirmarContrasenia"
+                  placeholder="Confirmar contraseña"
+                  className="rounded-full bg-blue-800 p-3 outline-none shadow-lg"
+                  onChange={handleInput}
+                  value={data.confirmarContrasenia}
+                  required
+                />
+                <div className="w-full flex justify-end items-center">
+                  {showPass.pass2 ? (
+                    <FaRegEyeSlash
+                      className="absolute mr-4 cursor-pointer"
+                      size={20}
+                      onClick={() =>
+                        setShowPass({ type: "confirmarContrasenia" })
+                      }
+                    />
+                  ) : (
+                    <FaEye
+                      className="absolute mr-4 cursor-pointer"
+                      size={20}
+                      onClick={() =>
+                        setShowPass({ type: "confirmarContrasenia" })
+                      }
+                    />
+                  )}
+                </div>
+              </div>
             </div>
+            <p className="text-pink">{error}</p>
             <button className="p-3 rounded-lg shadow-md bg-yellow border border-yellow hover:text-yellow hover:bg-blue-600 transition-all">
               Registrarme
             </button>

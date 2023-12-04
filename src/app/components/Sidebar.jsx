@@ -13,6 +13,7 @@ import {
   BiListUl,
   BiListPlus,
 } from "react-icons/bi";
+import { IoMdPersonAdd } from "react-icons/io";
 import { AiFillWarning } from "react-icons/ai";
 import { BsFileEarmarkBarGraph, BsFillGearFill } from "react-icons/bs";
 import { SessionContext } from "./SessionContext";
@@ -32,6 +33,7 @@ function Sidebar({ children }) {
     "reports",
     "incident",
     "graphs",
+    "invite",
     "config",
   ];
   const handleIndicator = async () => {
@@ -68,7 +70,11 @@ function Sidebar({ children }) {
                 <Link href="/">
                   <div
                     className={`flex items-center p-2 gap-2
-                ${page == "dashboard" ? "text-white " : " text-gray-500 hover:text-gray-300"}`}>
+                ${
+                  page == "dashboard"
+                    ? "text-pink "
+                    : " text-gray-500 hover:text-gray-300"
+                }`}>
                     <BiSolidDashboard />
                     <p>Dashboard</p>
                   </div>
@@ -78,10 +84,10 @@ function Sidebar({ children }) {
                     className={`flex items-center p-2 gap-2
                 ${
                   page == "assistence"
-                    ? "bg-indigo-950 text-white "
+                    ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}>
-                    <BiListPlus />
+                    <BiListPlus  />
                     <p>Asistencia</p>
                   </div>
                 </Link>
@@ -90,7 +96,7 @@ function Sidebar({ children }) {
                     className={`flex items-center p-2 gap-2
                 ${
                   page == "reports"
-                    ? "bg-indigo-950 text-white "
+                    ? " text-blue "
                     : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <BiListUl />
@@ -102,7 +108,7 @@ function Sidebar({ children }) {
                     className={`flex items-center  p-2 gap-2
                 ${
                   page == "incident"
-                    ? "bg-indigo-950 text-white "
+                    ? " text-yellow "
                     : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <AiFillWarning />
@@ -114,11 +120,24 @@ function Sidebar({ children }) {
                     className={`flex items-center  p-2 gap-2
                 ${
                   page == "graphs"
-                    ? "bg-indigo-950 text-white "
+                    ? " text-green "
                     : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <BsFileEarmarkBarGraph />
                     <p>Gráficas</p>
+                  </div>
+                </Link>
+                <Link href="/pages/invite">
+                  <div
+                    className={`flex items-center p-2 gap-2
+                ${
+                  page == "invite"
+                    ? " text-purple "
+                    : "text-gray-500 hover:text-gray-300"
+                }`}>
+                    <IoMdPersonAdd />
+
+                    <p>Invitar</p>
                   </div>
                 </Link>
                 <Link href="/pages/config">
@@ -126,7 +145,7 @@ function Sidebar({ children }) {
                     className={`flex items-center p-2 gap-2
                 ${
                   page == "config"
-                    ? "bg-indigo-950 text-white "
+                    ? " text-white "
                     : "text-gray-500 hover:text-gray-300"
                 }`}>
                     <BsFillGearFill />
@@ -136,7 +155,7 @@ function Sidebar({ children }) {
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 p-2 text-gray-500">
+                className="flex items-center gap-2 p-2 text-gray-500 hover:text-gray-300">
                 <BiLogOut size={20} />
                 Cerrar Sesión
               </button>
@@ -147,16 +166,18 @@ function Sidebar({ children }) {
                   <div
                     className={`w-2 h-2 rounded-full ${
                       page == "dashboard"
-                        ? "bg-white"
+                        ? "bg-pink"
                         : page == "assistence"
                         ? "bg-purple"
                         : page == "reports"
                         ? "bg-blue"
                         : page == "incident"
-                        ? "bg-green"
+                        ? "bg-yellow"
                         : page == "graphs"
-                        ? "bg-pink"
-                        : "bg-yellow"
+                        ? "bg-green"
+                        : page == "invite"
+                        ? "bg-purple"
+                        : "bg-white"
                     }`}></div>
                 </div>
               </div>

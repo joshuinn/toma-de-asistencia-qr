@@ -7,7 +7,7 @@ export async function POST(req) {
     const key = process.env.SECRET_KEY;
     const hashed = crypto.AES.encrypt("123456789", key).toString();
     //const dec = crypto.AES.decrypt(hashed, key).toString(crypto.enc.Utf8)
-
+/*
     const result = await conn.query("INSERT INTO users SET ?", {
       name: "Jhon doe",
       email: "dev@dev.com",
@@ -15,6 +15,7 @@ export async function POST(req) {
       boleta: "123456789",
     });
     console.log(result);
+    */
     return NextResponse.json("ok");
   } catch (e) {
     return NextResponse.json({ message: "Nop" }, { status: 500 });

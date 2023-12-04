@@ -35,7 +35,7 @@ function LoginPage() {
   };
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen bg-blue-700">
-      <h1 className="text-[60px] font-extrabold text-white">Welcome!</h1>
+      <h1 className="text-[60px] font-extrabold text-white pl-10">Welcome!👋</h1>
       <form onSubmit={handelSubmit} className="flex flex-col gap-5 ">
         <div className="flex w-fit justify-center items-center text-white">
           <input

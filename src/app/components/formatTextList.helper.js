@@ -56,3 +56,12 @@ export const formatText = (name, text) => {
   }
   return textFormated;
 };
+
+export const isEmailValid = (email) => {
+  const emailRegex =
+    /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  return emailRegex.test(email);
+};
+export const isPasswordValid = (password) => {
+  return password.length > 5 ? true : false;
+};

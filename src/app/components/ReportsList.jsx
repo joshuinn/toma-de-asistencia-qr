@@ -147,7 +147,7 @@ function ReportsList() {
               <Loading />
             </div>
           ) : (
-            <div className="xl:h-[calc(100vh-15rem)]">
+            <div className="h-full sm:h-[50vh]">
               <ul className="grid grid-cols-2">
                 <li className="">
                   <h3>Grupo</h3>
@@ -156,7 +156,7 @@ function ReportsList() {
                   <h3>Seleccionar</h3>
                 </li>
               </ul>
-              <ul className="">
+              <ul className="overflow-y-scroll h-full">
                 {reports.length > 0 ? (
                   reports.map((report) => {
                     return (

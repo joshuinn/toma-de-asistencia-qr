@@ -4,10 +4,10 @@ import styles from "./dashboard.module.css";
 function page() {
   return (
     <div className="h-screen ]">
-      <Header title="Welcome back!" extra="Choose an option" />
+      <Header title="Welcome back! 👋" extra="Pero que día!" />
       <div className="flex justify-center m-4">
         <h1 className="font-bold text-2xl text-white ">
-          Some intresting things happened this morining!
+          ¿A dónde iras hoy? 🤔
         </h1>
       </div>
       <div className="flex flex-col md:grid md:grid-cols-2 items-center justify-center p-10 gap-4 h-[90vh]">
@@ -22,19 +22,26 @@ function page() {
           </div>
         </Link>
         <Link href="/pages/incident" className={styles.card}>
-          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-green transition-all">
+          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-yellow transition-all">
             <h2>Incidencia</h2>
           </div>
         </Link>
         <Link href="/pages/graphs" className={styles.card}>
-          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-pink transition-all">
+          <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-green transition-all">
             <h2>Gráficas</h2>
           </div>
         </Link>
         <Link
+          href="/pages/invite"
+          className={styles.card}>
+           <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-purple transition-all">
+            <h2>Invitar</h2>
+          </div>
+        </Link>
+        <Link
           href="/pages/config"
-          className={"col-start-1 col-end-3 " + styles.card}>
-           <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-yellow transition-all">
+          className={ styles.card}>
+           <div className="w-full h-full bg-blue-600 flex justify-center items-center text-white hover:text-pink transition-all">
             <h2>Cuenta</h2>
           </div>
         </Link>
