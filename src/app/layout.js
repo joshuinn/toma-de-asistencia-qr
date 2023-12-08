@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "./components/Sidebar";
 import SessionProvider from "./components/SessionContext";
+import SidebarProvider from "./components/SideBarResponsiveContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -12,9 +13,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body className={inter.className+" bg-blue-700"}>
+      <body className={inter.className + " bg-blue-700"}>
         <SessionProvider>
-          <Sidebar>{children}</Sidebar>
+          <SidebarProvider>
+            <Sidebar>{children}</Sidebar>
+          </SidebarProvider>
         </SessionProvider>
       </body>
     </html>

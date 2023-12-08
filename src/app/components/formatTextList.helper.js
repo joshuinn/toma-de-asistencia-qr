@@ -3,6 +3,7 @@ export const formatText = (name, text) => {
     return text;
   }
   let textFormated;
+  console.log(name);
   switch (name) {
     case "grupo":
       textFormated = text.toUpperCase();
@@ -23,9 +24,10 @@ export const formatText = (name, text) => {
         .join(" ");
       break;
     case "laboratorio":
+    case "numero_maquina":
       textFormated = "";
       for (let i = 0; i < text.length; i++) {
-        if (parseInt(text[i])) {
+        if (parseInt(text[i]) >= 0) {
           textFormated += text[i];
         }
       }
@@ -42,7 +44,7 @@ export const formatText = (name, text) => {
     case "boleta":
       textFormated = "";
       for (let i = 0; i < text.length; i++) {
-        if (parseInt(text[i])) {
+        if (parseInt(text[i]) >= 0) {
           textFormated += text[i];
         }
       }

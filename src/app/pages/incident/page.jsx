@@ -1,12 +1,16 @@
 import Header from "@/app/components/Header";
 import IncidentForm from "@/app/components/IncidentForm";
+import Loading from "@/app/components/Loading";
+import { Suspense } from "react";
 
 function Incident() {
   return (
-    <div className="text-white">
-      <Header title={"Reportar incidencia"} />
-      <IncidentForm />
-    </div>
+    <Suspense fallback={<Loading />}>
+      <div className="text-white">
+        <Header title={"Reportar incidencia"} />
+        <IncidentForm />
+      </div>
+    </Suspense>
   );
 }
 

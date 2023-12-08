@@ -50,6 +50,10 @@ function changePass() {
         if(response.data.isValid){
             succesChangePass()
             setIsError(false)
+            setDataPass({
+              contrasenia:"",
+              confirmarContrasenia:""
+            })
         }else{
             setIsError(true)
         }

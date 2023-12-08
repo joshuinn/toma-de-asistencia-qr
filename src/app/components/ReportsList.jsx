@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Loading from "./Loading";
 import { AiOutlineReload } from "react-icons/ai";
 import axios from "axios";
@@ -10,28 +10,12 @@ import { formatText } from "./formatTextList.helper";
 import { FaFilePdf } from "react-icons/fa";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { FaListCheck } from "react-icons/fa6";
-
-const DATA = [
-  {
-    id_lista: crypto.randomUUID(),
-    grupo: "6CV22",
-  },
-  {
-    id_lista: crypto.randomUUID(),
-    grupo: "8CV22",
-  },
-  {
-    id_lista: crypto.randomUUID(),
-    grupo: "1CV22",
-  },
-  {
-    id_lista: crypto.randomUUID(),
-    grupo: "2CV22",
-  },
-];
+import { toast } from "sonner";
+import GenPDFReport from "./GenPDFReport";
 
 function ReportsList() {
   const [reports, setReports] = useState([]);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefresing] = useState(false);
   const [changeTypeSearch, setChangeTypeSearch] = useState(false);
@@ -40,27 +24,44 @@ function ReportsList() {
     grupo: "",
     fecha: "",
   });
+  const [listToExport, setListToExport] = useState([]);
+
   useEffect(() => {
-    setIsLoading(true);
     const getReport = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get("/api/groups");
         if (response.status == 200) {
           setReports(response.data);
+          setData(response.data);
         }
       } catch (error) {}
       setIsLoading(false);
-      setIsRefresing(false);
     };
     getReport();
-    console.log(reports);
   }, [isRefreshing]);
+
   const handleSearch = (e) => {
     e.preventDefault();
+    /*
+    if(dataSearch.grupo.length==0 && )
+    {
+      setReports(data)
+      return
+    }
+    */
+    let newList = data.filter((item) => {
+      if (
+        item.ciclo.includes(dataSearch.ciclo) &&
+        item.grupo.includes(dataSearch.grupo)
+      )
+        return item;
+    });
+    setReports(newList);
   };
 
   const handleRefresh = () => {
-    setIsRefresing(true);
+    setIsRefresing(!isRefreshing);
   };
   const handleChangeTypeSearch = () => {
     setChangeTypeSearch(!changeTypeSearch);
@@ -72,13 +73,50 @@ function ReportsList() {
       [e.target.name]: textFormated,
     });
   };
+
+  const handleCheked = (id_lista_asistencia) => {
+    setReports((prev) =>
+      prev.map((report) =>
+        report.id_lista_asistencia == id_lista_asistencia
+          ? { ...report, checked: !report.checked }
+          : report
+      )
+    );
+  };
+  const selectAll = () => {
+    setReports((prev) => prev.map((report) => ({ ...report, checked: true })));
+  };
+
+  const handleExportToPDF = async() => {
+    setListChecked();
+    if (listToExport.length > 0) {
+      if (listToExport[0].length) {
+        //await GenPDFReport(listToExport[0]);
+      }
+    }
+  };
+  const handleExportToExcel = () => {
+    setListChecked();
+  };
+  const setListChecked = () => {
+    setListToExport([
+      reports.filter((report) => (report.checked ? report : null)),
+    ]);
+  };
+  useEffect(() => {
+    if (listToExport.length > 0) {
+      if (listToExport[0].length == 0) {
+        toast.error("No se han escogido listas para exportar");
+      }
+    }
+  }, [listToExport]);
   return (
-    <div>
+    <div className="h-[90vh] p-4 m-[-4px]">
       <div className="flex justify-between items-center flex-wrap">
         <div className="flex items-center flex-wrap gap-5">
           <form onSubmit={handleSearch}>
             <div className="flex gap-2 flex-wrap items-center p-3 bg-blue-600 rounded-lg shadow-lg">
-              <label> Ciclo</label>
+              <label> Ciclo</label>handleList
               <input
                 type="search"
                 placeholder="Ciclo"
@@ -107,7 +145,8 @@ function ReportsList() {
               </div>
               <button
                 className="p-3 border hover:border-blue hover:text-blue rounded-lg transition-all flex gap-2 items-center"
-                type="submit">
+                type="submit"
+              >
                 Buscar
                 <CiSearch size={20} />
               </button>
@@ -116,7 +155,8 @@ function ReportsList() {
           <div>
             <button
               className="p-4 bg-blue-600 flex items-center gap-2 rounded-lg shadow-lg hover:text-blue"
-              onClick={handleRefresh}>
+              onClick={handleRefresh}
+            >
               <span>Refrescar</span>
               <AiOutlineReload
                 size={20}
@@ -126,28 +166,37 @@ function ReportsList() {
           </div>
         </div>
         <div className="flex gap-10 mt-2 bg-blue-600 p-3 rounded-lg shadow-lg">
-          <button className="p-3 bg-purple rounded-lg hover:bg-blue-600 hover:text-purple border border-purple transition-all flex items-center gap-2">
+          <button
+            className="p-3 bg-purple rounded-lg hover:bg-blue-600 hover:text-purple border border-purple transition-all flex items-center gap-2"
+            onClick={selectAll}
+          >
             Seleccionar Todo
             <FaListCheck size={20} />
           </button>
-          <button className="p-3 bg-pink rounded-lg border border-pink hover:text-pink hover:bg-blue-600 transition-all flex items-center gap-2">
+          <button
+            className="p-3 bg-pink rounded-lg border border-pink hover:text-pink hover:bg-blue-600 transition-all flex items-center gap-2"
+            onClick={handleExportToPDF}
+          >
             PDF
             <FaFilePdf size={20} />
           </button>
-          <button className="p-3 bg-green rounded-lg border border-green hover:text-green hover:bg-blue-600 transition-all flex items-center gap-2">
+          <button
+            className="p-3 bg-green rounded-lg border border-green hover:text-green hover:bg-blue-600 transition-all flex items-center gap-2"
+            onClick={handleExportToExcel}
+          >
             Excel
             <SiMicrosoftexcel size={20} />
           </button>
         </div>
       </div>
-      <div className="w-full">
-        <div className="bg-blue-800 mt-5 p-4 rounded-lg shadow-xl">
+      <div className="h-full">
+        <div className="bg-blue-800 h-[70%] mt-5 p-4 rounded-lg shadow-xl overflow-y-scroll">
           {isLoading ? (
             <div className="h-[50vh]">
               <Loading />
             </div>
           ) : (
-            <div className="h-full sm:h-[50vh]">
+            <div className=" ">
               <ul className="grid grid-cols-2">
                 <li className="">
                   <h3>Grupo</h3>
@@ -156,13 +205,14 @@ function ReportsList() {
                   <h3>Seleccionar</h3>
                 </li>
               </ul>
-              <ul className="overflow-y-scroll h-full">
+              <ul className="">
                 {reports.length > 0 ? (
                   reports.map((report) => {
                     return (
                       <li
                         key={report.id_lista_asistencia}
-                        className="border border-x-0 grid grid-cols-2 p-3">
+                        className="border border-x-0 grid grid-cols-2 p-3"
+                      >
                         <div className="">
                           <span>{report.grupo}</span>
                         </div>
@@ -172,10 +222,19 @@ function ReportsList() {
                             <input
                               type="checkbox"
                               id={report.id_lista_asistencia}
+                              checked={
+                                report.checked == undefined
+                                  ? false
+                                  : report.checked
+                              }
+                              onChange={() => {
+                                handleCheked(report.id_lista_asistencia);
+                              }}
                             />
                             <label
                               className={style.checkInput}
-                              htmlFor={report.id_lista_asistencia}></label>
+                              htmlFor={report.id_lista_asistencia}
+                            ></label>
                           </div>
                         </div>
                       </li>

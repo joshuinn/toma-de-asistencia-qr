@@ -6,7 +6,9 @@ import React, { Suspense } from "react";
 
 const loadGroup = async (listaId) => {
   try {
-    const response = await axios.get("http://localhost:3000/api/groups/" + listaId);
+    const response = await axios.get(
+      "http://localhost:3000/api/groups/" + listaId
+    );
     if (response.status == 404) {
       return { status: 404 };
     }
@@ -23,33 +25,31 @@ async function ListAssistance({ params }) {
     return <div>404</div>;
   }
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <Header title="Lista de asistencia" />
-      <Suspense fallback={<Loading />}>
-        <div className="flex flex-col gap-3">
-          <div className="flex gap-4 p-2 rounded-lg flex-wrap justify-between text-white">
-            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
-              <p className="">Ciclo:{data.ciclo} </p>
-            </div>
-            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
-              <p className="">Grupo: {data.grupo} </p>
-            </div>
-            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
-              <p className="">Profesor: {data.maestro} </p>
-            </div>
-            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
-              <p className="">Numero de Laboratorio: {data.laboratorio} </p>
-            </div>
-            <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
-              <p className="">Materia: {data.materia} </p>
-            </div>
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-4 p-2 rounded-lg flex-wrap justify-between text-white">
+          <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
+            <p className="">Ciclo:{data.ciclo} </p>
           </div>
-          <div>
-            <ListStudent id_lista_asitencia={params.id} />
+          <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
+            <p className="">Grupo: {data.grupo} </p>
+          </div>
+          <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
+            <p className="">Profesor: {data.maestro} </p>
+          </div>
+          <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
+            <p className="">Numero de Laboratorio: {data.laboratorio} </p>
+          </div>
+          <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
+            <p className="">Materia: {data.materia} </p>
           </div>
         </div>
-      </Suspense>
-    </>
+        <div>
+          <ListStudent id_lista_asitencia={params.id} />
+        </div>
+      </div>
+    </Suspense>
   );
 }
 

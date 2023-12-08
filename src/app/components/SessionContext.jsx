@@ -20,7 +20,6 @@ const SessionProvider = ({ children }) => {
       try {
         const response = await axios.get("/api/auth");
         if (response.status === 200) {
-          //console.log(response);
           setIsLogged(true);
           setDataUser({
             id_usuario: response.data.id_usuario,
@@ -34,6 +33,7 @@ const SessionProvider = ({ children }) => {
       setIsLoading(false);
     };
     checkLogged();
+    console.log("Render");
   }, []);
   const handleLogin = async () => {
     setIsLogged(true);

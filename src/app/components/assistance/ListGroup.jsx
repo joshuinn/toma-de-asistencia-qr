@@ -22,9 +22,11 @@ export default function ListGroup() {
   const [isError, setIsError] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if (dataSearch.grupo.length == 0 && dataSearch.ciclo.length == 0) {
+      setGroups(data);
+      return;
+    }
     let newList = data.filter((item) => {
-      console.log(item.ciclo, dataSearch.ciclo);
       if (
         item.ciclo.includes(dataSearch.ciclo) &&
         item.grupo.includes(dataSearch.grupo)
@@ -34,7 +36,7 @@ export default function ListGroup() {
     setGroups(newList);
   };
   const handleInput = (e) => {
-    const text = formatText(e.target.name, e.target.value)
+    const text = formatText(e.target.name, e.target.value);
     setDataSearch({
       ...dataSearch,
       [e.target.name]: text,
@@ -63,22 +65,19 @@ export default function ListGroup() {
       grupo: "",
     });
     if (isError) {
-      toast("Ha ocurrido un problema", {
-        icon: <BiMessageRoundedError className="text-red-500" size={25} />,
-      });
+      toast.error("Ha ocurrido un problema");
     } else {
-      toast("Se ha recargado los datos de los grupos", {
-        icon: <AiFillCheckCircle className="text-green-500" size={25} />,
-      });
+      toast.success("Se ha recargado los datos de los grupos");
     }
   };
   return (
     <>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 h-[calc(100vh-5rem)]">
         <div className="flex justify-between flex-wrap gap-3 text-white">
           <form
             className="flex gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg"
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+          >
             <label className="t">Ciclo</label>
             <input
               className="rounded-full p-2 outline-none bg-blue-800"
@@ -105,7 +104,8 @@ export default function ListGroup() {
           </form>
           <button
             onClick={handleRefreshGroups}
-            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple transition-all">
+            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple transition-all"
+          >
             <span>Refrescar</span>
             <AiOutlineReload className="cursor-pointer" size={20} />
           </button>
@@ -114,7 +114,7 @@ export default function ListGroup() {
           </div>
         </div>
         <Suspense fallback={<Loading />}>
-          <section className="bg-blue-800 rounded-lg overflow-y-scroll h-full xl:h-[81vh] text-white shadow-lg">
+          <section className="bg-blue-800 rounded-lg overflow-y-scroll h-1/2 xl:h-[81vh] text-white shadow-lg">
             <ul className="p-2 grid grid-cols-3 md:grid-cols-4 justify-evenly items-center ">
               <li className="">Ciclo</li>
               <li className="">Grupo</li>
@@ -129,13 +129,15 @@ export default function ListGroup() {
                   groups.map((item, i) => (
                     <li
                       key={item.id_grupo}
-                      className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center ">
+                      className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center "
+                    >
                       <p className="">{item.ciclo}</p>
                       <p className="">{item.grupo}</p>
                       <p className="md:block hidden">{item.maestro}</p>
                       <div className="flex justify-end  w-full">
                         <Link
-                          href={`/pages/assistence/${item.id_lista_asistencia}`}>
+                          href={`/pages/assistence/${item.id_lista_asistencia}`}
+                        >
                           <p
                             className={`flex items-center p-2 text-white rounded-lg justify-between
                             border transition-all
@@ -143,7 +145,8 @@ export default function ListGroup() {
                               i % 2 == 0
                                 ? "bg-purple hover:text-purple hover:bg-blue-800 border-purple"
                                 : "bg-blue border-blue hover:text-blue hover:bg-blue-800"
-                            } `}>
+                            } `}
+                          >
                             Tomar lista
                             <BiListCheck size={25} />
                           </p>

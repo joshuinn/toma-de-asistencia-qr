@@ -5,6 +5,7 @@ const nextConfig = {
             source: '/',
             destination: "/pages/dashboard",
             permanent: true,
+            
         }]
     }
 }

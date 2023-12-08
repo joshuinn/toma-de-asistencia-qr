@@ -1,52 +1,54 @@
 "use client";
 import Header from "@/app/components/Header";
+import Loading from "@/app/components/Loading";
 import { isEmailValid } from "@/app/components/formatTextList.helper";
-import { toastError, toastSucces } from "@/app/components/toast.helper";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 function page() {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("")
-  const handlesubmit = async(e) => {
+  const [error, setError] = useState("");
+  const handlesubmit = async (e) => {
     e.preventDefault();
-    if(isEmailValid(email)){
+    if (isEmailValid(email)) {
       try {
-        const response = await axios.post("/api/sendmail",[email])
-        if(response.status == 200){
-          toastSucces("Se ha mandado correctamente la invitación🎉")
-          return
+        const response = await axios.post("/api/sendmail", [email]);
+        if (response.status == 200) {
+          toast.success("Se ha mandado correctamente la invitación🎉");
+          return;
         }
-        toastError("Se ha producido un error al mandar el email")
+        toast.error("Se ha producido un error al mandar el email");
       } catch (error) {
-          console.log(error);
+        console.log(error);
       }
-    }else{
-      setError("El correo no es válido")
+    } else {
+      setError("El correo no es válido");
     }
   };
   const handleInput = (e) => {
     setEmail(e.target.value);
   };
-  useEffect(()=>{
-    if(email.length>0 && error.length>0){
-      setError("")
+  useEffect(() => {
+    if (email.length > 0 && error.length > 0) {
+      setError("");
     }
-  },[email])
+  }, [email]);
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <Header title="Inviar a encargado" />
       <div className="flex justify-center pt-20 text-white ">
         <div className="flex justify-center items-center p-4 bg-blue-600 rounded-lg w-10/12 h-[50vh] flex-col gap-4 shadow-lg">
           <h2 className="text-2xl font-bold text-purple">Ingrese un correo </h2>
           <form
             className="flex flex-col gap-3 justify-center items-center"
-            onSubmit={handlesubmit}>
+            onSubmit={handlesubmit}
+          >
             <div className="flex gap-3 items-center">
               <label htmlFor="correo">Correo </label>
               <input
                 type="email"
-                placeholder="correo"
+                placeholder="Correo"
                 id="correo"
                 className="rounded-full outline-none p-3 bg-blue-800"
                 onChange={handleInput}
@@ -62,7 +64,7 @@ function page() {
           </form>
         </div>
       </div>
-    </>
+    </Suspense>
   );
 }
 

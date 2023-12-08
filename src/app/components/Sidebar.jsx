@@ -13,20 +13,23 @@ import {
   BiListUl,
   BiListPlus,
 } from "react-icons/bi";
-import { IoMdPersonAdd } from "react-icons/io";
+import { IoMdClose, IoMdPersonAdd } from "react-icons/io";
 import { AiFillWarning } from "react-icons/ai";
 import { BsFileEarmarkBarGraph, BsFillGearFill } from "react-icons/bs";
 import { SessionContext } from "./SessionContext";
 import { Toaster } from "sonner";
 import Loading from "./Loading";
 import { usePathname } from "next/navigation";
+import { SidebarContext } from "./SideBarResponsiveContext";
 
 function Sidebar({ children }) {
   const [page, setPage] = useState("dashboard");
   const { isLogged, handleLogout } = useContext(SessionContext);
+  const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
   const indicatorRef = useRef();
   const topPagesRef = useRef();
+  const { isShow, handleShow } = useContext(SidebarContext);
   const pages = [
     "dashboard",
     "assistence",
@@ -48,11 +51,14 @@ function Sidebar({ children }) {
     }
   }, [page, isLogged]);
   useEffect(() => {
+    setIsLoading(true);
     if (isLogged) {
       const actualPage = pathname.split("/");
       setPage(actualPage[2]);
     }
+    setIsLoading(false);
   }, [pathname]);
+
   return (
     <>
       <Suspense fallback={<Loading />}>
@@ -60,7 +66,20 @@ function Sidebar({ children }) {
           <div>{children}</div>
         ) : (
           <div className="flex bg-blue-700">
-            <div className="fixed bg-blue-800 w-[12rem] h-screen p-3 flex flex-col justify-evenly">
+            <div
+              className={`flex bg-blue-800 z-10 h-screen w-full p-3 flex-col  
+              transition-opacity delay-75 fixed
+              ${
+                isShow
+                  ? "absolute translate-x-0 bg-opacity-90 opacity-100"
+                  : "translate-x-[-100%] opacity-0"
+              } sm:flex sm:bg-opacity-100 sm:opacity-100 sm:translate-x-0 sm:w-[12rem] justify-evenly`}
+            >
+              <div className="absolute sm:hidden top-0 right-0 text-white p-2">
+                <button onClick={handleShow}>
+                  <IoMdClose size={35} />
+                </button>
+              </div>
               <Link href="/">
                 <div className="flex justify-center items-center text-white rounded-lg">
                   <BiSolidDashboard size={80} />
@@ -74,7 +93,8 @@ function Sidebar({ children }) {
                   page == "dashboard"
                     ? "text-pink "
                     : " text-gray-500 hover:text-gray-300"
-                }`}>
+                }`}
+                  >
                     <BiSolidDashboard />
                     <p>Dashboard</p>
                   </div>
@@ -86,8 +106,9 @@ function Sidebar({ children }) {
                   page == "assistence"
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
-                }`}>
-                    <BiListPlus  />
+                }`}
+                  >
+                    <BiListPlus />
                     <p>Asistencia</p>
                   </div>
                 </Link>
@@ -98,31 +119,34 @@ function Sidebar({ children }) {
                   page == "reports"
                     ? " text-blue "
                     : "text-gray-500 hover:text-gray-300"
-                }`}>
+                }`}
+                  >
                     <BiListUl />
                     Reportes
                   </div>
                 </Link>
-                <Link href="/pages/incident">
+                <Link href="/pages/incident" prefetch={false}>
                   <div
                     className={`flex items-center  p-2 gap-2
                 ${
                   page == "incident"
                     ? " text-yellow "
                     : "text-gray-500 hover:text-gray-300"
-                }`}>
+                }`}
+                  >
                     <AiFillWarning />
                     <p>Incidencia</p>
                   </div>
                 </Link>
-                <Link href="/pages/graphs">
+                <Link href="/pages/graphs" prefetch={false}>
                   <div
                     className={`flex items-center  p-2 gap-2
                 ${
                   page == "graphs"
                     ? " text-green "
                     : "text-gray-500 hover:text-gray-300"
-                }`}>
+                }`}
+                  >
                     <BsFileEarmarkBarGraph />
                     <p>Gráficas</p>
                   </div>
@@ -134,20 +158,22 @@ function Sidebar({ children }) {
                   page == "invite"
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
-                }`}>
+                }`}
+                  >
                     <IoMdPersonAdd />
 
                     <p>Invitar</p>
                   </div>
                 </Link>
-                <Link href="/pages/config">
+                <Link href="/pages/config"  prefetch={false}>
                   <div
                     className={`flex items-center p-2 gap-2
                 ${
                   page == "config"
                     ? " text-white "
                     : "text-gray-500 hover:text-gray-300"
-                }`}>
+                }`}
+                  >
                     <BsFillGearFill />
                     <p>Cuenta</p>
                   </div>
@@ -155,14 +181,16 @@ function Sidebar({ children }) {
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 p-2 text-gray-500 hover:text-gray-300">
+                className="flex items-center gap-2 p-2 text-gray-500 hover:text-gray-300"
+              >
                 <BiLogOut size={20} />
                 Cerrar Sesión
               </button>
-              <div className="flex justify-end bg-gray-300 absolute top-0 w-full">
+              <div className="hidden sm:flex justify-end bg-gray-300 absolute top-0 w-full">
                 <div
                   ref={indicatorRef}
-                  className="bg-blue-700 rounded-tl-full rounded-bl-full w-6 h-10 transition-all flex justify-center items-center indicator-shadow absolute mr-3">
+                  className="bg-blue-700 rounded-tl-full rounded-bl-full w-6 h-10 transition-all flex justify-center items-center indicator-shadow absolute mr-3 "
+                >
                   <div
                     className={`w-2 h-2 rounded-full ${
                       page == "dashboard"
@@ -178,15 +206,16 @@ function Sidebar({ children }) {
                         : page == "invite"
                         ? "bg-purple"
                         : "bg-white"
-                    }`}></div>
+                    }`}
+                  ></div>
                 </div>
               </div>
             </div>
-            <div className="w-full h-screen ml-[13rem] p-3 overflow-hidden">
+            <div className="w-full h-screen sm:ml-[13rem] p-3 overflow-hidden">
               <div className="absolute top-0 right-0">
-                <Toaster />
+                <Toaster richColors />
               </div>
-              <div className="h-screen">{children}</div>
+                <div className="h-screen overflow-y-scroll sm:overflow-hidden">{children}</div>
             </div>
           </div>
         )}

@@ -1,6 +1,12 @@
 "use client";
 import axios from "axios";
-import React, { useState, useEffect, Suspense, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  Suspense,
+  useContext,
+  useRef,
+} from "react";
 import { AiFillCloseCircle, AiOutlineQrcode } from "react-icons/ai";
 import { RiInboxUnarchiveFill } from "react-icons/ri";
 import Loading from "../Loading";
@@ -8,20 +14,7 @@ import { toast } from "sonner";
 import studenLoader from "./ListStudent.module.css";
 import { useRouter } from "next/navigation";
 import { SessionContext } from "../SessionContext";
-const DATA = [
-  {
-    id: "fb70de3d-658b-4826-8ff2-c3426468910c",
-    boleta: "2021350820",
-    apellido_alumno: "DEL MONTE ORTEGA",
-    nombre_alumno: "JOSHUA ALEXANDER ",
-  },
-  {
-    id: "9417c6cd-a188-4b7d-8c10-9e1cd056908e",
-    boleta: "2020202020",
-    apellido_alumno: "Torres Perez",
-    nombre_alumno: "Pedrito Ayala",
-  },
-];
+import { formatText } from "../formatTextList.helper";
 
 function ListStudent({ id_lista_asitencia }) {
   const [students, setStudents] = useState([]);
@@ -29,6 +22,8 @@ function ListStudent({ id_lista_asitencia }) {
   const [showForm, setShowForm] = useState(false);
   const router = useRouter();
   const { dataUser } = useContext(SessionContext);
+  const focusedInputRef = useRef(null);
+  const [currentInputId, setCurrentInputId] = useState(null);
   const [dataForm, setDataForm] = useState({
     url: "",
     id_lista_asitencia: id_lista_asitencia,
@@ -75,7 +70,7 @@ function ListStudent({ id_lista_asitencia }) {
 
           setStudents((prevStudents) => {
             return prevStudents.map((student) => {
-              if (student.id == id_queue) {
+              if (student.id == id_queue && data.boleta) {
                 return {
                   ...student,
                   boleta: data.boleta,
@@ -119,14 +114,10 @@ function ListStudent({ id_lista_asitencia }) {
         data: dataForm,
       },
     ]);
-
-    /*    clean form
     setDataForm({
-      url: "",
       id_lista_asitencia: "",
-      maquina: "",
+      url: "",
     });
-    */
   };
   const handleForm = () => {
     setShowForm(!showForm);
@@ -138,14 +129,22 @@ function ListStudent({ id_lista_asitencia }) {
     });
   };
   const handleMaquina = (e) => {
+    const val = formatText(e.target.name, e.target.value);
     setStudents((prevStudents) => {
-      return prevStudents.map((student) => {
-        if (student.id == e.target.id) {
-          return { ...student, numero_maquina: e.target.value };
-        }
-        return student;
-      });
+      return prevStudents.map((student) =>
+        student.id == e.target.id
+          ? { ...student, numero_maquina: val }
+          : student
+      );
     });
+    if (focusedInputRef.current) {
+      setTimeout(() => {
+        focusedInputRef.current.focus();
+      }, 0);
+    }
+  };
+  const setFocusedInput = (e) => {
+    setCurrentInputId(e.target.id);
   };
   const FormRegister = () => {
     return (
@@ -158,7 +157,8 @@ function ListStudent({ id_lista_asitencia }) {
       ${
         showForm ? " bg-[rgb(0,0,0,0.5)] left-[13rem]" : "right-full opacity-0 "
       }
-      `}>
+      `}
+      >
         <div className="bg-blue-700 text-white p-5 flex flex-col items-center justify-center rounded-lg">
           <div className="flex justify-end w-full">
             <AiFillCloseCircle
@@ -174,7 +174,8 @@ function ListStudent({ id_lista_asitencia }) {
                 url: "https://servicios.dae.ipn.mx/vcred/?h=b65180be30f3f9dcf9713f09a04a799d88ceec72341b468c9336c38acf3dc2bf",
               })
             }
-            className="m-2 bg-blue p-3 rounded">
+            className="m-2 bg-blue p-3 rounded"
+          >
             Example
           </button>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
@@ -198,8 +199,9 @@ function ListStudent({ id_lista_asitencia }) {
       <div className="bg-blue-800 rounded-lg p-3 shadow-lg z-10 text-white">
         <div className="flex justify-end">
           <button
-            className="bg-gradient-to-tl from-green to-blue p-3 rounded-lg flex items-center"
-            onClick={handleForm}>
+            className="transition-all bg-purple border border-purple hover:bg-blue-800 hover:text-purple p-3 rounded-lg flex items-center"
+            onClick={handleForm}
+          >
             <AiOutlineQrcode size={25} />
             <p>Iniciar registro con QR</p>
           </button>
@@ -229,11 +231,16 @@ function ListStudent({ id_lista_asitencia }) {
                     <input
                       key={student.id}
                       id={student.id}
-                      type="text"
+                      ref={
+                        student.id === currentInputId ? focusedInputRef : null
+                      }
+                      type="numeric"
                       placeholder="00"
                       value={student.numero_maquina ?? 0}
-                      onChange={handleMaquina}
                       className="bg-blue-600 p-2 rounded-full outline-none w-20 text-center"
+                      onChange={handleMaquina}
+                      onFocus={setFocusedInput}
+                      name="numero_maquina"
                     />
                   </div>
                 </div>
@@ -243,7 +250,7 @@ function ListStudent({ id_lista_asitencia }) {
         </ul>
         <div className="flex justify-end">
           <button
-            className={`border  p-3 mt-2 rounded-lg  flex items-center gap-1 
+            className={`border transition-all p-3 mt-2 rounded-lg  flex items-center gap-1 
                 ${
                   studentQueue.length > 0 || students.length == 0
                     ? "text-gray-500 border-gray-500"
@@ -253,7 +260,8 @@ function ListStudent({ id_lista_asitencia }) {
             onClick={() => {
               handleEndList();
             }}
-            disabled={students.length == 0 || studentQueue.length > 0}>
+            disabled={students.length == 0 || studentQueue.length > 0}
+          >
             <p>Terminar registro</p>
             <RiInboxUnarchiveFill size={25} />
           </button>

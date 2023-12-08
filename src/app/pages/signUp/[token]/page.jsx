@@ -4,8 +4,9 @@ import {
   isEmailValid,
   isPasswordValid,
 } from "@/app/components/formatTextList.helper";
-import { toastSucces } from "@/app/components/toast.helper";
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useReducer, useState } from "react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { TbLogin2 } from "react-icons/tb";
@@ -20,9 +21,10 @@ const showPassreducer = (state, action) => {
   }
 };
 
-function page() {
+function page({ params }) {
   const [isRegistered, setIsRegistered] = useState("");
   const [error, setError] = useState(false);
+  const router = useRouter();
   const [showPass, setShowPass] = useReducer(showPassreducer, {
     pass1: false,
     pass2: false,
@@ -34,6 +36,7 @@ function page() {
     contrasenia: "",
     confirmarContrasenia: "",
   });
+
   const handleInput = (e) => {
     const textFormated = formatText(e.target.name, e.target.value);
     setData({
@@ -42,15 +45,29 @@ function page() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isEmailValid(data.correo)) {
       return setError("El correo no es válido");
     }
-    if(!isPasswordValid(data.contrasenia)){
-      return setError("La contraseña debe ser mayor a 6 caracteres")
+    if (!isPasswordValid(data.contrasenia)) {
+      return setError("La contraseña debe ser mayor a 6 caracteres");
     }
-    setIsRegistered(true);
+    if (data.contrasenia !== data.confirmarContrasenia) {
+      return setError("La contraseñas no son iguales");
+    }
+    try {
+      const response = await axios
+        .post("/api/users", [data])
+        .then((res) => res)
+        .catch((e) => e);
+      if (response.status == 200) {
+        console.log(response);
+      } else {
+        return setError("Ha ocurrido un error vuelva intentar");
+      }
+      setIsRegistered(true);
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -67,6 +84,29 @@ function page() {
       }
     }
   }, [data.contrasenia]);
+
+  useEffect(() => {
+    const verifyToken = async (token) => {
+      try {
+        const response = await axios
+          .post("/api/verifyToken", [{ token }])
+          .then((res) => res)
+          .then((res) => res)
+          .catch((e) => e);
+        console.log(response.status);
+        if (response.status == 200) {
+          setData({ ...data, correo: response.data.correo });
+          return;
+        }
+      } catch (error) {
+        console.log("error catch:" + error);
+      }
+      router.push("/");
+      router.refresh();
+    };
+    verifyToken(params.token);
+  }, []);
+
   return (
     <div className="flex justify-center items-center h-screen w-full">
       <div className="text-white bg-blue-600 p-4 shadow-lg rounded-lg w-9/12 h-5/6 flex justify-center items-center">
@@ -85,7 +125,8 @@ function page() {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-center items-center gap-4">
+            className="flex flex-col justify-center items-center gap-4"
+          >
             <h1 className="text-purple text-4xl font-bold">Registro</h1>
             <h3>Por favor ingrese los siguientes datos</h3>
             <div className="flex gap-3 items-center justify-between w-80">
@@ -131,7 +172,7 @@ function page() {
               <label htmlFor="contrasenia">Contraseña</label>
               <div className="flex w-fit justify-center items-center">
                 <input
-                  type={showPass.pass1?"text":"password"}
+                  type={showPass.pass1 ? "text" : "password"}
                   name="contrasenia"
                   id="contrasenia"
                   placeholder="Contraseña"
@@ -145,17 +186,13 @@ function page() {
                     <FaRegEyeSlash
                       className="absolute mr-4 cursor-pointer"
                       size={20}
-                      onClick={() =>
-                        setShowPass({ type: "contrasenia" })
-                      }
+                      onClick={() => setShowPass({ type: "contrasenia" })}
                     />
                   ) : (
                     <FaEye
                       className="absolute mr-4 cursor-pointer"
                       size={20}
-                      onClick={() =>
-                        setShowPass({ type: "contrasenia" })
-                      }
+                      onClick={() => setShowPass({ type: "contrasenia" })}
                     />
                   )}
                 </div>

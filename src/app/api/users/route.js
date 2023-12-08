@@ -4,20 +4,19 @@ import crypto from "crypto-js";
 
 export async function POST(req) {
   try {
+    const data = await req.json();
     const key = process.env.SECRET_KEY;
-    const hashed = crypto.AES.encrypt("123456789", key).toString();
-    //const dec = crypto.AES.decrypt(hashed, key).toString(crypto.enc.Utf8)
-/*
-    const result = await conn.query("INSERT INTO users SET ?", {
-      name: "Jhon doe",
-      email: "dev@dev.com",
-      password: hashed,
-      boleta: "123456789",
+    const hashed = crypto.AES.encrypt(data[0].contrasenia, key).toString();
+    const result = await conn.query("INSERT INTO ctb_usuario SET ?", {
+      nombre_usuario: data[0].nombre,
+      correo: data[0].correo,
+      boleta: data[0].boleta,
+      contrasenia: hashed,
     });
-    console.log(result);
-    */
+
     return NextResponse.json("ok");
   } catch (e) {
+    console.log(e);
     return NextResponse.json({ message: "Nop" }, { status: 500 });
   }
 }
@@ -34,7 +33,7 @@ export async function PUT(req) {
         'UPDATE ctb_usuario SET contrasenia= "' +
           hashed +
           '" WHERE id_usuario = ' +
-          1
+          data[0].id_usuario
       );
       if (result.affectedRows > 0) {
         return NextResponse.json({ isValid: true });

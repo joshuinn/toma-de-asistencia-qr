@@ -39,6 +39,9 @@ function getFormatedName(name) {
   lastName[1] = splitName[imax - 1];
   lastName[2] = splitName[imax];
   let nombre = "";
+
+  console.log(lastName);
+
   if (splitName[imax - 2].length < 4) {
     lastName[0] = splitName[imax - 2];
     for (let i = 0; i <= imax-3; i++) {
@@ -52,7 +55,8 @@ function getFormatedName(name) {
   for (let i = 0; i <= imax-2; i++) {
     nombre += splitName[i]+" ";
   }
-  return { appellido: lastName[1] + " " + lastName[2], nombre: nombre };
+  console.log("last: " + lastName);
+  return { apellido: lastName[1] + " " + lastName[2], nombre: nombre };
 }
 async function serchData(url) {
   try {
