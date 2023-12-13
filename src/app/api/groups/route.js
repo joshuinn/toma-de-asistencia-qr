@@ -3,36 +3,116 @@ import { conn } from "@/lib/mysql";
 export async function POST(request) {
   try {
     const data = await request.json();
+    let id_lista = {
+      grupo: "",
+      ciclo: "",
+      maestro: "",
+      materia: "",
+      lab: "",
+    };
 
-    const resultCiclo = await conn.query(
-      "INSERT INTO ctb_ciclo SET ciclo = ?",
-      [data.ciclo]
-    );
-
-    const resultGrupo = await conn.query(
-      "INSERT INTO ctb_grupo SET grupo = ?",
+    let resultGrupo = await conn.query(
+      "SELECT * FROM ctb_grupo WHERE grupo = ?",
       [data.grupo]
     );
-    const resultMaestro = await conn.query(
-      "INSERT INTO ctb_maestro SET maestro =?",
+    if (resultGrupo.length > 0) {
+      id_lista = {
+        ...id_lista,
+        grupo: resultGrupo[0].id_grupo,
+      };
+    } else {
+      resultGrupo = await conn.query("INSERT INTO ctb_grupo SET grupo = ?", [
+        data.grupo,
+      ]);
+      id_lista = {
+        ...id_lista,
+        grupo: resultGrupo.insertId,
+      };
+    }
+
+    let resultCiclo = await conn.query(
+      "SELECT * FROM ctb_ciclo WHERE ciclo = ?",
+      [data.ciclo]
+    );
+    if (resultCiclo.length > 0) {
+      id_lista = {
+        ...id_lista,
+        ciclo: resultCiclo[0].id_ciclo,
+      };
+    } else {
+      resultCiclo = await conn.query("INSERT INTO ctb_ciclo SET ciclo = ?", [
+        data.ciclo,
+      ]);
+      id_lista = {
+        ...id_lista,
+        ciclo: resultCiclo.insertId,
+      };
+    }
+    let resultMaestro = await conn.query(
+      "SELECT * FROM ctb_maestro WHERE maestro = ?",
       [data.maestro]
     );
-    const resultMateria = await conn.query(
-      "INSERT INTO ctb_materia SET materia =?",
+    if (resultMaestro.length > 0) {
+      id_lista = {
+        ...id_lista,
+        maestro: resultMaestro[0].id_maestro,
+      };
+    } else {
+      resultMaestro = await conn.query(
+        "INSERT INTO ctb_maestro SET maestro =?",
+        [data.maestro]
+      );
+      id_lista = {
+        ...id_lista,
+        maestro: resultMaestro.insertId,
+      };
+    }
+    let resultMateria = await conn.query(
+      "SELECT * FROM ctb_materia WHERE materia = ?",
       [data.materia]
     );
-    const resultLab = await conn.query(
-      "INSERT INTO ctb_laboratorio SET laboratorio =?",
+    if (resultMateria.length > 0) {
+      id_lista = {
+        ...id_lista,
+        materia: resultMateria[0].id_materia,
+      };
+    } else {
+      resultMateria = await conn.query(
+        "INSERT INTO ctb_materia SET materia =?",
+        [data.materia]
+      );
+      id_lista = {
+        ...id_lista,
+        materia: resultMateria.insertId,
+      };
+    }
+    let resultLab = await conn.query(
+      "SELECT * FROM ctb_laboratorio WHERE laboratorio = ?",
       [data.laboratorio]
     );
+    if (resultLab.length > 0) {
+      id_lista = {
+        ...id_lista,
+        lab: resultLab[0].id_laboratorio,
+      };
+    } else {
+      resultLab = await conn.query(
+        "INSERT INTO ctb_laboratorio SET laboratorio =?",
+        [data.laboratorio]
+      );
+      id_lista = {
+        ...id_lista,
+        lab: resultLab.insertId,
+      };
+    }
     const resultLista = await conn.query(
       "INSERT INTO ctb_lista_asistencia SET ?",
       {
-        id_grupo: resultGrupo.insertId,
-        id_materia: resultMateria.insertId,
-        id_maestro: resultMaestro.insertId,
-        id_ciclo: resultCiclo.insertId,
-        id_laboratorio: resultLab.insertId,
+        id_grupo: id_lista.grupo,
+        id_materia: id_lista.materia,
+        id_maestro: id_lista.maestro,
+        id_ciclo: id_lista.ciclo,
+        id_laboratorio: id_lista.lab,
       }
     );
     //console.log(resultLista);
@@ -51,7 +131,9 @@ export async function GET(request) {
       " JOIN ctb_ciclo ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
     const joinMestro =
       " JOIN ctb_maestro ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
-    const data = await conn.query("SELECT * FROM ctb_lista_asistencia" +joinGrupo+joinCiclo+joinMestro);
+    const data = await conn.query(
+      "SELECT * FROM ctb_lista_asistencia" + joinGrupo + joinCiclo + joinMestro
+    );
     return NextResponse.json(data);
   } catch (error) {
     console.log(error);

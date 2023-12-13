@@ -34,6 +34,6 @@ async function getIdStudent(student) {
     apellido_alumno: student.apellido_alumno,
     boleta: student.boleta,
   });
-  getIdStudent(student);
-  return undefined;
+  return getIdStudent(student);
+  
 }

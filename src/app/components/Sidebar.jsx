@@ -21,6 +21,9 @@ import { Toaster } from "sonner";
 import Loading from "./Loading";
 import { usePathname } from "next/navigation";
 import { SidebarContext } from "./SideBarResponsiveContext";
+import AutoCompliteProvider, {
+  AutoCompliteContext,
+} from "./ContextDataAutoCompliteInput";
 
 function Sidebar({ children }) {
   const [page, setPage] = useState("dashboard");
@@ -99,6 +102,7 @@ function Sidebar({ children }) {
                     <p>Dashboard</p>
                   </div>
                 </Link>
+
                 <Link href="/pages/assistence">
                   <div
                     className={`flex items-center p-2 gap-2
@@ -151,6 +155,7 @@ function Sidebar({ children }) {
                     <p>Gráficas</p>
                   </div>
                 </Link>
+
                 <Link href="/pages/invite">
                   <div
                     className={`flex items-center p-2 gap-2
@@ -165,7 +170,7 @@ function Sidebar({ children }) {
                     <p>Invitar</p>
                   </div>
                 </Link>
-                <Link href="/pages/config"  prefetch={false}>
+                <Link href="/pages/config" prefetch={false}>
                   <div
                     className={`flex items-center p-2 gap-2
                 ${
@@ -215,7 +220,9 @@ function Sidebar({ children }) {
               <div className="absolute top-0 right-0">
                 <Toaster richColors />
               </div>
-                <div className="h-screen overflow-y-scroll sm:overflow-hidden">{children}</div>
+              <div className="h-screen overflow-y-scroll sm:overflow-hidden">
+                {children}
+              </div>
             </div>
           </div>
         )}

@@ -36,13 +36,15 @@ const SessionProvider = ({ children }) => {
     console.log("Render");
   }, []);
   const handleLogin = async () => {
-    setIsLogged(true);
+    setIsLoading(true)
     router.push("/");
     router.refresh();
     const response = await axios.get("/api/auth");
     setDataUser({
       id_usuario: await response.data.id_usuario,
     });
+    setIsLogged(true);
+    setIsLoading(false)
   };
   const handleLogout = async () => {
     try {

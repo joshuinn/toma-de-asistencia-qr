@@ -3,7 +3,6 @@ export const formatText = (name, text) => {
     return text;
   }
   let textFormated;
-  console.log(name);
   switch (name) {
     case "grupo":
       textFormated = text.toUpperCase();

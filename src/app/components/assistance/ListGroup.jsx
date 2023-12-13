@@ -9,11 +9,14 @@ import { toast } from "sonner";
 import Loading from "../Loading";
 import Link from "next/link";
 import { formatText } from "../formatTextList.helper";
+import { AutoCompliteContext } from "../ContextDataAutoCompliteInput";
 
 export default function ListGroup() {
   const [groups, setGroups] = useState([]);
   const [data, setData] = useState([]);
   const [refreshGroups, setRefreshGroups] = useState(false);
+  //const dataAutoComplite = { some: "" };
+  const {dataAutoComplite} = useContext(AutoCompliteContext);
   const [dataSearch, setDataSearch] = useState({
     ciclo: "",
     grupo: "",
@@ -70,6 +73,7 @@ export default function ListGroup() {
       toast.success("Se ha recargado los datos de los grupos");
     }
   };
+
   return (
     <>
       <div className="flex flex-col gap-3 h-[calc(100vh-5rem)]">
@@ -86,7 +90,15 @@ export default function ListGroup() {
               name="ciclo"
               value={dataSearch.ciclo}
               onChange={handleInput}
+              list="options_ciclo"
             />
+            <datalist id="options_ciclo">
+              {dataAutoComplite.ciclo
+                ? dataAutoComplite.ciclo.map((ciclo) => (
+                    <option value={ciclo.ciclo} key={ciclo.id_ciclo}></option>
+                  ))
+                : null}
+            </datalist>
             <p>y</p>
             <label>Grupo</label>
             <input
@@ -96,7 +108,15 @@ export default function ListGroup() {
               name="grupo"
               value={dataSearch.grupo}
               onChange={handleInput}
+              list="options_grupo"
             />
+            <datalist id="options_grupo">
+              {dataAutoComplite.grupo
+                ? dataAutoComplite.grupo.map((grupo) => (
+                    <option value={grupo.grupo} key={grupo.id_grupo}></option>
+                  ))
+                : null}
+            </datalist>
             <button className="rounded border p-3 flex gap-1 items-center hover:text-purple transition-all">
               Buscar
               <CiSearch size={20} />
@@ -137,6 +157,7 @@ export default function ListGroup() {
                       <div className="flex justify-end  w-full">
                         <Link
                           href={`/pages/assistence/${item.id_lista_asistencia}`}
+                          shallow
                         >
                           <p
                             className={`flex items-center p-2 text-white rounded-lg justify-between

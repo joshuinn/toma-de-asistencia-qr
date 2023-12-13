@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import Loading from "./Loading";
 import { AiOutlineReload } from "react-icons/ai";
 import axios from "axios";
@@ -12,6 +12,7 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { FaListCheck } from "react-icons/fa6";
 import { toast } from "sonner";
 import GenPDFReport from "./GenPDFReport";
+import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
 
 function ReportsList() {
   const [reports, setReports] = useState([]);
@@ -19,13 +20,13 @@ function ReportsList() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefresing] = useState(false);
   const [changeTypeSearch, setChangeTypeSearch] = useState(false);
+  const [listToExport, setListToExport] = useState([]);
   const [dataSearch, setDataSearch] = useState({
     ciclo: "",
     grupo: "",
     fecha: "",
   });
-  const [listToExport, setListToExport] = useState([]);
-
+  const { dataAutoComplite } = useContext(AutoCompliteContext);
   useEffect(() => {
     const getReport = async () => {
       setIsLoading(true);
@@ -87,36 +88,18 @@ function ReportsList() {
     setReports((prev) => prev.map((report) => ({ ...report, checked: true })));
   };
 
-  const handleExportToPDF = async() => {
-    setListChecked();
-    if (listToExport.length > 0) {
-      if (listToExport[0].length) {
-        //await GenPDFReport(listToExport[0]);
-      }
-    }
-  };
-  const handleExportToExcel = () => {
-    setListChecked();
-  };
-  const setListChecked = () => {
-    setListToExport([
-      reports.filter((report) => (report.checked ? report : null)),
-    ]);
-  };
   useEffect(() => {
-    if (listToExport.length > 0) {
-      if (listToExport[0].length == 0) {
-        toast.error("No se han escogido listas para exportar");
-      }
-    }
-  }, [listToExport]);
+    setListToExport(
+      reports.filter((report) => (report.checked ? report : null))
+    );
+  }, [reports]);
   return (
     <div className="h-[90vh] p-4 m-[-4px]">
       <div className="flex justify-between items-center flex-wrap">
         <div className="flex items-center flex-wrap gap-5">
           <form onSubmit={handleSearch}>
             <div className="flex gap-2 flex-wrap items-center p-3 bg-blue-600 rounded-lg shadow-lg">
-              <label> Ciclo</label>handleList
+              <label> Ciclo</label>
               <input
                 type="search"
                 placeholder="Ciclo"
@@ -124,18 +107,34 @@ function ReportsList() {
                 name="ciclo"
                 onChange={handleInput}
                 value={dataSearch.ciclo}
+                list="options_ciclo"
               />
+              <datalist id="options_ciclo">
+                {dataAutoComplite.ciclo
+                  ? dataAutoComplite.ciclo.map((item) => (
+                      <option value={item.ciclo} key={item.id_ciclo}></option>
+                    ))
+                  : null}
+              </datalist>
               <p>y</p>
               <label>Grupo o fecha</label>
               <div className="flex items-center gap-3">
                 <input
                   type={changeTypeSearch ? "text" : "date"}
-                  placeholder="Grupo o fecha"
+                  placeholder="Grupo"
                   className="rounded-full p-2 bg-blue-800 outline-none w-40"
                   name={changeTypeSearch ? "grupo" : "fecha"}
                   onChange={handleInput}
                   value={changeTypeSearch ? dataSearch.grupo : dataSearch.fecha}
+                  list="options_grupo"
                 />
+                <datalist id="options_grupo">
+                  {dataAutoComplite.grupo
+                    ? dataAutoComplite.grupo.map((item) => (
+                        <option value={item.grupo} key={item.id_grupo}></option>
+                      ))
+                    : null}
+                </datalist>
                 <div className="mr-4 hover:text-blue cursor-pointer">
                   <HiOutlineSwitchHorizontal
                     size={20}
@@ -169,21 +168,14 @@ function ReportsList() {
           <button
             className="p-3 bg-purple rounded-lg hover:bg-blue-600 hover:text-purple border border-purple transition-all flex items-center gap-2"
             onClick={selectAll}
+            disabled={!reports.length>0}
           >
             Seleccionar Todo
             <FaListCheck size={20} />
           </button>
-          <button
-            className="p-3 bg-pink rounded-lg border border-pink hover:text-pink hover:bg-blue-600 transition-all flex items-center gap-2"
-            onClick={handleExportToPDF}
-          >
-            PDF
-            <FaFilePdf size={20} />
-          </button>
-          <button
-            className="p-3 bg-green rounded-lg border border-green hover:text-green hover:bg-blue-600 transition-all flex items-center gap-2"
-            onClick={handleExportToExcel}
-          >
+
+          <GenPDFReport list={listToExport} />
+          <button className="p-3 bg-green rounded-lg border border-green hover:text-green hover:bg-blue-600 transition-all flex items-center gap-2">
             Excel
             <SiMicrosoftexcel size={20} />
           </button>
@@ -241,7 +233,9 @@ function ReportsList() {
                     );
                   })
                 ) : (
-                  <div></div>
+                  <div className="text-center mt-6">
+                    <h3 className="font-bold text-2xl">No hay elementos</h3>
+                  </div>
                 )}
               </ul>
             </div>
