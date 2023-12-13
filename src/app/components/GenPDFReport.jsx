@@ -152,6 +152,7 @@ function GenPDFReport({ list }) {
     setIsShow(!isShow);
   };
 
+  
   return (
     <>
       <button
