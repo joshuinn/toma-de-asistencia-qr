@@ -2,6 +2,7 @@
 import Header from "@/app/components/Header";
 import Loading from "@/app/components/Loading";
 import { isEmailValid } from "@/app/components/formatTextList.helper";
+import ButtonStyled from "@/app/components/styled/ButtonStyled";
 import axios from "axios";
 import React, { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -13,7 +14,10 @@ function page() {
     e.preventDefault();
     if (isEmailValid(email)) {
       try {
-        const response = await axios.post("/api/sendmail", {email, type:"invite"});
+        const response = await axios.post("/api/sendmail", {
+          email,
+          type: "invite",
+        });
         if (response.status == 200) {
           toast.success("Se ha mandado correctamente la invitación🎉");
           return;
@@ -42,8 +46,7 @@ function page() {
           <h2 className="text-2xl font-bold text-purple">Ingrese un correo </h2>
           <form
             className="flex flex-col gap-3 justify-center items-center"
-            onSubmit={handlesubmit}
-          >
+            onSubmit={handlesubmit}>
             <div className="flex gap-3 items-center">
               <label htmlFor="correo">Correo </label>
               <input
@@ -58,9 +61,7 @@ function page() {
             <div>
               <p className="text-pink">{error}</p>
             </div>
-            <button className="p-3 bg-purple border border-purple rounded-lg hover:text-purple hover:bg-blue-600 transition-all">
-              Enviar invitación
-            </button>
+            <ButtonStyled color="purple">Enviar invitación</ButtonStyled>
           </form>
         </div>
       </div>

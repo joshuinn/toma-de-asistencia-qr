@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { IoMdCloseCircle } from "react-icons/io";
 import axios from "axios";
 import { countStudents } from "./countStudents.helper";
+import ButtonStyled from "./styled/ButtonStyled";
 
 const styles = StyleSheet.create({
   page: {
@@ -135,8 +136,7 @@ function GenPDFReport({ list }) {
       <PDFDownloadLink
         document={<ReportPDF list={listToExport} />}
         fileName="reporte.pdf"
-        className="hidden"
-      >
+        className="hidden">
         <input type="button" ref={downloadRef}></input>
       </PDFDownloadLink>
     );
@@ -152,16 +152,12 @@ function GenPDFReport({ list }) {
     setIsShow(!isShow);
   };
 
-  
   return (
     <>
-      <button
-        className="p-3 bg-pink rounded-lg border border-pink hover:text-pink hover:bg-blue-600 transition-all flex items-center gap-2"
-        onClick={handleShow}
-      >
+      <ButtonStyled color="pink" onClick={handleShow}>
         PDF
         <FaFilePdf size={20} />
-      </button>
+      </ButtonStyled>
       {isShow ? (
         <div className="absolute h-screen top-0 w-[calc(100%-13rem)] right-0 z-10 p-4 bg-[rgb(0,0,0,0.4)]">
           <div className="my-3 flex justify-end">

@@ -42,9 +42,10 @@ function page() {
             type="text"
             placeholder="nombre"
             id="nombre"
-            className="rounded-full bg-blue-800 p-3"
+            className="rounded-full bg-blue-700 p-3 text-gray-300"
             value={dataUser.nombre}
             disabled
+
           />
         </div>
         <div className="flex gap-3 bg-blue-600 rounded-lg p-3 items-center w-1/2 justify-center shadow-lg">
@@ -53,7 +54,7 @@ function page() {
             type="text"
             placeholder="Boleta"
             id="boleta"
-            className="rounded-full bg-blue-800 p-3"
+            className="rounded-full bg-blue-700 p-3 text-gray-300"
             value={dataUser.boleta}
             disabled
           />
@@ -64,7 +65,7 @@ function page() {
             type="text"
             placeholder="Correo"
             id="correo"
-            className="rounded-full bg-blue-800 p-3"
+            className="rounded-full bg-blue-700 p-3 text-gray-300"
             value={dataUser.correo}
             disabled
           />

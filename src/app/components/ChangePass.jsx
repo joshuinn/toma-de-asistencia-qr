@@ -4,6 +4,7 @@ import { FaEye, FaRegEyeSlash } from "react-icons/fa";
 import { SessionContext } from "./SessionContext";
 import axios from "axios";
 import { toast } from "sonner";
+import ButtonStyled from "./styled/ButtonStyled";
 
 const showPassreducer = (state, action) => {
   switch (action.type) {
@@ -65,11 +66,11 @@ function changePass() {
 
   return (
     <div className="bg-blue-600 w-1/2 h-full flex flex-col justify-center items-center rounded-lg shadow-lg p-4">
-      <button
-        className="p-3 bg-yellow rounded-lg border border-yellow hover:bg-blue-600 hover:text-yellow transition-all"
+      <ButtonStyled
+       color="yellow"
         onClick={handleShow}>
         Cambiar contraseña
-      </button>
+      </ButtonStyled>
       <form
         className={`mt-3 flex flex-col gap-3 transtion-all ${
           showChangePass ? "opacity-100 relative" : "opacity-0 hidden"
@@ -128,7 +129,9 @@ function changePass() {
           </div>
         </div>
         <h3 className={`text-pink ${isError?"block":"hidden"} `} >Las contraseñas no son iguales</h3>
-        <button className="p-2 transition-all rounded-lg bg-pink border border-pink hover:bg-blue-600 hover:text-pink ">Cambiar</button>
+        <ButtonStyled color="pink" >
+          <span>Cambiar</span>
+        </ButtonStyled>
       </form>
     </div>
   );

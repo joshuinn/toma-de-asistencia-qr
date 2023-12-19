@@ -11,6 +11,7 @@ import ReactPDF, {
 import { useState } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
+import ButtonStyled from "./styled/ButtonStyled";
 
 const styles = StyleSheet.create({
   page: {
@@ -23,18 +24,18 @@ const styles = StyleSheet.create({
   },
   text: {
     width: "16.6666%",
-    fontWeight:"bold"
+    fontWeight: "bold",
   },
   textData: {
     width: "16.6666%",
-    fontSize:"15px"
+    fontSize: "15px",
   },
   dataTextArea: {
     width: "100%",
     border: "1px solid #000",
     padding: "8px",
-    fontSize:"15px",
-    borderRadius:"5px"
+    fontSize: "15px",
+    borderRadius: "5px",
   },
   title: {
     fontWeight: "bold",
@@ -58,9 +59,9 @@ const styles = StyleSheet.create({
     width: "200px",
     fontSize: "12px",
   },
-  observaciones:{
-    marginTop:"10px"
-  }
+  observaciones: {
+    marginTop: "10px",
+  },
 });
 
 function GenPDFIncident({ data }) {
@@ -111,13 +112,10 @@ function GenPDFIncident({ data }) {
 
   return (
     <>
-      <button
-        className="bg-pink border border-pink p-3 rounded-lg hover:text-pink hover:bg-blue-600 transition-all flex gap-2 items-center"
-        onClick={handleShow}
-      >
+      <ButtonStyled color="pink" onClick={handleShow}>
         Exportar a PDF
         <FaFilePdf size={20} />
-      </button>
+      </ButtonStyled>
       {isShow ? (
         <div className="absolute h-screen top-0 w-[calc(100%-13rem)] right-0 z-10 p-4 bg-[rgb(0,0,0,0.4)]">
           <div className="my-3 flex justify-end">

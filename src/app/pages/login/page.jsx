@@ -4,6 +4,8 @@ import axios from "axios";
 import Link from "next/link";
 import { SessionContext } from "@/app/components/SessionContext";
 import { FaEye, FaRegEyeSlash, FaUserCircle } from "react-icons/fa";
+import ButtonStyled from "@/app/components/styled/ButtonStyled";
+import InputStyled from "@/app/components/styled/InputStyled";
 function LoginPage() {
   const [credentials, setCredentials] = useState({
     boleta: "",
@@ -35,13 +37,14 @@ function LoginPage() {
   };
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen bg-blue-700">
-      <h1 className="text-[60px] font-extrabold text-white pl-10">Welcome!👋</h1>
+      <h1 className="text-[60px] font-extrabold text-white pl-10">
+        Welcome!👋
+      </h1>
       <form onSubmit={handelSubmit} className="flex flex-col gap-5 ">
         <div className="flex w-fit justify-center items-center text-white">
-          <input
+          <InputStyled
             type="text"
             placeholder="Boleta"
-            className="bg-blue-800 p-3 rounded-3xl shadow-lg"
             name="boleta"
             onChange={handleChange}
             required
@@ -51,11 +54,10 @@ function LoginPage() {
           </div>
         </div>
         <div className="flex w-fit justify-center items-center text-white">
-          <input
+          <InputStyled
             type={showPass ? "text" : "password"}
             name="contrasenia"
             placeholder="contraseña"
-            className="bg-blue-800 p-3 rounded-3xl shadow-lg"
             onChange={handleChange}
             required
           />
@@ -79,9 +81,7 @@ function LoginPage() {
         {isError && (
           <p className="text-pink">Boleta o contraseña incorrectos</p>
         )}
-        <button className="p-3 px-4 text-white bg-pink border border-pink hover:bg-blue-700 hover:text-pink rounded-lg shadow-xl transition-all">
-          Iniciar sesión
-        </button>
+        <ButtonStyled color="pink">Iniciar sesión</ButtonStyled>
         <Link href="/pages/forgotPassword">
           <p className="text-sm text-right text-white hover:text-gray-300 transition-all">
             Olvidé mi contraseña

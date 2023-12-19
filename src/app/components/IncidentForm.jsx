@@ -4,6 +4,8 @@ import GenPDFIncident from "./GenPDFIncident";
 import { formatText } from "./formatTextList.helper";
 import { FaFilePdf, FaTrash } from "react-icons/fa";
 import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
+import ButtonStyled from "./styled/ButtonStyled";
+import InputStyled from "./styled/InputStyled";
 
 function IncidentForm() {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
@@ -58,10 +60,9 @@ function IncidentForm() {
         <div className="bg-blue-600 rounded-lg p-4 shadow-lg flex flex-wrap gap-3">
           <div className="flex gap-3 items-center">
             <label>Grupo</label>
-            <input
+            <InputStyled
               type="text"
               placeholder="Grupo"
-              className="bg-blue-800 p-2 rounded-full outline-none"
               name="grupo"
               onChange={handleInput}
               value={data.grupo}
@@ -77,7 +78,7 @@ function IncidentForm() {
           </div>
           <div className="flex gap-3 items-center">
             <label>Maestro</label>
-            <input
+            <InputStyled
               type="text"
               placeholder="Maestro"
               className="bg-blue-800 p-2 rounded-full outline-none"
@@ -97,7 +98,7 @@ function IncidentForm() {
 
           <div className="flex gap-3 items-center">
             <label>Ciclo</label>
-            <input
+            <InputStyled
               type="text"
               placeholder="Ciclo"
               className="bg-blue-800 p-2 rounded-full outline-none"
@@ -116,10 +117,9 @@ function IncidentForm() {
           </div>
           <div className="flex gap-3 items-center">
             <label>Nombre</label>
-            <input
+            <InputStyled
               type="text"
               placeholder="Nombre"
-              className="bg-blue-800 p-2 rounded-full outline-none"
               name="nombre"
               onChange={handleInput}
               value={data.nombre}
@@ -127,10 +127,9 @@ function IncidentForm() {
           </div>
           <div className="flex gap-3 items-center">
             <label>Boleta</label>
-            <input
+            <InputStyled
               type="text"
               placeholder="Boleta"
-              className="bg-blue-800 p-2 rounded-full outline-none"
               name="boleta"
               onChange={handleInput}
               value={data.boleta}
@@ -138,10 +137,9 @@ function IncidentForm() {
           </div>
           <div className="flex gap-3 items-center">
             <label>#laboratorio</label>
-            <input
+            <InputStyled
               type="text"
               placeholder="#Laboratorio"
-              className="bg-blue-800 p-2 rounded-full outline-none"
               name="laboratorio"
               onChange={handleInput}
               value={data.laboratorio}
@@ -152,8 +150,7 @@ function IncidentForm() {
                 ? dataAutoComplite.laboratorio.map((item) => (
                     <option
                       value={item.laboratorio}
-                      key={item.id_laboratorio}
-                    ></option>
+                      key={item.id_laboratorio}></option>
                   ))
                 : null}
             </datalist>
@@ -167,17 +164,12 @@ function IncidentForm() {
             className="bg-blue-800 p-4 rounded-lg outline-none max-h-[calc(50vh)]"
             name="observaciones"
             onChange={handleInput}
-            value={data.observaciones}
-          ></textarea>
+            value={data.observaciones}></textarea>
           <div className="flex justify-end gap-4">
-            <button
-              className="flex items-center gap-2 p-3 rounded-lg bg-purple border border-purple hover:bg-blue-600 hover:text-purple transition-all"
-              onClick={handleClean}
-              type="reset"
-            >
+            <ButtonStyled onClick={handleClean} color="purple" type="reset">
               Limpiar
               <FaTrash size={20} />
-            </button>
+            </ButtonStyled>
             <GenPDFIncident data={data} />
           </div>
         </div>

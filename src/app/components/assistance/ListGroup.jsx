@@ -10,11 +10,78 @@ import Loading from "../Loading";
 import Link from "next/link";
 import { formatText } from "../formatTextList.helper";
 import { AutoCompliteContext } from "../ContextDataAutoCompliteInput";
+import useReports from "../hooks/useReports";
+import Search from "../Search";
+import ButtonStyled from "../styled/ButtonStyled";
 
+export default function ListGroup() {
+  const reports = useReports();
+  if (reports.isLoading) {
+    return <Loading />;
+  }
+  return (
+    <div className="flex flex-col gap-3 h-[calc(100vh-5rem)]">
+      <div className="flex justify-between text-white items-center">
+        <Search
+          dataSearch={reports.dataSearch}
+          setDataSearch={reports.setDataSearch}
+          data={reports.data}
+          setReports={reports.setGroups}
+          handleRefresh={reports.handleRefreshGroups}
+        />
+        <div className="flex items-center">
+          <NewList handleRefreshGroups={reports.handleRefreshGroups} />
+        </div>
+      </div>
+      <Suspense fallback={<Loading />}>
+        <section className="bg-blue-800 rounded-lg overflow-y-scroll h-1/2 xl:h-[81vh] text-white shadow-lg">
+          <ul className="p-2 grid grid-cols-3 md:grid-cols-4 justify-evenly items-center ">
+            <li className="">Ciclo</li>
+            <li className="">Grupo</li>
+            <li className=" md:block hidden">Maestro</li>
+            <li className=" flex justify-end  w-full">Tomar lista</li>
+          </ul>
+
+          <ul className="w-full p-2">
+            {reports.groups.length > 0 ? (
+              reports.groups.map((item, i) => (
+                <li
+                  key={item.id_grupo}
+                  className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center ">
+                  <p className="">{item.ciclo}</p>
+                  <p className="">{item.grupo}</p>
+                  <p className="md:block hidden">{item.maestro}</p>
+                  <div className="flex justify-end  w-full">
+                    <Link
+                      href={`/pages/assistence/${item.id_lista_asistencia}`}
+                      shallow>
+                      <ButtonStyled color={i % 2 == 0 ? "purple" : "blue"}>
+                        <span>Tomar lista</span>
+                        <BiListCheck size={25} />
+                      </ButtonStyled>
+                    </Link>
+                  </div>
+                </li>
+              ))
+            ) : (
+              <div className="bg-indigo-950 p-3 text-center rounded-lg">
+                <h2 className="font-bold text-2xl text-white">
+                  No hay elementos
+                </h2>
+              </div>
+            )}
+          </ul>
+        </section>
+      </Suspense>
+    </div>
+  );
+}
+/*
 export default function ListGroup() {
   const [groups, setGroups] = useState([]);
   const [data, setData] = useState([]);
   const [refreshGroups, setRefreshGroups] = useState(false);
+  console.log(newReports);
   //const dataAutoComplite = { some: "" };
   const {dataAutoComplite} = useContext(AutoCompliteContext);
   const [dataSearch, setDataSearch] = useState({
@@ -124,10 +191,10 @@ export default function ListGroup() {
           </form>
           <button
             onClick={handleRefreshGroups}
-            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple transition-all group"
+            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple  group transition-all" 
           >
             <span >Refrescar</span>
-            <AiOutlineReload className="cursor-pointer group-hover:rotate-45 transition-all" size={20} />
+            <AiOutlineReload className="cursor-pointer  group-hover:rotate-45    transition-transform" size={20} />
           </button>
           <div className="flex items-center">
             <NewList handleRefreshGroups={handleRefreshGroups} />
@@ -190,3 +257,4 @@ export default function ListGroup() {
     </>
   );
 }
+*/
