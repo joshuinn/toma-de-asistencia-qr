@@ -52,11 +52,15 @@ function ChartIndex() {
     <>
       <div className="p-3 w-full h-full">
         <div className="w-full flex flex-wrap justify-between items-center gap-2">
-          <Search
-            dataSearch={dataSearch}
-            data={reports.data}
-            setReports={reports.setGroups}
-          />
+          <div className="flex gap-4 items-center">
+            <Search
+              dataSearch={reports.dataSearch}
+              setDataSearch={reports.setDataSearch}
+              data={reports.data}
+              setReports={reports.setGroups}
+              handleRefresh={reports.handleRefreshGroups}
+            />
+          </div>
           <div className="flex gap-5 bg-blue-600 p-4 rounded-lg shadow-lg">
             <ButtonStyled color="purple" onClick={selectAll}>
               Seleccionar Todo
@@ -84,7 +88,8 @@ function ChartIndex() {
                   return (
                     <li
                       key={report.id_lista_asistencia}
-                      className="border border-x-0 grid grid-cols-4 p-3">
+                      className="border border-x-0 grid grid-cols-4 p-3"
+                    >
                       <div className="">
                         <span>{report.ciclo}</span>
                       </div>
@@ -110,7 +115,8 @@ function ChartIndex() {
                           />
                           <label
                             className={style.checkInput}
-                            htmlFor={report.id_lista_asistencia}></label>
+                            htmlFor={report.id_lista_asistencia}
+                          ></label>
                         </div>
                       </div>
                     </li>

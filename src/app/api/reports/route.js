@@ -19,7 +19,8 @@ export async function POST(req) {
       " JOIN ctb_alumno ON ttb_asistencia.id_alumno = ctb_alumno.id_alumno ";
     const joinLista =
       " JOIN ctb_lista_asistencia ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
-    for (let i = 0; i < data.length; i++) {
+      const joinFecha = " JOIN ttb_asistencia "
+      for (let i = 0; i < data.length; i++) {
       newData[i] = await conn.query(
         "SELECT * FROM ttb_asistencia " +
           joinLista +

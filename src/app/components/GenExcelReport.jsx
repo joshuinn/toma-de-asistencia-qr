@@ -4,6 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { countStudents } from "./countStudents.helper";
+import ButtonStyled from "./styled/ButtonStyled";
+import { toast } from "sonner";
 
 function GenExcelReport({ list }) {
   const [listToExport, setListToExport] = useState([]);
@@ -15,6 +17,7 @@ function GenExcelReport({ list }) {
       for (let i = 0; i < data.length; i++) {
         console.log(data[i]);
         if (data[i].length > 0) {
+          let fecha = data[i][0].fecha_asistencia.split("T");
           dataFormated[i] = {
             id: data[i][0].id_lista_asistencia,
             grupo: data[i][0].grupo,
@@ -23,6 +26,7 @@ function GenExcelReport({ list }) {
             maestro: data[i][0].maestro,
             ciclo: data[i][0].ciclo,
             alumnos: countStudents(data[i]),
+            fecha: fecha[0],
           };
         }
       }
@@ -35,7 +39,11 @@ function GenExcelReport({ list }) {
   const handleExport = async (e) => {
     e.preventDefault();
     await extracData();
+    if(listToExport.length == 0){
+      return toast.error("No se ha escogido una lista")
+    }
     console.log(e);
+    refExport.current.click();
   };
   useEffect(() => {
     console.log("data:", listToExport);
@@ -49,14 +57,12 @@ function GenExcelReport({ list }) {
 
   return (
     <>
-      <CSVLink
-        data={listToExport}
-        headers={headers}
-        className="p-3 bg-green rounded-lg  border border-green hover:text-green hover:bg-blue-600 transition-all flex items-center gap-2"
-        onClick={handleExport}
-      >
+      <ButtonStyled color="green" onClick={handleExport}>
         Excel
         <SiMicrosoftexcel size={20} />
+      </ButtonStyled>
+      <CSVLink data={listToExport} headers={headers} className="hidden">
+        <input type="button" ref={refExport} />
       </CSVLink>
     </>
   );

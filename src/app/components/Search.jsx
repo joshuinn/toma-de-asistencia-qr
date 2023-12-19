@@ -13,7 +13,7 @@ function Search({
   setReports,
   data,
   handleRefresh,
-  isChangeInput =false,
+  isChangeInput = false,
 }) {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [changeTypeSearch, setChangeTypeSearch] = useState(false);
@@ -34,7 +34,7 @@ function Search({
     let newList = data.filter((item) => {
       if (
         item.ciclo.includes(dataSearch.ciclo) &&
-        item.grupo.includes(dataSearch.grupo)
+      (item.grupo.includes(dataSearch.grupo))
       )
         return item;
     });
@@ -47,17 +47,20 @@ function Search({
   return (
     <>
       <form
-        className="flex gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg"
-        onSubmit={handleSubmit}>
-        <label className="t">Ciclo</label>
-        <InputStyled
-          type="search"
-          placeholder="Ciclo"
-          name="ciclo"
-          value={dataSearch.ciclo}
-          onChange={handleInput}
-          list="options_ciclo"
-        />
+        className="flex justify-center gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg"
+        onSubmit={handleSubmit}
+      >
+        <div className="flex gap-2 items-center">
+          <label>Ciclo</label>
+          <InputStyled
+            type="search"
+            placeholder="Ciclo"
+            name="ciclo"
+            value={dataSearch.ciclo}
+            onChange={handleInput}
+            list="options_ciclo"
+          />
+        </div>
 
         <datalist id="options_ciclo">
           {dataAutoComplite.ciclo
@@ -66,6 +69,7 @@ function Search({
               ))
             : null}
         </datalist>
+        <div className="flex items-center gap-2">
         <p>y</p>
         <label>Grupo</label>
         <InputStyled
@@ -75,11 +79,13 @@ function Search({
           value={dataSearch.grupo}
           onChange={handleInput}
           list="options_grupo"
-        />
+          />
+          </div>
         <div
-          className={
-            `mr-4 hover:text-blue cursor-pointer ${isChangeInput? "visible":"hidden"}`
-          }>
+          className={`mr-4 hover:text-blue cursor-pointer ${
+            isChangeInput ? "visible" : "hidden"
+          }`}
+        >
           <HiOutlineSwitchHorizontal
             size={20}
             onClick={handleChangeTypeSearch}
@@ -100,7 +106,8 @@ function Search({
       </form>
       <button
         onClick={handleRefresh}
-        className="p-6 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple  group transition-all">
+        className="p-6 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple  group transition-all"
+      >
         <span>Refrescar</span>
         <AiOutlineReload
           className="cursor-pointer  group-hover:rotate-45    transition-transform"

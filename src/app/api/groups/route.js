@@ -132,8 +132,9 @@ export async function GET(request) {
     const joinMestro =
       " JOIN ctb_maestro ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
     const data = await conn.query(
-      "SELECT * FROM ctb_lista_asistencia" + joinGrupo + joinCiclo + joinMestro
+      "SELECT * FROM ctb_lista_asistencia" + joinGrupo + joinCiclo + joinMestro + " ORDER BY id_lista_asistencia DESC"
     );
+    console.log(data);
     return NextResponse.json(data);
   } catch (error) {
     console.log(error);

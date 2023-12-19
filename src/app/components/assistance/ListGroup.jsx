@@ -1,15 +1,9 @@
 "use client";
-import React, { Suspense, useContext, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import NewList from "./NewList";
-import { BiListCheck, BiMessageRoundedError } from "react-icons/bi";
-import { AiOutlineReload, AiFillCheckCircle } from "react-icons/ai";
-import { CiSearch } from "react-icons/ci";
-import axios from "axios";
-import { toast } from "sonner";
+import { BiListCheck } from "react-icons/bi";
 import Loading from "../Loading";
 import Link from "next/link";
-import { formatText } from "../formatTextList.helper";
-import { AutoCompliteContext } from "../ContextDataAutoCompliteInput";
 import useReports from "../hooks/useReports";
 import Search from "../Search";
 import ButtonStyled from "../styled/ButtonStyled";
@@ -21,7 +15,7 @@ export default function ListGroup() {
   }
   return (
     <div className="flex flex-col gap-3 h-[calc(100vh-5rem)]">
-      <div className="flex justify-between text-white items-center">
+      <div className="flex justify-between text-white items-center flex-wrap gap-2">
         <Search
           dataSearch={reports.dataSearch}
           setDataSearch={reports.setDataSearch}
@@ -47,14 +41,16 @@ export default function ListGroup() {
               reports.groups.map((item, i) => (
                 <li
                   key={item.id_grupo}
-                  className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center ">
+                  className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center "
+                >
                   <p className="">{item.ciclo}</p>
                   <p className="">{item.grupo}</p>
                   <p className="md:block hidden">{item.maestro}</p>
                   <div className="flex justify-end  w-full">
                     <Link
                       href={`/pages/assistence/${item.id_lista_asistencia}`}
-                      shallow>
+                      shallow
+                    >
                       <ButtonStyled color={i % 2 == 0 ? "purple" : "blue"}>
                         <span>Tomar lista</span>
                         <BiListCheck size={25} />
@@ -76,185 +72,3 @@ export default function ListGroup() {
     </div>
   );
 }
-/*
-export default function ListGroup() {
-  const [groups, setGroups] = useState([]);
-  const [data, setData] = useState([]);
-  const [refreshGroups, setRefreshGroups] = useState(false);
-  console.log(newReports);
-  //const dataAutoComplite = { some: "" };
-  const {dataAutoComplite} = useContext(AutoCompliteContext);
-  const [dataSearch, setDataSearch] = useState({
-    ciclo: "",
-    grupo: "",
-  });
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (dataSearch.grupo.length == 0 && dataSearch.ciclo.length == 0) {
-      setGroups(data);
-      return;
-    }
-    let newList = data.filter((item) => {
-      if (
-        item.ciclo.includes(dataSearch.ciclo) &&
-        item.grupo.includes(dataSearch.grupo)
-      )
-        return item;
-    });
-    setGroups(newList);
-  };
-  const handleInput = (e) => {
-    const text = formatText(e.target.name, e.target.value);
-    setDataSearch({
-      ...dataSearch,
-      [e.target.name]: text,
-    });
-  };
-  useEffect(() => {
-    setIsLoading(true);
-    const getGroup = async () => {
-      try {
-        const response = await axios.get("/api/groups");
-        setGroups(response.data);
-        setData(response.data);
-        setIsError(false);
-      } catch (e) {
-        setIsError(true);
-        console.log(e);
-      }
-      setIsLoading(false);
-    };
-    getGroup();
-  }, [refreshGroups]);
-  const handleRefreshGroups = () => {
-    setRefreshGroups(!refreshGroups);
-    setDataSearch({
-      ciclo: "",
-      grupo: "",
-    });
-    if (isError) {
-      toast.error("Ha ocurrido un problema");
-    } else {
-      toast.success("Se ha recargado los datos de los grupos");
-    }
-  };
-
-  return (
-    <>
-      <div className="flex flex-col gap-3 h-[calc(100vh-5rem)]">
-        <div className="flex justify-between flex-wrap gap-3 text-white">
-          <form
-            className="flex gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg"
-            onSubmit={handleSubmit}
-          >
-            <label className="t">Ciclo</label>
-            <input
-              className="rounded-full p-2 outline-none bg-blue-800"
-              type="search"
-              placeholder="Ciclo"
-              name="ciclo"
-              value={dataSearch.ciclo}
-              onChange={handleInput}
-              list="options_ciclo"
-            />
-            <datalist id="options_ciclo">
-              {dataAutoComplite.ciclo
-                ? dataAutoComplite.ciclo.map((ciclo) => (
-                    <option value={ciclo.ciclo} key={ciclo.id_ciclo}></option>
-                  ))
-                : null}
-            </datalist>
-            <p>y</p>
-            <label>Grupo</label>
-            <input
-              className="rounded-full p-2 outline-none bg-blue-800"
-              type="search"
-              placeholder="Grupo"
-              name="grupo"
-              value={dataSearch.grupo}
-              onChange={handleInput}
-              list="options_grupo"
-            />
-            <datalist id="options_grupo">
-              {dataAutoComplite.grupo
-                ? dataAutoComplite.grupo.map((grupo) => (
-                    <option value={grupo.grupo} key={grupo.id_grupo}></option>
-                  ))
-                : null}
-            </datalist>
-            <button className="rounded border p-3 flex gap-1 items-center hover:text-purple transition-all">
-              Buscar
-              <CiSearch size={20} />
-            </button>
-          </form>
-          <button
-            onClick={handleRefreshGroups}
-            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple  group transition-all" 
-          >
-            <span >Refrescar</span>
-            <AiOutlineReload className="cursor-pointer  group-hover:rotate-45    transition-transform" size={20} />
-          </button>
-          <div className="flex items-center">
-            <NewList handleRefreshGroups={handleRefreshGroups} />
-          </div>
-        </div>
-        <Suspense fallback={<Loading />}>
-          <section className="bg-blue-800 rounded-lg overflow-y-scroll h-1/2 xl:h-[81vh] text-white shadow-lg">
-            <ul className="p-2 grid grid-cols-3 md:grid-cols-4 justify-evenly items-center ">
-              <li className="">Ciclo</li>
-              <li className="">Grupo</li>
-              <li className=" md:block hidden">Maestro</li>
-              <li className=" flex justify-end  w-full">Tomar lista</li>
-            </ul>
-            {isLoading ? (
-              <Loading />
-            ) : (
-              <ul className="w-full p-2">
-                {groups.length > 0 ? (
-                  groups.map((item, i) => (
-                    <li
-                      key={item.id_grupo}
-                      className="p-2 border border-x-0 grid grid-cols-3 md:grid-cols-4 justify-between items-center "
-                    >
-                      <p className="">{item.ciclo}</p>
-                      <p className="">{item.grupo}</p>
-                      <p className="md:block hidden">{item.maestro}</p>
-                      <div className="flex justify-end  w-full">
-                        <Link
-                          href={`/pages/assistence/${item.id_lista_asistencia}`}
-                          shallow
-                        >
-                          <p
-                            className={`flex items-center p-2 text-white rounded-lg justify-between
-                            border transition-all
-                            ${
-                              i % 2 == 0
-                                ? "bg-purple hover:text-purple hover:bg-blue-800 border-purple"
-                                : "bg-blue border-blue hover:text-blue hover:bg-blue-800"
-                            } `}
-                          >
-                            Tomar lista
-                            <BiListCheck size={25} />
-                          </p>
-                        </Link>
-                      </div>
-                    </li>
-                  ))
-                ) : (
-                  <div className="bg-indigo-950 p-3 text-center rounded-lg">
-                    <h2 className="font-bold text-2xl text-white">
-                      No hay elementos
-                    </h2>
-                  </div>
-                )}
-              </ul>
-            )}
-          </section>
-        </Suspense>
-      </div>
-    </>
-  );
-}
-*/
