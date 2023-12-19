@@ -1,12 +1,12 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 16-11-2023 a las 07:19:41
--- Versión del servidor: 10.4.27-MariaDB
--- Versión de PHP: 8.1.12
-
+-- Servidor: localhost
+-- Tiempo de generación: 14-12-2023 a las 17:03:34
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
+-- dump v2
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -39,7 +39,7 @@ CREATE TABLE `ctb_alumno` (
 --
 
 INSERT INTO `ctb_alumno` (`id_alumno`, `nombre_alumno`, `apellido_alumno`, `boleta`) VALUES
-(1, 'JOSHUA ALEXANDER ', 'DEL MONTE ORTEGA', '2021350820');
+(4, 'JOSHUA ALEXANDER ', 'DEL MONTE ORTEGA', '2021350820');
 
 -- --------------------------------------------------------
 
@@ -57,10 +57,8 @@ CREATE TABLE `ctb_ciclo` (
 --
 
 INSERT INTO `ctb_ciclo` (`id_ciclo`, `ciclo`) VALUES
-(1, 'd'),
-(2, '2023-1'),
-(3, '2020-1'),
-(4, '2020-1');
+(16, '2024-1'),
+(17, '2023-2');
 
 -- --------------------------------------------------------
 
@@ -78,9 +76,10 @@ CREATE TABLE `ctb_grupo` (
 --
 
 INSERT INTO `ctb_grupo` (`id_grupo`, `grupo`) VALUES
-(1, 'd'),
-(2, '4CV1'),
-(3, '4CV1');
+(12, '4CM11'),
+(13, '6CV13'),
+(14, '6CV16'),
+(15, '5CV23');
 
 -- --------------------------------------------------------
 
@@ -98,9 +97,8 @@ CREATE TABLE `ctb_laboratorio` (
 --
 
 INSERT INTO `ctb_laboratorio` (`id_laboratorio`, `laboratorio`) VALUES
-(1, 'd'),
-(2, '2'),
-(3, '2');
+(11, '2'),
+(12, '1');
 
 -- --------------------------------------------------------
 
@@ -122,7 +120,10 @@ CREATE TABLE `ctb_lista_asistencia` (
 --
 
 INSERT INTO `ctb_lista_asistencia` (`id_lista_asistencia`, `id_grupo`, `id_materia`, `id_maestro`, `id_ciclo`, `id_laboratorio`) VALUES
-(1, 3, 3, 3, 4, 3);
+(11, 12, 12, 13, 16, 11),
+(12, 13, 13, 14, 16, 12),
+(13, 14, 14, 15, 16, 11),
+(14, 15, 15, 14, 17, 12);
 
 -- --------------------------------------------------------
 
@@ -140,9 +141,9 @@ CREATE TABLE `ctb_maestro` (
 --
 
 INSERT INTO `ctb_maestro` (`id_maestro`, `maestro`) VALUES
-(1, 'd'),
-(2, 'Someone'),
-(3, 'Someone');
+(13, 'Ramiréz Hernández Jazmín'),
+(14, 'Calzada Salas Ricardo I.'),
+(15, 'Mendiola Medellin Maria Elena');
 
 -- --------------------------------------------------------
 
@@ -160,9 +161,10 @@ CREATE TABLE `ctb_materia` (
 --
 
 INSERT INTO `ctb_materia` (`id_materia`, `materia`) VALUES
-(1, 'd'),
-(2, 'Quimica'),
-(3, 'Quimica');
+(12, 'Analisis Numerico'),
+(13, 'Sistemas Operativos'),
+(14, 'Metodologia De La Investigacion '),
+(15, 'Análisis De Algoritmos');
 
 -- --------------------------------------------------------
 
@@ -183,7 +185,16 @@ CREATE TABLE `ctb_usuario` (
 --
 
 INSERT INTO `ctb_usuario` (`id_usuario`, `nombre_usuario`, `correo`, `boleta`, `contrasenia`) VALUES
-(1, 'Jhon Doe', 'some@some.dev', '123456789', 'U2FsdGVkX19QHtjAJspy51bEXLnn2wuDhTmNL4BOrB8=');
+(1, 'Jhon Doe', 'some@some.dev', '123456789', 'U2FsdGVkX1/jDXUo1Ujk+6OJpyIMKnncJFMeP6e3Q80='),
+(2, 'Juanito Perez', 'juanito@noexiste.tampoco', '123456', 'U2FsdGVkX1/YTVUoWpAC9s4WkPNgxC2zxbc3rifCNo8='),
+(3, 'Kolop', 'hoikwet@ppplo.com', '787878', 'U2FsdGVkX19ta9HhzC2prihF+Q1iOocfpZXiedyqmxQ='),
+(4, 'Hola', 'some@some.some', '123', 'U2FsdGVkX1+I49f7O32dEeSc454xJEE2kpRWNF+VaIc='),
+(5, 'Sd', 'some@gmail.com', '1234', 'U2FsdGVkX19bQq1CKQCt0RHbkSAICIa8uMCPse5On30='),
+(6, 'Some', 'al@gmail.com', '4123', 'U2FsdGVkX1+ZFOMe+j1Kp8rBltPPQ0H9Xg8a9CG1WJg='),
+(7, 'Some Name', 'qwe@sdsd.cm', '12340', 'U2FsdGVkX18fxQr58L6p0n5CmSffOJ1BJ/SFsfltiU8='),
+(8, 'Juanito', 'some@gmail.com', '1313', 'U2FsdGVkX197gI3b+uaEQe/0De3BLlC8TlYHK8jmfVk='),
+(9, 'DVE', 'sdsda@dodf.com', '12345', 'U2FsdGVkX18FQOxXQgI8fFhMfNcEM3k1KL4gaWrJ2yE='),
+(10, 'Master', 'joshuin21@gmail.com', '2021350820', 'U2FsdGVkX1+IX3vCTq03oxsJJZA6g/i/rxg2s20aHrs=');
 
 -- --------------------------------------------------------
 
@@ -199,6 +210,14 @@ CREATE TABLE `ttb_asistencia` (
   `fecha_asistencia` date NOT NULL DEFAULT current_timestamp(),
   `numero_maquina` varchar(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `ttb_asistencia`
+--
+
+INSERT INTO `ttb_asistencia` (`id_asistencia`, `id_alumno`, `id_lista_asistencia`, `id_usuario`, `fecha_asistencia`, `numero_maquina`) VALUES
+(19, 4, 11, 9, '2023-12-12', '0'),
+(20, 4, 11, 9, '2023-12-13', '1');
 
 --
 -- Índices para tablas volcadas
@@ -275,55 +294,55 @@ ALTER TABLE `ttb_asistencia`
 -- AUTO_INCREMENT de la tabla `ctb_alumno`
 --
 ALTER TABLE `ctb_alumno`
-  MODIFY `id_alumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_alumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `ctb_ciclo`
 --
 ALTER TABLE `ctb_ciclo`
-  MODIFY `id_ciclo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_ciclo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `ctb_grupo`
 --
 ALTER TABLE `ctb_grupo`
-  MODIFY `id_grupo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_grupo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `ctb_laboratorio`
 --
 ALTER TABLE `ctb_laboratorio`
-  MODIFY `id_laboratorio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_laboratorio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `ctb_lista_asistencia`
 --
 ALTER TABLE `ctb_lista_asistencia`
-  MODIFY `id_lista_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_lista_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `ctb_maestro`
 --
 ALTER TABLE `ctb_maestro`
-  MODIFY `id_maestro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_maestro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `ctb_materia`
 --
 ALTER TABLE `ctb_materia`
-  MODIFY `id_materia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_materia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `ctb_usuario`
 --
 ALTER TABLE `ctb_usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `ttb_asistencia`
 --
 ALTER TABLE `ttb_asistencia`
-  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Restricciones para tablas volcadas

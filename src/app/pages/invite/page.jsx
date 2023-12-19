@@ -13,7 +13,7 @@ function page() {
     e.preventDefault();
     if (isEmailValid(email)) {
       try {
-        const response = await axios.post("/api/sendmail", [email]);
+        const response = await axios.post("/api/sendmail", {email, type:"invite"});
         if (response.status == 200) {
           toast.success("Se ha mandado correctamente la invitación🎉");
           return;

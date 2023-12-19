@@ -16,7 +16,6 @@ const BORDER_GREEN = "rgba(79, 230, 228,1)";
 const BORDER_PINK = "rgba(237, 58, 152,1)";
 const BORDER_YELLOW = "rgba(247, 146, 17,1)";
 
-
 const allColors = [
   {
     backgroundColor: BACK_PINK,
@@ -31,7 +30,7 @@ const allColors = [
     borderColor: BORDER_YELLOW,
   },
   {
-    backgroundColor:BACK_GREEN,
+    backgroundColor: BACK_GREEN,
     borderColor: BORDER_GREEN,
   },
   {
@@ -48,7 +47,13 @@ function getColor(color) {
   };
   return newColor;
 }
-const GenPieChart = ({ data, titleColor, mainColor, secondColor }) => {
+const GenPieChart = ({
+  data,
+  titleColor,
+  mainColor,
+  secondColor,
+  title = "Asistencia",
+}) => {
   const newMainColor = getColor(mainColor);
   const newSecondColor = getColor(secondColor);
   const newTitleColor = getColor(titleColor);
@@ -72,7 +77,7 @@ const GenPieChart = ({ data, titleColor, mainColor, secondColor }) => {
     <div className="bg-blue-600 rounded-lg shadow-lg p-4 flex justify-evenly items-center h-72 mt-4">
       <div className="flex flex-col justify-around text-center h-full">
         <div>
-          <h3 className="text-xl text-pink">Porcentaje de Asistencia total</h3>
+          <h3 className="text-xl text-pink">{title}</h3>
         </div>
         <div>
           <p>

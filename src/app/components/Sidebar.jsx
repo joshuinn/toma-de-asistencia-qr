@@ -44,7 +44,7 @@ function Sidebar({ children }) {
   ];
   const handleIndicator = async () => {
     const indicator = indicatorRef.current;
-    const topIndicatorY = await topPagesRef.current.getBoundingClientRect().y;
+    const topIndicatorY = await topPagesRef.current.getBoundingClientRect().y??0;
     const ipage = pages.findIndex((item) => item == page);
     indicator.style.transform = `translateY(${topIndicatorY + ipage * 47}px)`;
   };

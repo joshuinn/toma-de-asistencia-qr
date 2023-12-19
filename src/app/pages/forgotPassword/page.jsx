@@ -1,14 +1,25 @@
 "use client";
 
+import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
 
 function ForgotPassword() {
   const [boleta, setBoleta] = useState("");
   const [wasEmailSent, setWasEmailSent] = useState(false);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setWasEmailSent(true);
+    try {
+      const response = await axios.post("/api/sendmail", {
+        boleta,
+        type: "forgotPassword",
+      });
+      if (response.status == 200) {
+        setWasEmailSent(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleInput = (e) => {
     setBoleta(e.target.value);
@@ -23,13 +34,16 @@ function ForgotPassword() {
               existir
             </h1>
             <Link href="/">
-              <button className="p-3 border border-pink bg-pink hover:bg-blue-600 hover:text-pink transition-all rounded-lg">Regresar al inicio</button>
+              <button className="p-3 border border-pink bg-pink hover:bg-blue-600 hover:text-pink transition-all rounded-lg">
+                Regresar al inicio
+              </button>
             </Link>
           </div>
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-4 justify-center items-center">
+            className="flex flex-col gap-4 justify-center items-center"
+          >
             <h1 className="font-bold text-2xl">
               Ingrese su boleta y se le enviará un correo en caso de existir
             </h1>

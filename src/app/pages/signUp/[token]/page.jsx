@@ -89,13 +89,12 @@ function page({ params }) {
     const verifyToken = async (token) => {
       try {
         const response = await axios
-          .post("/api/verifyToken", [{ token }])
-          .then((res) => res)
+          .post("/api/verifyToken", { token })
           .then((res) => res)
           .catch((e) => e);
-        console.log(response.status);
-        if (response.status == 200) {
-          setData({ ...data, correo: response.data.correo });
+
+          if (response.status == 200) {
+          setData({ ...data, correo: response.data.dataToken.correo });
           return;
         }
       } catch (error) {

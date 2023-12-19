@@ -24,6 +24,7 @@ function ListStudent({ id_lista_asitencia }) {
   const { dataUser } = useContext(SessionContext);
   const focusedInputRef = useRef(null);
   const [currentInputId, setCurrentInputId] = useState(null);
+  const formRef = useRef(null);
   const [dataForm, setDataForm] = useState({
     url: "",
     id_lista_asitencia: id_lista_asitencia,
@@ -31,7 +32,7 @@ function ListStudent({ id_lista_asitencia }) {
   const getDataStudent = async (student) => {
     try {
       const { data } = await axios.post("/api/webScrapping", student);
-      if (data) {
+      if (data.nombre) {
         return {
           nombre: data.nombre.nombre,
           apellido: data.nombre.apellido,
@@ -66,10 +67,18 @@ function ListStudent({ id_lista_asitencia }) {
       if (studentQueue.length > 0) {
         const id_queue = await studentQueue[0].id;
         try {
-          const data = await getDataStudent(studentQueue[0].data);
-
+          const data = await getDataStudent(studentQueue[0].data)
+            .then((res) => res)
+            .catch((e) => e);
           setStudents((prevStudents) => {
             return prevStudents.map((student) => {
+              if (student.id == id_queue && !data) {
+                toast.error("ha ocurrudo un error con uno de los estudiantes");
+                return {
+                  ...student,
+                  boleta: "error",
+                };
+              }
               if (student.id == id_queue && data.boleta) {
                 return {
                   ...student,
@@ -94,6 +103,15 @@ function ListStudent({ id_lista_asitencia }) {
     };
     updateStudent();
   }, [studentQueue]);
+
+  useEffect(() => {
+    let newList = students.filter((student) =>
+      student.boleta !== "error" ? student : null
+    );
+    if (newList.length !== students.length) {
+      setStudents(newList);
+    }
+  }, [students]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -127,6 +145,7 @@ function ListStudent({ id_lista_asitencia }) {
       ...dataForm,
       [e.target.name]: e.target.value,
     });
+    formRef.current.submit()
   };
   const handleMaquina = (e) => {
     const val = formatText(e.target.name, e.target.value);
@@ -178,7 +197,11 @@ function ListStudent({ id_lista_asitencia }) {
           >
             Example
           </button>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-2"
+            ref={formRef}
+          >
             <input
               className="bg-blue-800 p-2 rounded-full outline-none "
               type="text"

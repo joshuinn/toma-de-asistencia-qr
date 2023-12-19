@@ -5,26 +5,9 @@ import { conn } from "@/lib/mysql";
 export async function POST(request) {
   const data = await request.json();
   const result = await serchData(data.url);
-
   if (result.name && result.boleta) {
     const nombre = getFormatedName(result.name);
-    return NextResponse.json({nombre:nombre, boleta:result.boleta})
-    /*
-    const response = await conn.query('SELECT * FROM ctb_alumno WHERE ? ',{
-      boleta:result.boleta
-    })
-    if(response.length ==0){
-      const nombre = getFormatedName(result.name);
-      const res = await conn.query('INSERT INTO ctb_alumno SET ?',{
-          boleta:result.boleta,
-          nombre_alumno:nombre.nombre,
-          apellido_alumno:nombre.apellido
-        })
-    }else{
-      console.log(response);
-    }
-    */
-    return NextResponse.json("ok");
+    return NextResponse.json({ nombre: nombre, boleta: result.boleta });
   } else {
     return NextResponse.json(
       { message: "No found information" },
@@ -44,16 +27,16 @@ function getFormatedName(name) {
 
   if (splitName[imax - 2].length < 4) {
     lastName[0] = splitName[imax - 2];
-    for (let i = 0; i <= imax-3; i++) {
-      nombre += splitName[i]+" ";
+    for (let i = 0; i <= imax - 3; i++) {
+      nombre += splitName[i] + " ";
     }
     return {
       apellido: lastName[0] + " " + lastName[1] + " " + lastName[2],
       nombre: nombre,
     };
   }
-  for (let i = 0; i <= imax-2; i++) {
-    nombre += splitName[i]+" ";
+  for (let i = 0; i <= imax - 2; i++) {
+    nombre += splitName[i] + " ";
   }
   console.log("last: " + lastName);
   return { apellido: lastName[1] + " " + lastName[2], nombre: nombre };
@@ -76,6 +59,6 @@ async function serchData(url) {
     }
   } catch (e) {
     console.log(e);
-    return { error: "Error" };
+    return { error: "error" };
   }
 }

@@ -5,20 +5,20 @@ export async function POST(req) {
     const data = await req.json();
     const key = process.env.SECRET_KEY;
     try {
-      const dataToken = verify(data[0].token, key, (err, decode) => {
+      const dataToken = verify(data.token, key, (err, decode) => {
         if (err) {
-          return false
-        }else return decode
+          return false;
+        } else return decode;
       });
       if (dataToken) {
-        return NextResponse.json({ correo: dataToken.correo });
+        return NextResponse.json({ dataToken });
       }
     } catch (error) {
       console.log(error);
     }
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   } catch (error) {
-    console.log("Some error: ", error); 
+    console.log("Some error: ", error);
   }
   return NextResponse.json({ message: "Error" }, { status: 500 });
 }

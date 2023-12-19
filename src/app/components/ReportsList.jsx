@@ -13,6 +13,7 @@ import { FaListCheck } from "react-icons/fa6";
 import { toast } from "sonner";
 import GenPDFReport from "./GenPDFReport";
 import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
+import GenExcelReport from "./GenExcelReport";
 
 function ReportsList() {
   const [reports, setReports] = useState([]);
@@ -143,7 +144,7 @@ function ReportsList() {
                 </div>
               </div>
               <button
-                className="p-3 border hover:border-blue hover:text-blue rounded-lg transition-all flex gap-2 items-center"
+                className="p-3 group border hover:border-blue hover:text-blue rounded-lg transition-all flex gap-2 items-center"
                 type="submit"
               >
                 Buscar
@@ -153,13 +154,13 @@ function ReportsList() {
           </form>
           <div>
             <button
-              className="p-4 bg-blue-600 flex items-center gap-2 rounded-lg shadow-lg hover:text-blue"
+              className="p-4 group bg-blue-600 flex items-center gap-2 rounded-lg shadow-lg hover:text-blue"
               onClick={handleRefresh}
             >
               <span>Refrescar</span>
               <AiOutlineReload
                 size={20}
-                className="hover:rotate-45 transition-all"
+                className="group-hover:rotate-45 transition-all"
               />
             </button>
           </div>
@@ -168,17 +169,15 @@ function ReportsList() {
           <button
             className="p-3 bg-purple rounded-lg hover:bg-blue-600 hover:text-purple border border-purple transition-all flex items-center gap-2"
             onClick={selectAll}
-            disabled={!reports.length>0}
+            disabled={!reports.length > 0}
           >
             Seleccionar Todo
             <FaListCheck size={20} />
           </button>
 
           <GenPDFReport list={listToExport} />
-          <button className="p-3 bg-green rounded-lg border border-green hover:text-green hover:bg-blue-600 transition-all flex items-center gap-2">
-            Excel
-            <SiMicrosoftexcel size={20} />
-          </button>
+          <GenExcelReport list={listToExport} />
+          
         </div>
       </div>
       <div className="h-full">
@@ -189,7 +188,10 @@ function ReportsList() {
             </div>
           ) : (
             <div className=" ">
-              <ul className="grid grid-cols-2">
+              <ul className="grid grid-cols-3">
+                <li>
+                  <h3>Ciclo</h3>
+                </li>
                 <li className="">
                   <h3>Grupo</h3>
                 </li>
@@ -203,8 +205,11 @@ function ReportsList() {
                     return (
                       <li
                         key={report.id_lista_asistencia}
-                        className="border border-x-0 grid grid-cols-2 p-3"
+                        className="border border-x-0 grid grid-cols-3 p-3"
                       >
+                        <div>
+                          <span>{report.ciclo}</span>
+                        </div>
                         <div className="">
                           <span>{report.grupo}</span>
                         </div>

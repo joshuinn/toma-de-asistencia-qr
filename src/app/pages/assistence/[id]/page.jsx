@@ -25,7 +25,7 @@ async function ListAssistance({ params }) {
     return <div>404</div>;
   }
   return (
-    <Suspense fallback={<Loading />}>
+    <>
       <Header title="Lista de asistencia" />
       <div className="flex flex-col gap-3">
         <div className="flex gap-4 p-2 rounded-lg flex-wrap justify-between text-white">
@@ -46,10 +46,12 @@ async function ListAssistance({ params }) {
           </div>
         </div>
         <div>
-          <ListStudent id_lista_asitencia={params.id} />
+          <Suspense fallback={<Loading />}>
+            <ListStudent id_lista_asitencia={params.id} />
+          </Suspense>
         </div>
       </div>
-    </Suspense>
+    </>
   );
 }
 

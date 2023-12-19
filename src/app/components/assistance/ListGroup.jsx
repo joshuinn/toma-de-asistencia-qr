@@ -124,10 +124,10 @@ export default function ListGroup() {
           </form>
           <button
             onClick={handleRefreshGroups}
-            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple transition-all"
+            className="p-3 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple transition-all group"
           >
-            <span>Refrescar</span>
-            <AiOutlineReload className="cursor-pointer" size={20} />
+            <span >Refrescar</span>
+            <AiOutlineReload className="cursor-pointer group-hover:rotate-45 transition-all" size={20} />
           </button>
           <div className="flex items-center">
             <NewList handleRefreshGroups={handleRefreshGroups} />
