@@ -7,13 +7,17 @@ function InputStyled({
   list,
   onChange,
   value,
+  className,
   ...props
 }) {
   return (
     <input
       type={type}
       placeholder={placeholder}
-      className="bg-blue-800 rounded-full p-3 autofill:bg-blue-800 outline-none"
+      className={
+        "bg-blue-800 rounded-full p-3 autofill:bg-blue-800 outline-none " +
+        className
+      }
       onChange={onChange}
       list={list}
       name={name}

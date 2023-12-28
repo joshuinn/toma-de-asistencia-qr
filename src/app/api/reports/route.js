@@ -1,6 +1,7 @@
 import { conn } from "@/lib/mysql";
 import { NextResponse } from "next/server";
 
+
 export async function POST(req) {
   try {
     const data = await req.json();

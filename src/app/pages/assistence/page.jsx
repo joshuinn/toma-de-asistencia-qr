@@ -6,14 +6,12 @@ import AutoCompliteProvider from "@/app/components/ContextDataAutoCompliteInput"
 
 function page() {
   return (
-    <Suspense fallback={<Loading />}>
+    <div className="h-screen p-3 rounded-lg">
+      <Header title="Toma de asistencia" />
       <AutoCompliteProvider>
-        <div className="h-screen p-3 rounded-lg">
-          <Header title="Toma de asistencia" />
-          <ListGroup />
-        </div>
+        <ListGroup />
       </AutoCompliteProvider>
-    </Suspense>
+    </div>
   );
 }
 

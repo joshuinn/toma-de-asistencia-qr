@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function useReports() {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,6 +11,8 @@ function useReports() {
   const [dataSearch, setDataSearch] = useState({
     ciclo: "",
     grupo: "",
+    fecha_min:"",
+    fecha_max:""
   });
   useEffect(() => {
     const getGroup = async () => {
@@ -21,8 +23,11 @@ function useReports() {
         setData(response.data);
       } catch (e) {
         console.log(e);
-      }
-      setIsLoading(false);
+      } 
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+      return () => clearTimeout(timer);
     };
     getGroup();
   }, [refreshGroups]);

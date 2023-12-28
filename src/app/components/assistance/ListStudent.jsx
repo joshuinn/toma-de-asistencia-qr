@@ -11,7 +11,7 @@ import { AiFillCloseCircle, AiOutlineQrcode } from "react-icons/ai";
 import { RiInboxUnarchiveFill } from "react-icons/ri";
 import Loading from "../Loading";
 import { toast } from "sonner";
-import studenLoader from "./ListStudent.module.css";
+import loaderIndividual from "./LoadingIndividual.module.css";
 import { useRouter } from "next/navigation";
 import { SessionContext } from "../SessionContext";
 import { formatText } from "../formatTextList.helper";
@@ -240,10 +240,10 @@ function ListStudent({ id_lista_asitencia }) {
             <li key={student.id}>
               {student.boleta == "waiting" ? (
                 <div className="grid grid-cols-4 text-center justify-center items-center">
-                  <div className={studenLoader.loader}></div>
-                  <div className={studenLoader.loader}></div>
-                  <div className={studenLoader.loader}></div>
-                  <div className={studenLoader.loader}></div>
+                  <div className={loaderIndividual.loader}></div>
+                  <div className={loaderIndividual.loader}></div>
+                  <div className={loaderIndividual.loader}></div>
+                  <div className={loaderIndividual.loader}></div>
                 </div>
               ) : (
                 <div className="grid sm:grid-cols-4 grid-cols-2 text-center justify-center mb-2">

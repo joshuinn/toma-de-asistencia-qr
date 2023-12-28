@@ -5,6 +5,7 @@ import { Suspense, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { SessionContext } from "@/app/components/SessionContext";
 import Loading from "@/app/components/Loading";
+import InputStyled from "@/app/components/styled/InputStyled";
 
 function page() {
   const [dataUser, setDataUser] = useState({
@@ -45,7 +46,6 @@ function page() {
             className="rounded-full bg-blue-700 p-3 text-gray-300"
             value={dataUser.nombre}
             disabled
-
           />
         </div>
         <div className="flex gap-3 bg-blue-600 rounded-lg p-3 items-center w-1/2 justify-center shadow-lg">
@@ -61,11 +61,10 @@ function page() {
         </div>
         <div className="flex gap-3 bg-blue-600 rounded-lg p-3 items-center w-1/2 justify-center shadow-lg">
           <label htmlFor="correo">Correo</label>
-          <input
+          <InputStyled
             type="text"
             placeholder="Correo"
             id="correo"
-            className="rounded-full bg-blue-700 p-3 text-gray-300"
             value={dataUser.correo}
             disabled
           />

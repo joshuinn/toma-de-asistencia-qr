@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Loading from "./Loading";
 import style from "./ReportsList.module.css";
 import { FaListCheck } from "react-icons/fa6";
@@ -18,13 +18,6 @@ function ReportsList() {
     fecha: "",
   });
   const reports = useReports();
-  if (reports.isLoading) {
-    return (
-      <div className="h-[50vh]">
-        <Loading />
-      </div>
-    );
-  }
   const selectAll = () => {
     reports.setGroups((prev) =>
       prev.map((report) => ({ ...report, checked: true }))
@@ -42,7 +35,7 @@ function ReportsList() {
           handleRefresh={reports.handleRefreshGroups}
           isChangeInput
         />
-        <div className="flex gap-10 mt-2 bg-blue-600 p-3 rounded-lg shadow-lg">
+        <div className="flex flex-grow justify-center gap-10 mt-2 bg-blue-600 p-3 rounded-lg shadow-lg">
           <ButtonStyled
             color="purple"
             onClick={selectAll}
@@ -72,51 +65,65 @@ function ReportsList() {
               <h3>Seleccionar</h3>
             </li>
           </ul>
-          <ul className="">
-            {reports.groups.length > 0 ? (
-              reports.groups.map((report) => {
-                return (
-                  <li
-                    key={report.id_lista_asistencia}
-                    className="border border-x-0 grid grid-cols-4 p-3"
-                  >
-                    <div>
-                      <span>{report.ciclo}</span>
-                    </div>
-                    <div className="">
-                      <span>{report.grupo}</span>
-                    </div>
-                    <div>
-                      <span>{report.maestro}</span>
-                    </div>
 
-                    <div className="ml-4">
-                      <div className={style.checkboxWrapper}>
-                        <input
-                          type="checkbox"
-                          id={report.id_lista_asistencia}
-                          checked={
-                            report.checked == undefined ? false : report.checked
-                          }
-                          onChange={() => {
-                            reports.handleCheked(report.id_lista_asistencia);
-                          }}
-                        />
-                        <label
-                          className={style.checkInput}
-                          htmlFor={report.id_lista_asistencia}
-                        ></label>
-                      </div>
-                    </div>
-                  </li>
-                );
-              })
-            ) : (
-              <div className="text-center mt-6">
-                <h3 className="font-bold text-2xl">No hay elementos</h3>
+          <Suspense fallback={<Loading />}>
+            {reports.isLoading ? (
+              <div className="h-full mt-5">
+
+              <Loading />
               </div>
+            ) : (
+              <ul className="">
+                {reports.groups.length > 0 ? (
+                  reports.groups.map((report) => {
+                    return (
+                      <li
+                        key={report.id_lista_asistencia}
+                        className="border border-x-0 grid grid-cols-4 p-3"
+                      >
+                        <div>
+                          <span>{report.ciclo}</span>
+                        </div>
+                        <div className="">
+                          <span>{report.grupo}</span>
+                        </div>
+                        <div>
+                          <span>{report.maestro}</span>
+                        </div>
+
+                        <div className="ml-4">
+                          <div className={style.checkboxWrapper}>
+                            <input
+                              type="checkbox"
+                              id={report.id_lista_asistencia}
+                              checked={
+                                report.checked == undefined
+                                  ? false
+                                  : report.checked
+                              }
+                              onChange={() => {
+                                reports.handleCheked(
+                                  report.id_lista_asistencia
+                                );
+                              }}
+                            />
+                            <label
+                              className={style.checkInput}
+                              htmlFor={report.id_lista_asistencia}
+                            ></label>
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })
+                ) : (
+                  <div className="text-center mt-6">
+                    <h3 className="font-bold text-2xl">No hay elementos</h3>
+                  </div>
+                )}
+              </ul>
             )}
-          </ul>
+          </Suspense>
         </div>
       </div>
     </div>

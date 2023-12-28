@@ -13,8 +13,8 @@ export async function POST(req) {
       secure: true,
       auth: {
         user: "delmonteo.joshua@gmail.com",
-        pass: "syof rgzg yoym rprz",
-      },
+        pass: process.env.EMAIL_PASSWORD,
+      },  
     });
     /*
     transporter.verify().then(()=>{

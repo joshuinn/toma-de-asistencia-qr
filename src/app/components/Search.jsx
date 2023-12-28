@@ -5,7 +5,6 @@ import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineReload } from "react-icons/ai";
 import InputStyled from "./styled/InputStyled";
-import ButtonStyled from "./styled/ButtonStyled";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 function Search({
   dataSearch,
@@ -16,7 +15,7 @@ function Search({
   isChangeInput = false,
 }) {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
-  const [changeTypeSearch, setChangeTypeSearch] = useState(false);
+  const [typeSearch, setChangeTypeSearch] = useState("text");
 
   const handleInput = (e) => {
     const text = formatText(e.target.name, e.target.value);
@@ -31,27 +30,37 @@ function Search({
       setReports(data);
       return;
     }
+    if(dataSearch.fecha_min.length >0 ){
+
+    }
     let newList = data.filter((item) => {
       if (
         item.ciclo.includes(dataSearch.ciclo) &&
-      (item.grupo.includes(dataSearch.grupo))
+        item.grupo.includes(dataSearch.grupo)
       )
         return item;
     });
     setReports(newList);
   };
   const handleChangeTypeSearch = () => {
-    setChangeTypeSearch(!changeTypeSearch);
+    setDataSearch({
+      ...dataSearch,
+      grupo: "",
+      fecha_min: "",
+      fecha_max: "",
+    });
+    setChangeTypeSearch(typeSearch == "text" ? "date" : "text");
   };
-
+  const date = new Date();
+  const todayDate =
+    date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
   return (
     <>
       <form
-        className="flex justify-center gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg"
+        className="flex justify-center gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg flex-grow"
         onSubmit={handleSubmit}
       >
         <div className="flex gap-2 items-center">
-          <label>Ciclo</label>
           <InputStyled
             type="search"
             placeholder="Ciclo"
@@ -70,17 +79,35 @@ function Search({
             : null}
         </datalist>
         <div className="flex items-center gap-2">
-        <p>y</p>
-        <label>Grupo</label>
-        <InputStyled
-          type={changeTypeSearch ? "date" : "text"}
-          placeholder="Grupo"
-          name="grupo"
-          value={dataSearch.grupo}
-          onChange={handleInput}
-          list="options_grupo"
+          <p>y</p>
+          <InputStyled
+            type={typeSearch}
+            placeholder="Grupo"
+            name={typeSearch == "text" ? "grupo" : "fecha_min"}
+            value={
+              typeSearch == "text" ? dataSearch.grupo : dataSearch.fecha_min
+            }
+            onChange={handleInput}
+            list="options_grupo"
+            className="w-52"
+            max={todayDate}
           />
-          </div>
+          {typeSearch !== "date" ? null : (
+            <div className="flex items-center gap-2 flex-wrap">
+              <p>a</p>
+              <InputStyled
+                type="date"
+                placeholder="Grupo"
+                name="fecha_max"
+                value={dataSearch.fecha_max}
+                onChange={handleInput}
+                list="options_grupo"
+                className="w-52"
+                max={todayDate}
+              />
+            </div>
+          )}
+        </div>
         <div
           className={`mr-4 hover:text-blue cursor-pointer ${
             isChangeInput ? "visible" : "hidden"
@@ -106,7 +133,7 @@ function Search({
       </form>
       <button
         onClick={handleRefresh}
-        className="p-6 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple  group transition-all"
+        className="p-6 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple  group transition-all flex-grow justify-center"
       >
         <span>Refrescar</span>
         <AiOutlineReload

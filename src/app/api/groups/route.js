@@ -134,7 +134,6 @@ export async function GET(request) {
     const data = await conn.query(
       "SELECT * FROM ctb_lista_asistencia" + joinGrupo + joinCiclo + joinMestro + " ORDER BY id_lista_asistencia DESC"
     );
-    console.log(data);
     return NextResponse.json(data);
   } catch (error) {
     console.log(error);

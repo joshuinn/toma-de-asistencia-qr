@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useState, useEffect, Suspense } from "react";
 import axios from "axios";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Loading from "./Loading";
 
 export const SessionContext = createContext(null);
@@ -13,7 +13,6 @@ const SessionProvider = ({ children }) => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const pathname = usePathname();
   useEffect(() => {
     setIsLoading(true);
     const checkLogged = async () => {
@@ -28,15 +27,16 @@ const SessionProvider = ({ children }) => {
           setIsLogged(false);
         }
       } catch (error) {
+        setIsLogged(false);
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
-    checkLogged();
-    console.log("Render");
+    checkLogged()
   }, []);
   const handleLogin = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     router.push("/");
     router.refresh();
     const response = await axios.get("/api/auth");
@@ -44,7 +44,7 @@ const SessionProvider = ({ children }) => {
       id_usuario: await response.data.id_usuario,
     });
     setIsLogged(true);
-    setIsLoading(false)
+    setIsLoading(false);
   };
   const handleLogout = async () => {
     try {
@@ -58,17 +58,18 @@ const SessionProvider = ({ children }) => {
       console.log(error);
     }
   };
+  if (isLoading) {
+    return (
+      <div className="h-[100vh]">
+        <Loading />
+      </div>
+    );
+  }
   return (
     <SessionContext.Provider
       value={{ isLogged, dataUser, handleLogout, handleLogin }}
     >
-      {isLoading ? (
-        <div className="h-[100vh]">
-          <Loading />
-        </div>
-      ) : (
-          <div>{children}</div>
-      )}
+      {children}
     </SessionContext.Provider>
   );
 };

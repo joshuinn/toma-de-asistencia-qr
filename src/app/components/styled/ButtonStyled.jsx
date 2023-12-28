@@ -1,6 +1,6 @@
 import React from "react";
 
-function ButtonStyled({ onClick, children, color, padding, ...props }) {
+function ButtonStyled({ onClick, children, color, padding, className, ...props }) {
   const styled = [
     (color == "purple" && " bg-purple border-purple  hover:text-purple") ||
       (color == "pink" && " bg-pink border-pink  hover:text-pink") ||
@@ -13,7 +13,7 @@ function ButtonStyled({ onClick, children, color, padding, ...props }) {
       onClick={onClick}
       className={
         "text-white p-3 rounded-lg border hover:bg-opacity-0 transition-all flex items-center justify-center gap-2 text-center " +
-        styled
+        styled + " "+className
       }
       {...props}>
       {children}

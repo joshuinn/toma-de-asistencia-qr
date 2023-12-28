@@ -6,14 +6,12 @@ import { Suspense } from "react";
 
 function page() {
   return (
-    <Suspense fallback={<Loading />}>
-      <AutoCompliteProvider>
-        <div className="text-white">
-          <Header title={"Reportes de asistencia"} />
+    <div className="text-white">
+      <Header title={"Reportes de asistencia"} />
+        <AutoCompliteProvider>
           <ReportsList />
-        </div>
-      </AutoCompliteProvider>
-    </Suspense>
+        </AutoCompliteProvider>
+    </div>
   );
 }
 

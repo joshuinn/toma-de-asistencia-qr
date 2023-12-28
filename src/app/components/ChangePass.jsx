@@ -5,6 +5,7 @@ import { SessionContext } from "./SessionContext";
 import axios from "axios";
 import { toast } from "sonner";
 import ButtonStyled from "./styled/ButtonStyled";
+import InputStyled from "./styled/InputStyled";
 
 const showPassreducer = (state, action) => {
   switch (action.type) {
@@ -77,10 +78,10 @@ function changePass() {
         }`}
         onSubmit={handleSubmit}>
         <div className="flex w-fit justify-center items-center">
-          <input
+          <InputStyled
             type={showPass.pass1 ? "text" : "password"}
-            placeholder="password"
-            className="bg-blue-800 rounded-full p-3 outline-none"
+            placeholder="Contraseña"
+            className="w-52"
             name="contrasenia"
             value={dataPass.contrasenia}
             onChange={handleInput}
@@ -102,26 +103,26 @@ function changePass() {
             )}
           </div>
         </div>
-        <div className="flex w-fit justify-center items-center">
-          <input
+        <div className="flex w-fit justify-center items-center relative">
+          <InputStyled
             type={showPass.pass2 ? "text" : "password"}
             placeholder="Confirmar contraseña"
-            className="bg-blue-800 rounded-full p-3 outline-none"
             name="confirmarContrasenia"
             value={dataPass.confirmarContrasenia}
             onChange={handleInput}
+            className="w-60"
             required
           />
-          <div className="w-full flex justify-end items-center">
+          <div className="w-full flex justify-end items-center absolute">
             {showPass.pass2 ? (
               <FaRegEyeSlash
-                className="absolute mr-4 cursor-pointer"
+                className=" cursor-pointer"
                 size={20}
                 onClick={() => setShowPass({ type: "confirmarContrasenia" })}
               />
             ) : (
               <FaEye
-                className="absolute mr-4 cursor-pointer"
+                className=" cursor-pointer"
                 size={20}
                 onClick={() => setShowPass({ type: "confirmarContrasenia" })}
               />
