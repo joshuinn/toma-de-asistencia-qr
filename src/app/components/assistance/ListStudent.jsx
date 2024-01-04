@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import loaderIndividual from "./LoadingIndividual.module.css";
 import { useRouter } from "next/navigation";
 import { SessionContext } from "../SessionContext";
-import { formatText } from "../formatTextList.helper";
+import { formatText } from "../helpers/formatTextList.helper";
 
 function ListStudent({ id_lista_asitencia }) {
   const [students, setStudents] = useState([]);

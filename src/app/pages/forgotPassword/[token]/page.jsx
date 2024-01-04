@@ -1,5 +1,5 @@
 "use client";
-import { formatText } from "@/app/components/formatTextList.helper";
+import { formatText } from "@/app/components/helpers/formatTextList.helper";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useReducer, useState } from "react";

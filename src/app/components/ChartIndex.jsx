@@ -37,7 +37,7 @@ function ChartIndex() {
   };
   return (
     <>
-      <div className="p-3 w-full h-full flex flex-col gap-3">
+      <div className="p-3 w-full h-[92vh] flex flex-col gap-3">
         <div className="w-full flex flex-wrap justify-between items-center gap-2">
           <div className="flex gap-4 items-center flex-grow">
             <Search
@@ -59,70 +59,80 @@ function ChartIndex() {
             </ButtonStyled>
           </div>
         </div>
-        <section className="bg-blue-800 rounded-lg overflow-y-scroll h-1/2 xl:h-[60vh] text-white shadow-lg p-4">
-          <ul className="grid grid-cols-4">
-            <li>Ciclo</li>
-            <li>Grupo</li>
-            <li>Maestro</li>
-            <li>Seleccionar</li>
-          </ul>
-          {reports.isLoading ? (
-            <div className="mt-7">
-              <Loading />
-            </div>
-          ) : (
-            <Suspense fallback={<Loading />}>
-              <ul className="w-full mt-2">
-                {reports.groups.length > 0 ? (
-                  reports.groups.map((report) => {
-                    return (
-                      <li
-                        key={report.id_lista_asistencia}
-                        className="border border-x-0 grid grid-cols-4 p-3"
-                      >
-                        <div className="">
-                          <span>{report.ciclo}</span>
-                        </div>
-                        <div className="">
-                          <span>{report.grupo}</span>
-                        </div>
-                        <div className="">
-                          <span>{report.maestro}</span>
-                        </div>
-                        <div className="ml-4">
-                          <div className={style.checkboxWrapper}>
-                            <input
-                              type="checkbox"
-                              id={report.id_lista_asistencia}
-                              checked={
-                                report.checked == undefined
-                                  ? false
-                                  : report.checked
-                              }
-                              onChange={() => {
-                                reports.handleCheked(
-                                  report.id_lista_asistencia
-                                );
-                              }}
-                            />
-                            <label
-                              className={style.checkInput}
-                              htmlFor={report.id_lista_asistencia}
-                            ></label>
-                          </div>
-                        </div>
-                      </li>
-                    );
-                  })
-                ) : (
-                  <div className="text-center mt-6">
-                    <h3 className="font-bold text-2xl">No hay elementos</h3>
-                  </div>
-                )}
-              </ul>
-            </Suspense>
-          )}
-        </section>
+        <div className="w-full h-[70%] overflow-y-scroll shadow-lg">
+          <table className="table-fixed text-center bg-blue-800 h-full p-4 rounded-lg w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="p-3">
+                  <h3 className="text-xl font-bold text-green">Ciclo</h3>
+                </th>
+                <th className="p-3">
+                  <h3 className="text-xl font-bold text-green">Grupo</h3>
+                </th>
+                <th className="p-3">
+                  <h3 className="text-xl font-bold text-green">Maestro</h3>
+                </th>
+                <th className="p-3">
+                  <h3 className="text-xl font-bold text-green">Seleccionar</h3>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="w-full h-full relative">
+              {reports.isLoading ? (
+                <tr>
+                  <td className="absolute w-full h-full ">
+                    <Loading />
+                  </td>
+                </tr>
+              ) : (
+                <Suspense fallback={<Loading />}>
+                  {reports.groups.length > 0 ? (
+                    reports.groups.map((report, i) => {
+                      return (
+                        <tr
+                          key={report.id_lista_asistencia}
+                          className={` ${i % 2 == 0 ? "bg-blue-700" : ""}`}
+                        >
+                          <td className="">{report.ciclo}</td>
+                          <td className="">{report.grupo}</td>
+                          <td className="">{report.maestro}</td>
+                          <td className="">
+                            <div className="p-2">
+                              <div className={style.checkboxWrapper}>
+                                <input
+                                  type="checkbox"
+                                  id={report.id_lista_asistencia}
+                                  checked={
+                                    report.checked == undefined
+                                      ? false
+                                      : report.checked
+                                  }
+                                  onChange={() => {
+                                    reports.handleCheked(
+                                      report.id_lista_asistencia
+                                    );
+                                  }}
+                                />
+                                <label
+                                  className={style.checkInput}
+                                  htmlFor={report.id_lista_asistencia}
+                                ></label>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center mt-6">
+                      <h3 className="font-bold text-2xl">No hay elementos</h3>
+                    </div>
+                  )}
+                </Suspense>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
       {isShowGraph ? (
         <div className="sm:w-[calc(100%-13rem)] h-screen bg-[rgb(0,0,0,0.5)] absolute z-10 top-0 right-0">

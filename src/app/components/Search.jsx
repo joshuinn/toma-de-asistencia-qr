@@ -1,11 +1,13 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { formatText } from "./formatTextList.helper";
+import { formatText } from "./helpers/formatTextList.helper";
 import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineReload } from "react-icons/ai";
 import InputStyled from "./styled/InputStyled";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import axios from "axios";
+import reportsFormatedWithDate from "./helpers/reportsFormatedWithDate";
 function Search({
   dataSearch,
   setDataSearch,
@@ -13,10 +15,13 @@ function Search({
   data,
   handleRefresh,
   isChangeInput = false,
+  setIsLoading = false,
 }) {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [typeSearch, setChangeTypeSearch] = useState("text");
-
+  const date = new Date();
+  const todayDate =
+  date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
   const handleInput = (e) => {
     const text = formatText(e.target.name, e.target.value);
     setDataSearch({
@@ -24,14 +29,43 @@ function Search({
       [e.target.name]: text,
     });
   };
-  const handleSubmit = (e) => {
+  async function getReportsWithDate(fecha_min = "", fecha_max = "") {
+    try {
+      if(fecha_min.length==0 || fecha_max.length ==0){
+        fecha_min = fecha_min.length==0? fecha_max : fecha_min
+        fecha_max = fecha_min
+      }
+      const response = await axios.post("/api/reports", {
+        fecha_min,
+        fecha_max,
+      });
+      if (response.status == 200) {
+        const dataFormated = reportsFormatedWithDate(response.data);
+        return dataFormated;
+      }
+    } catch (error) {}
+  }
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(dataSearch);
+    if (dataSearch.fecha_min.length > 0 || dataSearch.fecha_max.length > 0) {
+      setIsLoading(true);
+      const dataFormated = await getReportsWithDate(
+        dataSearch.fecha_min,
+        dataSearch.fecha_max
+      );
+      console.log(dataFormated);
+      if (dataFormated) {
+        setReports(dataFormated);
+      }
+      /*if(dataFormated.length >0){
+        }*/
+      setIsLoading(false);
+      return;
+    }
     if (dataSearch.grupo.length == 0 && dataSearch.ciclo.length == 0) {
       setReports(data);
       return;
-    }
-    if(dataSearch.fecha_min.length >0 ){
-
     }
     let newList = data.filter((item) => {
       if (
@@ -51,25 +85,27 @@ function Search({
     });
     setChangeTypeSearch(typeSearch == "text" ? "date" : "text");
   };
-  const date = new Date();
-  const todayDate =
-    date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+  
   return (
     <>
       <form
         className="flex justify-center gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg flex-grow"
         onSubmit={handleSubmit}
       >
-        <div className="flex gap-2 items-center">
-          <InputStyled
-            type="search"
-            placeholder="Ciclo"
-            name="ciclo"
-            value={dataSearch.ciclo}
-            onChange={handleInput}
-            list="options_ciclo"
-          />
-        </div>
+        {typeSearch == "date" ? null : (
+          <div className="flex gap-2 items-center">
+            <InputStyled
+              type="search"
+              placeholder="Ciclo"
+              name="ciclo"
+              value={dataSearch.ciclo}
+              onChange={handleInput}
+              list="options_ciclo"
+              className="w-52"
+            />
+            <p>y</p>
+          </div>
+        )}
 
         <datalist id="options_ciclo">
           {dataAutoComplite.ciclo
@@ -79,7 +115,6 @@ function Search({
             : null}
         </datalist>
         <div className="flex items-center gap-2">
-          <p>y</p>
           <InputStyled
             type={typeSearch}
             placeholder="Grupo"

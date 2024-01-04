@@ -77,26 +77,26 @@ function changePass() {
           showChangePass ? "opacity-100 relative" : "opacity-0 hidden"
         }`}
         onSubmit={handleSubmit}>
-        <div className="flex w-fit justify-center items-center">
+        <div className="flex w-fit justify-center items-center relative">
           <InputStyled
             type={showPass.pass1 ? "text" : "password"}
             placeholder="Contraseña"
-            className="w-52"
+            className="w-56"
             name="contrasenia"
             value={dataPass.contrasenia}
             onChange={handleInput}
             required
           />
-          <div className="w-full flex justify-end items-center">
+          <div className="w-full flex justify-end items-center absolute pr-3">
             {showPass.pass1 ? (
               <FaRegEyeSlash
-                className="absolute mr-4 cursor-pointer"
+                className="cursor-pointer"
                 size={20}
                 onClick={() => setShowPass({ type: "contrasenia" })}
               />
             ) : (
               <FaEye
-                className="absolute mr-4 cursor-pointer"
+                className="cursor-pointer"
                 size={20}
                 onClick={() => setShowPass({ type: "contrasenia" })}
               />
@@ -110,10 +110,10 @@ function changePass() {
             name="confirmarContrasenia"
             value={dataPass.confirmarContrasenia}
             onChange={handleInput}
-            className="w-60"
+            className="w-56"
             required
           />
-          <div className="w-full flex justify-end items-center absolute">
+          <div className="w-full flex justify-end items-center absolute pr-3">
             {showPass.pass2 ? (
               <FaRegEyeSlash
                 className=" cursor-pointer"
@@ -122,7 +122,7 @@ function changePass() {
               />
             ) : (
               <FaEye
-                className=" cursor-pointer"
+                className="cursor-pointer"
                 size={20}
                 onClick={() => setShowPass({ type: "confirmarContrasenia" })}
               />

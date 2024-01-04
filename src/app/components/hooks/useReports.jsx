@@ -36,6 +36,8 @@ function useReports() {
     setDataSearch({
       ciclo: "",
       grupo: "",
+      fecha_min:"",
+      fecha_max:""  
     });
   };
   const handleSearch = (e) => {
@@ -67,6 +69,7 @@ function useReports() {
       groups.filter((report) => (report.checked ? report : null))
     );
   }, [groups]);
+  
   return {
     isLoading,
     groups,
@@ -77,7 +80,8 @@ function useReports() {
     dataSearch,
     setDataSearch,
     listToExport,
-    handleCheked
+    handleCheked, 
+    setIsLoading
   };
 }
 

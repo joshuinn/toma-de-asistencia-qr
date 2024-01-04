@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/app/components/Header";
 import Loading from "@/app/components/Loading";
-import { isEmailValid } from "@/app/components/formatTextList.helper";
+import { isEmailValid } from "@/app/components/helpers/formatTextList.helper";
 import ButtonStyled from "@/app/components/styled/ButtonStyled";
 import axios from "axios";
 import React, { Suspense, useEffect, useState } from "react";

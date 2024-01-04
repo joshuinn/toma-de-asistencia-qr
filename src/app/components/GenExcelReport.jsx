@@ -3,19 +3,23 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import { SiMicrosoftexcel } from "react-icons/si";
-import { countStudents } from "./countStudents.helper";
+import { countStudents } from "./helpers/countStudents.helper";
 import ButtonStyled from "./styled/ButtonStyled";
 import { toast } from "sonner";
 
-function GenExcelReport({ list }) {
+function GenExcelReport({ list, fecha_min, fecha_max }) {
   const [listToExport, setListToExport] = useState([]);
+  const [allList, setAllList] = useState([]);
   const refExport = useRef(null);
   const extracData = async () => {
     try {
-      const { data } = await axios.post("/api/reports", list);
+      const { data } = await axios.post("/api/listReports", {
+        list,
+        fecha_min,
+        fecha_max,
+      });
       let dataFormated = [];
       for (let i = 0; i < data.length; i++) {
-        console.log(data[i]);
         if (data[i].length > 0) {
           let fecha = data[i][0].fecha_asistencia.split("T");
           dataFormated[i] = {
@@ -30,7 +34,7 @@ function GenExcelReport({ list }) {
           };
         }
       }
-      setListToExport(dataFormated);
+      setAllList(dataFormated);
     } catch (error) {
       console.error(error);
     }
@@ -38,30 +42,90 @@ function GenExcelReport({ list }) {
 
   const handleExport = async (e) => {
     e.preventDefault();
-    await extracData();
-    if(listToExport.length == 0){
-      return toast.error("No se ha escogido una lista")
+    if (list.length == 0) {
+      return toast.error("No se ha escogido una lista");
     }
-    console.log(e);
-    refExport.current.click();
+    await extracData();
   };
   useEffect(() => {
-    console.log("data:", listToExport);
+    if (allList) {
+      if (allList.length > 0) {
+        const newData = formatedDataExport(allList);
+        setListToExport(newData);
+      }
+    }
+  }, [allList]);
+  useEffect(() => {
+    //console.log("data:", listToExport);
+    if (listToExport) {
+      if (listToExport.length > 0) {
+        refExport.current.click();
+      }
+    }
   }, [listToExport]);
   const headers = [
-    { label: "Apellido", key: "alumnos.apellido_alumno" },
-    { label: "Nombre", key: "alumnos.nombre_alumno" },
-    { label: "boleta", key: "alumnos.boleta" },
-    { label: "Conteo Asistencia", key: "alumnos.count" },
+    { label: "Apellido", key: "apellido_alumno" },
+    { label: "Nombre", key: "nombre_alumno" },
+    { label: "boleta", key: "boleta" },
+    { label: "Conteo Asistencia", key: "count" },
   ];
-
+  const dataExample = [
+    {
+      alumnos: {
+        apellido_alumno: "some",
+        nombre_alumno: "nombre",
+        count: 20,
+        boleta: "220202",
+      },
+    },
+  ];
+  function formatedDataExport(list) {
+    let newData = [];
+    let indexData = 0;
+    for (let i = 0; i < list.length; i++) {
+      if (!list[i]) {
+        continue;
+      }
+      newData[indexData] = [
+        "Ciclo: " + list[i].ciclo,
+        "Grupo: " + list[i].grupo,
+        "Maestro: " + list[i].maestro,
+      ];
+      let alumnos = list[i].alumnos;
+      indexData++;
+      newData[indexData] = [
+        "Apellido",
+        "Nombre",
+        "Boleta",
+        "conteo de asistencia",
+      ];
+      for (let j = 0; j < alumnos.length; j++) {
+        indexData++;
+        newData[indexData] = [
+          alumnos[j].apellido_alumno,
+          alumnos[j].nombre_alumno,
+          alumnos[j].boleta,
+          alumnos[j].count,
+        ];
+      }
+      indexData++;
+      newData[indexData] = [];
+      indexData++;
+    }
+    return newData;
+  }
   return (
     <>
       <ButtonStyled color="green" onClick={handleExport}>
         Excel
         <SiMicrosoftexcel size={20} />
       </ButtonStyled>
-      <CSVLink data={listToExport} headers={headers} className="hidden">
+      <CSVLink
+        filename="lista_asistencia.csv"
+        data={listToExport}
+        className="hidden"
+        target="_blank"
+      >
         <input type="button" ref={refExport} />
       </CSVLink>
     </>

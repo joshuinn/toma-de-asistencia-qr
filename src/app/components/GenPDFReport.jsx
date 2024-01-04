@@ -13,7 +13,7 @@ import { FaDownload, FaFilePdf } from "react-icons/fa";
 import { toast } from "sonner";
 import { IoMdCloseCircle } from "react-icons/io";
 import axios from "axios";
-import { countStudents } from "./countStudents.helper";
+import { countStudents } from "./helpers/countStudents.helper";
 import ButtonStyled from "./styled/ButtonStyled";
 
 const styles = StyleSheet.create({
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function GenPDFReport({ list }) {
+function GenPDFReport({ list, fecha_min,fecha_max }) {
   const [listToExport, setListToExport] = useState([]);
   const [isShow, setIsShow] = useState(false);
   const downloadRef = null;
@@ -109,7 +109,7 @@ function GenPDFReport({ list }) {
   };
   const extracData = async () => {
     try {
-      const { data } = await axios.post("/api/reports", list);
+      const { data } = await axios.post("/api/listReports", {list, fecha_min,fecha_max});
       let dataFormated = [];
       for (let i = 0; i < data.length; i++) {
         console.log(data[i]);
@@ -127,7 +127,7 @@ function GenPDFReport({ list }) {
       }
       setListToExport(dataFormated);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -142,6 +142,7 @@ function GenPDFReport({ list }) {
     );
   }, []);
   const handleShow = async () => {
+    console.log(list);
     if (list.length == 0) {
       toast.error("No se han escogido listas para exportar");
       return;

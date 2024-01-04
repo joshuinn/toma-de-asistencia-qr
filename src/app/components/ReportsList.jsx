@@ -10,13 +10,6 @@ import useReports from "./hooks/useReports";
 import Search from "./Search";
 
 function ReportsList() {
-  const [changeTypeSearch, setChangeTypeSearch] = useState(false);
-  const [listToExport, setListToExport] = useState([]);
-  const [dataSearch, setDataSearch] = useState({
-    ciclo: "",
-    grupo: "",
-    fecha: "",
-  });
   const reports = useReports();
   const selectAll = () => {
     reports.setGroups((prev) =>
@@ -25,7 +18,7 @@ function ReportsList() {
   };
 
   return (
-    <div className="h-[90vh] p-4 m-[-4px]">
+    <div className="h-[85vh] p-4 m-[-4px] ">
       <div className="flex items-center gap-4 flex-wrap">
         <Search
           dataSearch={reports.dataSearch}
@@ -33,6 +26,7 @@ function ReportsList() {
           data={reports.data}
           setReports={reports.setGroups}
           handleRefresh={reports.handleRefreshGroups}
+          setIsLoading={reports.setIsLoading}
           isChangeInput
         />
         <div className="flex flex-grow justify-center gap-10 mt-2 bg-blue-600 p-3 rounded-lg shadow-lg">
@@ -45,54 +39,63 @@ function ReportsList() {
             <FaListCheck size={20} />
           </ButtonStyled>
 
-          <GenPDFReport list={reports.listToExport} />
-          <GenExcelReport list={reports.listToExport} />
+          <GenPDFReport
+            list={reports.listToExport}
+            fecha_min={reports.dataSearch.fecha_min}
+            fecha_max={reports.dataSearch.fecha_max}
+          />
+          <GenExcelReport
+            list={reports.listToExport}
+            fecha_min={reports.dataSearch.fecha_min}
+            fecha_max={reports.dataSearch.fecha_max}
+          />
         </div>
       </div>
-      <div className="bg-blue-800 h-[70%] mt-5 p-4 rounded-lg shadow-xl overflow-y-scroll">
-        <div className=" ">
-          <ul className="grid grid-cols-4">
-            <li>
-              <h3>Ciclo</h3>
-            </li>
-            <li className="">
-              <h3>Grupo</h3>
-            </li>
-            <li className="">
-              <h3>Maestro</h3>
-            </li>
-            <li className="">
-              <h3>Seleccionar</h3>
-            </li>
-          </ul>
+      <div className="w-full h-[70%] overflow-y-scroll mt-5 shadow-lg">
+        <table className="table-fixed text-center bg-blue-800 h-full p-4 rounded-lg w-full border-collapse">
+          <thead>
+            <th className="p-3">
+              <h3 className="font-bold text-xl text-blue">Ciclo</h3>
+            </th>
+            <th className="p-3">
+              <h3 className="font-bold text-xl text-blue">Grupo</h3>
+            </th>
+            <th className="p-3">
+              <h3 className="font-bold text-xl text-blue">Maestro</h3>
+            </th>
+            <th className="p-3">
+              <h3 className="font-bold text-xl text-blue">Seleccionar</h3>
+            </th>
+          </thead>
 
-          <Suspense fallback={<Loading />}>
+          <tbody className="relative">
             {reports.isLoading ? (
-              <div className="h-full mt-5">
-
-              <Loading />
-              </div>
+              <tr>
+                <td className="absolute w-full h-full ">
+                  <Loading />
+                </td>
+              </tr>
             ) : (
-              <ul className="">
+              <Suspense fallback={<Loading />}>
                 {reports.groups.length > 0 ? (
-                  reports.groups.map((report) => {
+                  reports.groups.map((report, i) => {
                     return (
-                      <li
+                      <tr
                         key={report.id_lista_asistencia}
-                        className="border border-x-0 grid grid-cols-4 p-3"
+                        className={` ${i % 2 == 0 ? "bg-blue-700" : ""}`}
                       >
-                        <div>
+                        <td>
                           <span>{report.ciclo}</span>
-                        </div>
-                        <div className="">
+                        </td>
+                        <td className="">
                           <span>{report.grupo}</span>
-                        </div>
-                        <div>
+                        </td>
+                        <td>
                           <span>{report.maestro}</span>
-                        </div>
+                        </td>
 
-                        <div className="ml-4">
-                          <div className={style.checkboxWrapper}>
+                        <td>
+                          <div className={"p-2 " + style.checkboxWrapper}>
                             <input
                               type="checkbox"
                               id={report.id_lista_asistencia}
@@ -112,8 +115,8 @@ function ReportsList() {
                               htmlFor={report.id_lista_asistencia}
                             ></label>
                           </div>
-                        </div>
-                      </li>
+                        </td>
+                      </tr>
                     );
                   })
                 ) : (
@@ -121,10 +124,10 @@ function ReportsList() {
                     <h3 className="font-bold text-2xl">No hay elementos</h3>
                   </div>
                 )}
-              </ul>
+              </Suspense>
             )}
-          </Suspense>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );

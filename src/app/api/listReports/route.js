@@ -1,15 +1,11 @@
 import { conn } from "@/lib/mysql";
 import { NextResponse } from "next/server";
 
-
 export async function POST(req) {
   try {
     const data = await req.json();
+
     let newData = [];
-    console.log(data);
-    const fecha_min = JSON.stringify(data.fecha_min)
-    const fecha_max = JSON.stringify(data.fecha_max)
-    
     const joinGrupo =
       " JOIN ctb_grupo ON ctb_lista_asistencia.id_grupo = ctb_grupo.id_grupo ";
     const joinCiclo =
@@ -24,18 +20,40 @@ export async function POST(req) {
       " JOIN ctb_alumno ON ttb_asistencia.id_alumno = ctb_alumno.id_alumno ";
     const joinLista =
       " JOIN ctb_lista_asistencia ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
-      const joinFecha =  fecha_min+" AND "+fecha_max
-      newData = await conn.query(
-        "SELECT * FROM ttb_asistencia " +
-          joinLista +
-          joinGrupo +
-          joinMestro +
-          joinCiclo +
-          " WHERE fecha_asistencia BETWEEN" + joinFecha
+    let fecha_min = JSON.stringify(data.fecha_min);
+    let fecha_max = JSON.stringify(data.fecha_max);
+    
+    if (fecha_min.length == 2 || fecha_max.length == 2) {
+      fecha_min = fecha_min.length == 0 ? fecha_max : fecha_min;
+      fecha_max = fecha_min;
+    }
+    const bodyQuery =
+      "SELECT * FROM ttb_asistencia " +
+      joinLista +
+      joinAlumno +
+      joinGrupo +
+      joinMateria +
+      joinLab +
+      joinMestro +
+      joinCiclo;
+      console.log(fecha_min, fecha_max);
+    const bodyWhere =
+      fecha_min.length > 2 || fecha_max.length > 2
+        ? " WHERE ttb_asistencia.fecha_asistencia BETWEEN " +
+          fecha_min +
+          " AND " +
+          fecha_max +
+          " AND ttb_asistencia.id_lista_asistencia = "
+        : " WHERE ttb_asistencia.id_lista_asistencia =  ";
+    for (let i = 0; i < data.list.length; i++) {
+      newData[i] = await conn.query(
+        bodyQuery + bodyWhere + data.list[i].id_lista_asistencia
       );
+    }
+    console.log(newData);
     return NextResponse.json(newData);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return NextResponse.json({ message: "Error" }, { status: 500 });
 }

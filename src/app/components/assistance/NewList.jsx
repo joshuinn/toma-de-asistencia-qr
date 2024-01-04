@@ -8,7 +8,7 @@ import {
 } from "react-icons/ai";
 import { BiListPlus, BiErrorCircle } from "react-icons/bi";
 import { toast } from "sonner";
-import { formatText } from "../formatTextList.helper";
+import { formatText } from "../helpers/formatTextList.helper";
 import { AutoCompliteContext } from "../ContextDataAutoCompliteInput";
 import ButtonStyled from "../styled/ButtonStyled";
 function NewList({ handleRefreshGroups }) {
@@ -88,8 +88,11 @@ function NewList({ handleRefreshGroups }) {
         duration-200
         ease-in-out
         absolute
+        z-10
+        bg-black
         ${
-          show ? "bg-[rgb(0,0,0,0.5)] left-[12.5rem] " : "right-full opacity-0"
+          
+          show ? "bg-opacity-50 left-[12.5rem]" : "right-full opacity-0 "
         } 
         `}
       >

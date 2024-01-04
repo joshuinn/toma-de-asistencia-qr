@@ -3,7 +3,7 @@ import {
   formatText,
   isEmailValid,
   isPasswordValid,
-} from "@/app/components/formatTextList.helper";
+} from "@/app/components/helpers/formatTextList.helper";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

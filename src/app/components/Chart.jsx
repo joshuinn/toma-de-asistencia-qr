@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import GenPieChart from "./GenPieChart";
 import Loading from "./Loading";
-import { calculateAssistance } from "./calculateAssistance.helper";
+import { calculateAssistance } from "./helpers/calculateAssistance.helper";
 function Chart({ list }) {
   const [isLoading, setIsloading] = useState(false);
   const [dataChart, setDataChart] = useState([]);

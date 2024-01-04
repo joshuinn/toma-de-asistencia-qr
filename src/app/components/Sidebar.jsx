@@ -18,7 +18,7 @@ import { SidebarContext } from "./SideBarResponsiveContext";
 
 function Sidebar({ children }) {
   const [page, setPage] = useState("dashboard");
-  const {   isLogged, handleLogout } = useContext(SessionContext);
+  const { isLogged, handleLogout } = useContext(SessionContext);
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
   const indicatorRef = useRef();
@@ -63,8 +63,13 @@ function Sidebar({ children }) {
   }, [page, isLogged]);
   useEffect(()=>{
     setIsLoading(true)
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 6000);
+    return () => clearTimeout(timer);
   },[isChangedPage])
-  const handleChanged =()=>{
+  const handleChanged =(e)=>{
+    console.log(e);
     setChangedPage(!isChangedPage)
   }
   if (!isLogged) {
@@ -116,6 +121,7 @@ function Sidebar({ children }) {
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
+                name="assistence"
                 onClick={handleChanged}
               >
                 <BiListPlus />
