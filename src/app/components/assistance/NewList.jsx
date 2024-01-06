@@ -213,9 +213,9 @@ function NewList({ handleRefreshGroups }) {
                   : null}
               </datalist>
             </div>
-            <button className="border p-2 rounded-lg border-green text-green hover:text-pink hover:border-pink transition">
+            <ButtonStyled color="pink">
               Terminar registro
-            </button>
+            </ButtonStyled>
           </form>
           {/*MODAL*/}
           <div
@@ -235,18 +235,18 @@ function NewList({ handleRefreshGroups }) {
               <p>La lista se guardara y no podra ser modificada</p>
               <p className="font-bold text-xl">¿Está seguro?</p>
               <div className="flex gap-3">
-                <button
+                <ButtonStyled
                   onClick={handleShowConfirm}
-                  className="border border-pink text-pink p-3 rounded-lg hover:text-white"
+                  color="pink"
                 >
                   Regresar
-                </button>
-                <button
-                  className="bg-green  p-3 rounded-lg hover:text-gray-100"
+                </ButtonStyled>
+                <ButtonStyled
+                color="green"
                   onClick={submitGroup}
                 >
                   Confirmar
-                </button>
+                </ButtonStyled>
               </div>
             </div>
           </div>

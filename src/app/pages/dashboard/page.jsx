@@ -1,8 +1,6 @@
 import Header from "@/app/components/Header";
 import Link from "next/link";
-import styles from "./dashboard.module.css";
-import { Suspense } from "react";
-import Loading from "@/app/components/Loading";
+import styles from "@/app/components/dashboard.module.css";
 function page() {
   return (
     <div className="h-screen ]">

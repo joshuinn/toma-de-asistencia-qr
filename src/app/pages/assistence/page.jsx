@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 import ListGroup from "@/app/components/assistance/ListGroup";
 import Header from "@/app/components/Header";
-import Loading from "@/app/components/Loading";
 import AutoCompliteProvider from "@/app/components/ContextDataAutoCompliteInput";
 
 function page() {

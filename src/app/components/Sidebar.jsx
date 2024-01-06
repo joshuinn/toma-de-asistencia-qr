@@ -24,7 +24,7 @@ function Sidebar({ children }) {
   const indicatorRef = useRef();
   const topPagesRef = useRef();
   const { isShow, handleShow } = useContext(SidebarContext);
-  const [isChangedPage, setChangedPage] = useState(false)
+  const [isChangedPage, setChangedPage] = useState(false);
   const pages = [
     "dashboard",
     "assistence",
@@ -42,12 +42,13 @@ function Sidebar({ children }) {
     indicator.style.transform = `translateY(${topIndicatorY + ipage * 47}px)`;
   };
 
-
   useEffect(() => {
     setIsLoading(true);
     if (isLogged) {
       const actualPage = pathname.split("/");
-      setPage(actualPage[2])
+      if (actualPage[2]) {
+        setPage(actualPage[2]);
+      }
     }
 
     const timer = setTimeout(() => {
@@ -61,17 +62,16 @@ function Sidebar({ children }) {
       handleIndicator();
     }
   }, [page, isLogged]);
-  useEffect(()=>{
-    setIsLoading(true)
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 6000);
-    return () => clearTimeout(timer);
-  },[isChangedPage])
-  const handleChanged =(e)=>{
-    console.log(e);
-    setChangedPage(!isChangedPage)
-  }
+  useEffect(() => {
+    setIsLoading(true);
+  }, [isChangedPage]);
+  const handleChanged = (name) => {
+    const actualPage = pathname.split("/");
+    if (name !== actualPage[2]) {
+      setPage(name);
+      setChangedPage(!isChangedPage);
+    }
+  };
   if (!isLogged) {
     return <div>{children}</div>;
   }
@@ -93,25 +93,29 @@ function Sidebar({ children }) {
               <IoMdClose size={35} />
             </button>
           </div>
-          <Link href="/">
-            <div className="flex justify-center items-center text-white rounded-lg">
-              <BiSolidDashboard size={80} />
-            </div>
-          </Link>
-          <div className="flex flex-col gap-2 bg-" ref={topPagesRef}>
+          <button onClick={() => handleChanged("dashboard")}>
             <Link href="/">
-              <div
-                className={`flex items-center p-2 gap-2
+              <div className="flex justify-center items-center text-white rounded-lg">
+                <BiSolidDashboard size={80} />
+              </div>
+            </Link>
+          </button>
+          <div className="flex flex-col gap-2 bg-" ref={topPagesRef}>
+            <button onClick={() => handleChanged("dashboard")}>
+              <Link href="/">
+                <div
+                  className={`flex items-center p-2 gap-2
                 ${
                   page == "dashboard"
                     ? "text-pink "
                     : " text-gray-500 hover:text-gray-300"
                 }`}
-              >
-                <BiSolidDashboard />
-                <p>Dashboard</p>
-              </div>
-            </Link>
+                >
+                  <BiSolidDashboard />
+                  <p>Dashboard</p>
+                </div>
+              </Link>
+            </button>
 
             <Link href="/pages/assistence">
               <button
@@ -121,8 +125,7 @@ function Sidebar({ children }) {
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                name="assistence"
-                onClick={handleChanged}
+                onClick={() => handleChanged("assistence")}
               >
                 <BiListPlus />
                 <p>Asistencia</p>
@@ -136,7 +139,7 @@ function Sidebar({ children }) {
                     ? " text-blue "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={handleChanged}
+                onClick={() => handleChanged("reports")}
               >
                 <BiListUl />
                 Reportes
@@ -150,7 +153,7 @@ function Sidebar({ children }) {
                     ? " text-yellow "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={handleChanged}
+                onClick={() => handleChanged("incident")}
               >
                 <AiFillWarning />
                 <p>Incidencia</p>
@@ -164,7 +167,7 @@ function Sidebar({ children }) {
                     ? " text-green "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={handleChanged}
+                onClick={() => handleChanged("graphs")}
               >
                 <BsFileEarmarkBarGraph />
                 <p>Gráficas</p>
@@ -179,7 +182,7 @@ function Sidebar({ children }) {
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={handleChanged}
+                onClick={() => handleChanged("invite")}
               >
                 <IoMdPersonAdd />
 
@@ -194,7 +197,7 @@ function Sidebar({ children }) {
                     ? " text-white "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={handleChanged}
+                onClick={() => handleChanged("config")}
               >
                 <BsFillGearFill />
                 <p>Cuenta</p>

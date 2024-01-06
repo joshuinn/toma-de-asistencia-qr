@@ -39,22 +39,22 @@ function page() {
       <div className="text-white flex flex-col justify-center items-center gap-4">
         <div className="flex gap-3 bg-blue-600 rounded-lg p-3 items-center w-1/2 justify-center shadow-lg">
           <label htmlFor="nombre">Mi nombre</label>
-          <input
+          <InputStyled
             type="text"
             placeholder="nombre"
             id="nombre"
-            className="rounded-full bg-blue-700 p-3 text-gray-300"
+            className="text-gray-300 bg-opacity-50"
             value={dataUser.nombre}
             disabled
           />
         </div>
         <div className="flex gap-3 bg-blue-600 rounded-lg p-3 items-center w-1/2 justify-center shadow-lg">
           <label htmlFor="boleta">Boleta</label>
-          <input
+          <InputStyled
             type="text"
             placeholder="Boleta"
             id="boleta"
-            className="rounded-full bg-blue-700 p-3 text-gray-300"
+            className="bg-opacity-50 text-gray-300"
             value={dataUser.boleta}
             disabled
           />
@@ -67,6 +67,7 @@ function page() {
             id="correo"
             value={dataUser.correo}
             disabled
+            className= "text-gray-300 bg-opacity-50"
           />
         </div>
         <ChangePass />

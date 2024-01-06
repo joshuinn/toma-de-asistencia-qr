@@ -4,10 +4,11 @@ import { conn } from "@/lib/mysql";
 
 export async function POST(request) {
   const data = await request.json();
-  const result = await serchData(data.url);
+  const result = await serchData(data.student.url);
   if (result.name && result.boleta) {
     const nombre = getFormatedName(result.name);
-    return NextResponse.json({ nombre: nombre, boleta: result.boleta });
+    const numero_maquina = await getLastNumberStudent(result.boleta, data.id_lista_asistencia)
+    return NextResponse.json({ nombre: nombre, boleta: result.boleta, numero_maquina:numero_maquina });
   } else {
     return NextResponse.json(
       { message: "No found information" },
@@ -22,9 +23,6 @@ function getFormatedName(name) {
   lastName[1] = splitName[imax - 1];
   lastName[2] = splitName[imax];
   let nombre = "";
-
-  console.log(lastName);
-
   if (splitName[imax - 2].length < 4) {
     lastName[0] = splitName[imax - 2];
     for (let i = 0; i <= imax - 3; i++) {
@@ -38,9 +36,21 @@ function getFormatedName(name) {
   for (let i = 0; i <= imax - 2; i++) {
     nombre += splitName[i] + " ";
   }
-  console.log("last: " + lastName);
   return { apellido: lastName[1] + " " + lastName[2], nombre: nombre };
 }
+async function getLastNumberStudent(boleta, id_lista_asistencia){
+  try {
+      const response = await conn.query("SELECT * FROM ttb_asistencia JOIN ctb_alumno ON ctb_alumno.boleta = "+boleta+" WHERE id_lista_asistencia = "+id_lista_asistencia+" AND ttb_asistencia.id_alumno = ctb_alumno.id_alumno ORDER BY id_asistencia DESC")
+      console.log(response);
+      if(response.length>0){
+        return response[0].numero_maquina
+      }
+  } catch (error) {
+    console.error(error);
+  }
+  return "0"
+}
+
 async function serchData(url) {
   try {
     const browser = await puppeteer.launch({

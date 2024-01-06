@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { CiMenuBurger } from "react-icons/ci";
 import { SidebarContext } from "./SideBarResponsiveContext";
 
-function Header({ title, extra }) {
+function Header({ title, extra, colorTitle }) {
   const {isShow, handleShow} = useContext(SidebarContext)
   return (
     <div className="flex w-full justify-between text-white">

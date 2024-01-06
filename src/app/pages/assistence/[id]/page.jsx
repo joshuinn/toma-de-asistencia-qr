@@ -22,7 +22,7 @@ const loadGroup = async (listaId) => {
 
 const ListStudent = dynamic(
   () => import("@/app/components/assistance/ListStudent"),
-  { loading: <Loading /> }
+  { loading: () => <Loading /> }
 );
 
 async function ListAssistance({ params }) {
@@ -33,7 +33,13 @@ async function ListAssistance({ params }) {
   return (
     <>
       <Header title="Lista de asistencia" />
-      <Suspense fallback={<div className="h-[80vh]"><Loading /></div>}>
+      <Suspense
+        fallback={
+          <div className="h-[80vh]">
+            <Loading />
+          </div>
+        }
+      >
         <div className="flex flex-col gap-3">
           <div className="flex gap-4 p-2 rounded-lg flex-wrap justify-between text-white">
             <div className="bg-blue-600 p-3 shadow-lg rounded-lg">
@@ -53,7 +59,7 @@ async function ListAssistance({ params }) {
             </div>
           </div>
           <div>
-            <ListStudent id_lista_asitencia={params.id} />
+            <ListStudent id_lista_asistencia={params.id} />
           </div>
         </div>
       </Suspense>

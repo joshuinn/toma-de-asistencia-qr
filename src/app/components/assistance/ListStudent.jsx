@@ -15,10 +15,13 @@ import loaderIndividual from "./LoadingIndividual.module.css";
 import { useRouter } from "next/navigation";
 import { SessionContext } from "../SessionContext";
 import { formatText } from "../helpers/formatTextList.helper";
+import { CiCircleRemove } from "react-icons/ci";
+import ButtonStyled from "../styled/ButtonStyled";
 
-function ListStudent({ id_lista_asitencia }) {
+function ListStudent({ id_lista_asistencia }) {
   const [students, setStudents] = useState([]);
   const [studentQueue, setStudentQueue] = useState([]);
+  const [isNewStudent, setIsNewStudent] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const router = useRouter();
   const { dataUser } = useContext(SessionContext);
@@ -27,16 +30,20 @@ function ListStudent({ id_lista_asitencia }) {
   const formRef = useRef(null);
   const [dataForm, setDataForm] = useState({
     url: "",
-    id_lista_asitencia: id_lista_asitencia,
+    id_lista_asistencia: id_lista_asistencia,
   });
   const getDataStudent = async (student) => {
     try {
-      const { data } = await axios.post("/api/webScrapping", student);
+      const { data } = await axios.post("/api/webScrapping", {
+        student,
+        id_lista_asistencia,
+      });
       if (data.nombre) {
         return {
           nombre: data.nombre.nombre,
           apellido: data.nombre.apellido,
           boleta: data.boleta,
+          numero_maquina:data.numero_maquina
         };
       }
     } catch (e) {
@@ -48,10 +55,11 @@ function ListStudent({ id_lista_asitencia }) {
       const response = await axios.post("/api/assistanceList", [
         students,
         dataUser,
-        id_lista_asitencia,
+        id_lista_asistencia,
       ]);
       //console.log(response);
       if (response.status == 200) {
+        localStorage.removeItem("listStudents");
         toast.success("Se ha guardado correctamente la lista de asistencia");
         router.push("/pages/assistence");
         router.refresh();
@@ -85,6 +93,7 @@ function ListStudent({ id_lista_asitencia }) {
                   boleta: data.boleta,
                   apellido_alumno: data.apellido,
                   nombre_alumno: data.nombre,
+                  numero_maquina:data.numero_maquina
                 };
               }
               return student;
@@ -95,6 +104,7 @@ function ListStudent({ id_lista_asitencia }) {
               return student;
             }
           });
+          setIsNewStudent(!isNewStudent);
           setStudentQueue(NewQue);
         } catch (e) {
           console.error(e);
@@ -105,14 +115,38 @@ function ListStudent({ id_lista_asitencia }) {
   }, [studentQueue]);
 
   useEffect(() => {
-    let newList = students.filter((student) =>
-      student.boleta !== "error" ? student : null
-    );
-    if (newList.length !== students.length) {
-      setStudents(newList);
+    if (students.length > 0) {
+      let newList = students.filter((student) =>
+        student.boleta !== "error" ? student : null
+      );
+      if (newList.length !== students.length) {
+        setStudents(newList);
+      }
+      localStorage.setItem(
+        "listStudents",
+        JSON.stringify({ students, id_lista_asistencia })
+      );
     }
   }, [students]);
-
+  useEffect(() => {
+    const storageList = JSON.parse(localStorage.getItem("listStudents"));
+    if (storageList) {
+      if (storageList.id_lista_asistencia == id_lista_asistencia) {
+        setStudents(storageList.students);
+      }
+    }
+  }, []);
+  useEffect(() => {
+    if (students.length > 1) {
+      let newList = [...students];
+      newList.sort((a, b) => {
+        let mergeNameA = a.apellido_alumno + " " + a.nombre_alumno;
+        let mergeNameB = b.apellido_alumno + " " + b.nombre_alumno;
+        return mergeNameA.localeCompare(mergeNameB);
+      });
+      setStudents(newList);
+    }
+  }, [isNewStudent]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id_queue = crypto.randomUUID();
@@ -133,7 +167,7 @@ function ListStudent({ id_lista_asitencia }) {
       },
     ]);
     setDataForm({
-      id_lista_asitencia: "",
+      id_lista_asistencia: "",
       url: "",
     });
   };
@@ -145,7 +179,7 @@ function ListStudent({ id_lista_asitencia }) {
       ...dataForm,
       [e.target.name]: e.target.value,
     });
-    formRef.current.submit()
+    //formRef.current.submit()
   };
   const handleMaquina = (e) => {
     const val = formatText(e.target.name, e.target.value);
@@ -165,6 +199,13 @@ function ListStudent({ id_lista_asitencia }) {
   const setFocusedInput = (e) => {
     setCurrentInputId(e.target.id);
   };
+  const handleDeleteStudent=(id)=>{
+    let newList = students.filter((student)=>student.id !== id? student :null)
+    setStudents(newList)
+    if(newList.length == 0){
+      localStorage.removeItem("listStudents");
+    }
+  }
   const FormRegister = () => {
     return (
       <div
@@ -217,6 +258,7 @@ function ListStudent({ id_lista_asitencia }) {
       </div>
     );
   };
+  
   return (
     <Suspense fallback={<Loading />}>
       <div className="bg-blue-800 rounded-lg p-3 shadow-lg z-10 text-white">
@@ -229,14 +271,14 @@ function ListStudent({ id_lista_asitencia }) {
             <p>Iniciar registro con QR</p>
           </button>
         </div>
-        <ul className="grid grid-cols-4 text-center">
+        <ul className="grid grid-cols-4 text-center text-purple font-bold text-xl">
           <li>Apellido</li>
           <li>Nombre</li>
           <li>Boleta</li>
           <li>No. maquina</li>
         </ul>
         <ul className=" h-full sm:h-[calc(100vh-25rem)] lg:h-[calc(100vh-20rem)]  overflow-y-scroll">
-          {students.map((student) => (
+          {students.map((student, i) => (
             <li key={student.id}>
               {student.boleta == "waiting" ? (
                 <div className="grid grid-cols-4 text-center justify-center items-center">
@@ -247,7 +289,14 @@ function ListStudent({ id_lista_asitencia }) {
                 </div>
               ) : (
                 <div className="grid sm:grid-cols-4 grid-cols-2 text-center justify-center mb-2">
-                  <p className="w-11/12">{student.apellido_alumno}</p>
+                  <div className="w-11/12 flex items-center gap-2 justify-center">
+                    <button onClick={()=>handleDeleteStudent(student.id)} className="hover:text-pink transition-all">
+                      <span title="Eliminar">
+                      <CiCircleRemove size={20} />
+                      </span>
+                    </button>
+                    <p>{student.apellido_alumno}</p>
+                  </div>
                   <p className="w-11/12">{student.nombre_alumno}</p>
                   <p>{student.boleta}</p>
                   <div className="flex justify-evenly">
@@ -272,14 +321,15 @@ function ListStudent({ id_lista_asitencia }) {
           ))}
         </ul>
         <div className="flex justify-end">
-          <button
-            className={`border transition-all p-3 mt-2 rounded-lg  flex items-center gap-1 
+          <ButtonStyled
+            className={`mt-2
                 ${
                   studentQueue.length > 0 || students.length == 0
                     ? "text-gray-500 border-gray-500"
-                    : "border-pink text-pink hover:text-green hover:border-green"
+                    : ""
                 }
             `}
+            color="pink"
             onClick={() => {
               handleEndList();
             }}
@@ -287,7 +337,7 @@ function ListStudent({ id_lista_asitencia }) {
           >
             <p>Terminar registro</p>
             <RiInboxUnarchiveFill size={25} />
-          </button>
+          </ButtonStyled>
         </div>
       </div>
       <FormRegister />

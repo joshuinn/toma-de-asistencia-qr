@@ -54,18 +54,20 @@ function ReportsList() {
       <div className="w-full h-[70%] overflow-y-scroll mt-5 shadow-lg">
         <table className="table-fixed text-center bg-blue-800 h-full p-4 rounded-lg w-full border-collapse">
           <thead>
-            <th className="p-3">
-              <h3 className="font-bold text-xl text-blue">Ciclo</h3>
-            </th>
-            <th className="p-3">
-              <h3 className="font-bold text-xl text-blue">Grupo</h3>
-            </th>
-            <th className="p-3">
-              <h3 className="font-bold text-xl text-blue">Maestro</h3>
-            </th>
-            <th className="p-3">
-              <h3 className="font-bold text-xl text-blue">Seleccionar</h3>
-            </th>
+            <tr>
+              <th className="p-3">
+                <h3 className="font-bold text-xl text-blue">Ciclo</h3>
+              </th>
+              <th className="p-3">
+                <h3 className="font-bold text-xl text-blue">Grupo</h3>
+              </th>
+              <th className="p-3">
+                <h3 className="font-bold text-xl text-blue">Maestro</h3>
+              </th>
+              <th className="p-3">
+                <h3 className="font-bold text-xl text-blue">Seleccionar</h3>
+              </th>
+            </tr>
           </thead>
 
           <tbody className="relative">
