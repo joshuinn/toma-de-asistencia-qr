@@ -6,10 +6,11 @@ export async function POST(req) {
     const data = await req.json();
     let list = [];
     for (let i = 0; i < data.length; i++) {
-      list[i] = await conn.query(
-        "SELECT id_alumno,id_lista_asistencia, id_asistencia FROM ttb_asistencia WHERE id_lista_asistencia = ?",
+      let queryResponse = await conn.query(
+        "SELECT id_alumno,id_lista_asistencia, id_asistencia FROM `ttb_asistencia` WHERE `id_lista_asistencia` = ?",
         [data[i].id_lista_asistencia]
       );
+      list[i] = queryResponse[0] 
     }
     return NextResponse.json(list);
   } catch (error) {

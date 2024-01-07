@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import Loading from "./Loading";
 import style from "./ReportsList.module.css";
 import { FaListCheck } from "react-icons/fa6";
@@ -8,6 +8,7 @@ import GenExcelReport from "./GenExcelReport";
 import ButtonStyled from "./styled/ButtonStyled";
 import useReports from "./hooks/useReports";
 import Search from "./Search";
+import AutoCompliteProvider from "./ContextDataAutoCompliteInput";
 
 function ReportsList() {
   const reports = useReports();
@@ -20,15 +21,17 @@ function ReportsList() {
   return (
     <div className="h-[85vh] p-4 m-[-4px] ">
       <div className="flex items-center gap-4 flex-wrap">
-        <Search
-          dataSearch={reports.dataSearch}
-          setDataSearch={reports.setDataSearch}
-          data={reports.data}
-          setReports={reports.setGroups}
-          handleRefresh={reports.handleRefreshGroups}
-          setIsLoading={reports.setIsLoading}
-          isChangeInput
-        />
+        <AutoCompliteProvider>
+          <Search
+            dataSearch={reports.dataSearch}
+            setDataSearch={reports.setDataSearch}
+            data={reports.data}
+            setReports={reports.setGroups}
+            handleRefresh={reports.handleRefreshGroups}
+            setIsLoading={reports.setIsLoading}
+            isChangeInput
+          />
+        </AutoCompliteProvider>
         <div className="flex flex-grow justify-center gap-10 mt-2 bg-blue-600 p-3 rounded-lg shadow-lg">
           <ButtonStyled
             color="purple"
@@ -122,9 +125,11 @@ function ReportsList() {
                     );
                   })
                 ) : (
-                  <div className="text-center mt-6">
-                    <h3 className="font-bold text-2xl">No hay elementos</h3>
-                  </div>
+                  <tr>
+                    <div className="absolute w-full text-center mt-6">
+                      <h3 className="font-bold text-2xl">No hay elementos</h3>
+                    </div>
+                  </tr>
                 )}
               </Suspense>
             )}

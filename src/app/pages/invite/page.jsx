@@ -7,7 +7,7 @@ import axios from "axios";
 import React, { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-function page() {
+function Invite() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const handlesubmit = async (e) => {
@@ -69,4 +69,4 @@ function page() {
   );
 }
 
-export default page;
+export default Invite;

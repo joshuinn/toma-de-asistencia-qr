@@ -7,19 +7,19 @@ export async function POST(req) {
 
     let newData = [];
     const joinGrupo =
-      " JOIN ctb_grupo ON ctb_lista_asistencia.id_grupo = ctb_grupo.id_grupo ";
+      " JOIN `ctb_grupo` ON ctb_lista_asistencia.id_grupo = ctb_grupo.id_grupo ";
     const joinCiclo =
-      " JOIN ctb_ciclo ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
+      " JOIN `ctb_ciclo` ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
     const joinMestro =
-      " JOIN ctb_maestro ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
+      " JOIN `ctb_maestro` ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
     const joinLab =
-      " JOIN ctb_laboratorio ON ctb_lista_asistencia.id_laboratorio = ctb_laboratorio.id_laboratorio ";
+      " JOIN `ctb_laboratorio` ON ctb_lista_asistencia.id_laboratorio = ctb_laboratorio.id_laboratorio ";
     const joinMateria =
-      " JOIN ctb_materia ON ctb_lista_asistencia.id_materia = ctb_materia.id_materia ";
+      " JOIN `ctb_materia` ON ctb_lista_asistencia.id_materia = ctb_materia.id_materia ";
     const joinAlumno =
-      " JOIN ctb_alumno ON ttb_asistencia.id_alumno = ctb_alumno.id_alumno ";
+      " JOIN `ctb_alumno` ON ttb_asistencia.id_alumno = ctb_alumno.id_alumno ";
     const joinLista =
-      " JOIN ctb_lista_asistencia ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
+      " JOIN `ctb_lista_asistencia` ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
     let fecha_min = JSON.stringify(data.fecha_min);
     let fecha_max = JSON.stringify(data.fecha_max);
     
@@ -28,7 +28,7 @@ export async function POST(req) {
       fecha_max = fecha_min;
     }
     const bodyQuery =
-      "SELECT * FROM ttb_asistencia " +
+      "SELECT * FROM `ttb_asistencia` " +
       joinLista +
       joinAlumno +
       joinGrupo +
@@ -36,7 +36,6 @@ export async function POST(req) {
       joinLab +
       joinMestro +
       joinCiclo;
-      console.log(fecha_min, fecha_max);
     const bodyWhere =
       fecha_min.length > 2 || fecha_max.length > 2
         ? " WHERE ttb_asistencia.fecha_asistencia BETWEEN " +
@@ -46,11 +45,11 @@ export async function POST(req) {
           " AND ttb_asistencia.id_lista_asistencia = "
         : " WHERE ttb_asistencia.id_lista_asistencia =  ";
     for (let i = 0; i < data.list.length; i++) {
-      newData[i] = await conn.query(
+      let dataResponse = await conn.query(
         bodyQuery + bodyWhere + data.list[i].id_lista_asistencia
       );
+      newData[i] = dataResponse[0]
     }
-    console.log(newData);
     return NextResponse.json(newData);
   } catch (error) {
     console.error(error);

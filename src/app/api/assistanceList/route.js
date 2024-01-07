@@ -8,7 +8,7 @@ export async function POST(request) {
     const id_lista_asistencia = parseInt(data[2]);
     data[0].map(async (student) => {
       const id_alumno = await getIdStudent(student);
-      await conn.query("INSERT INTO ttb_asistencia SET ?", {
+      await conn.query("INSERT INTO `ttb_asistencia` SET ?", {
         id_alumno: id_alumno,
         id_lista_asistencia: id_lista_asistencia,
         id_usuario: id_usuario,
@@ -27,9 +27,9 @@ async function getIdStudent(student) {
   const res = await conn.query(
     "SELECT id_alumno FROM ctb_alumno WHERE boleta = " + student.boleta
   );
-  if (res[0]) return res[0].id_alumno;
+  if (res[0][0]) return res[0][0].id_alumno;
 
-  const newStudent = await conn.query("INSERT INTO ctb_alumno SET ? ", {
+  const newStudent = await conn.query("INSERT INTO `ctb_alumno` SET ? ", {
     nombre_alumno: student.nombre_alumno,
     apellido_alumno: student.apellido_alumno,
     boleta: student.boleta,

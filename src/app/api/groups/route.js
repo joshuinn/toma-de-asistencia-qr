@@ -12,32 +12,32 @@ export async function POST(request) {
     };
 
     let resultGrupo = await conn.query(
-      "SELECT * FROM ctb_grupo WHERE grupo = ?",
+      "SELECT * FROM `ctb_grupo` WHERE grupo = ?",
       [data.grupo]
     );
-    if (resultGrupo.length > 0) {
+    if (resultGrupo[0].length > 0) {
       id_lista = {
         ...id_lista,
-        grupo: resultGrupo[0].id_grupo,
+        grupo: resultGrupo[0][0].id_grupo,
       };
     } else {
-      resultGrupo = await conn.query("INSERT INTO ctb_grupo SET grupo = ?", [
+      resultGrupo = await conn.query("INSERT INTO `ctb_grupo` SET grupo = ?", [
         data.grupo,
       ]);
       id_lista = {
         ...id_lista,
-        grupo: resultGrupo.insertId,
+        grupo: resultGrupo[0].insertId,
       };
     }
 
     let resultCiclo = await conn.query(
-      "SELECT * FROM ctb_ciclo WHERE ciclo = ?",
+      "SELECT * FROM `ctb_ciclo` WHERE ciclo = ?",
       [data.ciclo]
     );
-    if (resultCiclo.length > 0) {
+    if (resultCiclo[0].length > 0) {
       id_lista = {
         ...id_lista,
-        ciclo: resultCiclo[0].id_ciclo,
+        ciclo: resultCiclo[0][0].id_ciclo,
       };
     } else {
       resultCiclo = await conn.query("INSERT INTO ctb_ciclo SET ciclo = ?", [
@@ -45,68 +45,68 @@ export async function POST(request) {
       ]);
       id_lista = {
         ...id_lista,
-        ciclo: resultCiclo.insertId,
+        ciclo: resultCiclo[0].insertId,
       };
     }
     let resultMaestro = await conn.query(
-      "SELECT * FROM ctb_maestro WHERE maestro = ?",
+      "SELECT * FROM `ctb_maestro` WHERE maestro = ?",
       [data.maestro]
     );
-    if (resultMaestro.length > 0) {
+    if (resultMaestro[0].length > 0) {
       id_lista = {
         ...id_lista,
-        maestro: resultMaestro[0].id_maestro,
+        maestro: resultMaestro[0][0].id_maestro,
       };
     } else {
       resultMaestro = await conn.query(
-        "INSERT INTO ctb_maestro SET maestro =?",
+        "INSERT INTO `ctb_maestro` SET maestro =?",
         [data.maestro]
       );
       id_lista = {
         ...id_lista,
-        maestro: resultMaestro.insertId,
+        maestro: resultMaestro[0].insertId,
       };
     }
     let resultMateria = await conn.query(
-      "SELECT * FROM ctb_materia WHERE materia = ?",
+      "SELECT * FROM `ctb_materia` WHERE materia = ?",
       [data.materia]
     );
-    if (resultMateria.length > 0) {
+    if (resultMateria[0].length > 0) {
       id_lista = {
         ...id_lista,
-        materia: resultMateria[0].id_materia,
+        materia: resultMateria[0][0].id_materia,
       };
     } else {
       resultMateria = await conn.query(
-        "INSERT INTO ctb_materia SET materia =?",
+        "INSERT INTO `ctb_materia` SET materia =?",
         [data.materia]
       );
       id_lista = {
         ...id_lista,
-        materia: resultMateria.insertId,
+        materia: resultMateria[0].insertId,
       };
     }
     let resultLab = await conn.query(
-      "SELECT * FROM ctb_laboratorio WHERE laboratorio = ?",
+      "SELECT * FROM `ctb_laboratorio` WHERE laboratorio = ?",
       [data.laboratorio]
     );
-    if (resultLab.length > 0) {
+    if (resultLab[0].length > 0) {
       id_lista = {
         ...id_lista,
-        lab: resultLab[0].id_laboratorio,
+        lab: resultLab[0][0].id_laboratorio,
       };
     } else {
       resultLab = await conn.query(
-        "INSERT INTO ctb_laboratorio SET laboratorio =?",
+        "INSERT INTO `ctb_laboratorio` SET laboratorio =?",
         [data.laboratorio]
       );
       id_lista = {
         ...id_lista,
-        lab: resultLab.insertId,
+        lab: resultLab[0].insertId,
       };
     }
     const resultLista = await conn.query(
-      "INSERT INTO ctb_lista_asistencia SET ?",
+      "INSERT INTO `ctb_lista_asistencia` SET ?",
       {
         id_grupo: id_lista.grupo,
         id_materia: id_lista.materia,
@@ -126,15 +126,15 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     const joinGrupo =
-      " JOIN ctb_grupo ON ctb_lista_asistencia.id_grupo = ctb_grupo.id_grupo ";
+      " JOIN `ctb_grupo` ON ctb_lista_asistencia.id_grupo = ctb_grupo.id_grupo ";
     const joinCiclo =
-      " JOIN ctb_ciclo ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
+      " JOIN `ctb_ciclo` ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
     const joinMestro =
-      " JOIN ctb_maestro ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
+      " JOIN `ctb_maestro` ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
     const data = await conn.query(
-      "SELECT * FROM ctb_lista_asistencia" + joinGrupo + joinCiclo + joinMestro + " ORDER BY id_lista_asistencia DESC"
+      "SELECT * FROM `ctb_lista_asistencia`  " + joinGrupo + joinCiclo + joinMestro + " ORDER BY id_lista_asistencia DESC"
     );
-    return NextResponse.json(data);
+    return NextResponse.json(data[0]);
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "error" }, { status: 500 });

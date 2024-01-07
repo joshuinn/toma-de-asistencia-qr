@@ -10,15 +10,11 @@ import { BiMath } from "react-icons/bi";
 import ButtonStyled from "./styled/ButtonStyled";
 import useReports from "./hooks/useReports";
 import Search from "./Search";
+import AutoCompliteProvider from "./ContextDataAutoCompliteInput";
 
 function ChartIndex() {
   const [isShowGraph, setIsShowGraph] = useState(false);
   const reports = useReports();
-  const [dataSearch, setDataSearch] = useState({
-    ciclo: "",
-    grupo: "",
-    fecha: "",
-  });
   const selectAll = () => {
     reports.setGroups((prev) =>
       prev.map((report) => ({ ...report, checked: true }))
@@ -40,13 +36,15 @@ function ChartIndex() {
       <div className="p-3 w-full h-[92vh] flex flex-col gap-3">
         <div className="w-full flex flex-wrap justify-between items-center gap-2">
           <div className="flex gap-4 items-center flex-grow">
-            <Search
-              dataSearch={reports.dataSearch}
-              setDataSearch={reports.setDataSearch}
-              data={reports.data}
-              setReports={reports.setGroups}
-              handleRefresh={reports.handleRefreshGroups}
-            />
+            <AutoCompliteProvider>
+              <Search
+                dataSearch={reports.dataSearch}
+                setDataSearch={reports.setDataSearch}
+                data={reports.data}
+                setReports={reports.setGroups}
+                handleRefresh={reports.handleRefreshGroups}
+              />
+            </AutoCompliteProvider>
           </div>
           <div className="flex gap-5 bg-blue-600 p-4 rounded-lg shadow-lg flex-grow justify-center">
             <ButtonStyled color="purple" onClick={selectAll}>

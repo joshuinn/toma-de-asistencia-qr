@@ -56,8 +56,7 @@ function ForgotPassword({ params }) {
       return toast.error("Las contraseñas no son iguales");
     }
     try {
-      const response = await axios.put("/api/users", [data]);
-      console.log(response);
+      const response = await axios.put("/api/users", {dataPass:{contrasenia:data.contrasenia, confirmarContrasenia:data.confirmarContrasenia}, id_usuario:data.id_usuario});
       if (response.status == 200) {
         setIsChanged(true);
       }

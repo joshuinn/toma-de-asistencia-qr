@@ -11,12 +11,13 @@ export async function POST(req) {
 
     const { boleta, contrasenia } = await req.json();
     const result = await conn.query(
-      "SELECT * FROM ctb_usuario WHERE boleta= ?",
+      "SELECT * FROM `ctb_usuario` WHERE `boleta`= ?",
       [boleta]
-    );
-    if (result[0]) {
+      );
+    const user = result[0][0]
+    if (user) {
       const dbPass = crypto.AES.decrypt(
-        result[0].contrasenia,
+        user.contrasenia,
         process.env.SECRET_KEY
       ).toString(crypto.enc.Utf8);
       if (contrasenia === dbPass) {
@@ -24,7 +25,7 @@ export async function POST(req) {
           {
             exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
             boleta: boleta,
-            id_usuario: result[0].id_usuario,
+            id_usuario: user.id_usuario,
           },
           process.env.SECRET_KEY
         );

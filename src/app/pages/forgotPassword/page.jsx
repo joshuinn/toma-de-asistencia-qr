@@ -18,7 +18,7 @@ function ForgotPassword() {
         setWasEmailSent(true);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const handleInput = (e) => {
@@ -30,7 +30,7 @@ function ForgotPassword() {
         {wasEmailSent ? (
           <div className="flex flex-col gap-4 items-center justify-center">
             <h1 className="text-2xl font-bold">
-              Se enviara un correo asociado a la boleta ingresada en caso de
+              Se enviará un correo asociado a la boleta ingresada en caso de
               existir
             </h1>
             <Link href="/">

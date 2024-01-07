@@ -8,6 +8,7 @@ import useReports from "../hooks/useReports";
 import Search from "../Search";
 import ButtonStyled from "../styled/ButtonStyled";
 import loadingIndividual from "./LoadingIndividual.module.css";
+import AutoCompliteProvider from "../ContextDataAutoCompliteInput";
 
 export default function ListGroup() {
   const reports = useReports();
@@ -21,23 +22,22 @@ export default function ListGroup() {
       )
     );
   };
-  useEffect(() => {
-    console.log(reports.groups);
-  }, [reports.groups]);
   return (
     <div className="flex flex-col gap-3 h-[calc(100vh-5rem)] ">
-      <div className="flex justify-between text-white items-center flex-wrap gap-2">
-        <Search
-          dataSearch={reports.dataSearch}
-          setDataSearch={reports.setDataSearch}
-          data={reports.data}
-          setReports={reports.setGroups}
-          handleRefresh={reports.handleRefreshGroups}
-        />
-        <div className="flex items-center">
-          <NewList handleRefreshGroups={reports.handleRefreshGroups} />
+      <AutoCompliteProvider>
+        <div className="flex justify-between text-white items-center flex-wrap gap-2">
+          <Search
+            dataSearch={reports.dataSearch}
+            setDataSearch={reports.setDataSearch}
+            data={reports.data}
+            setReports={reports.setGroups}
+            handleRefresh={reports.handleRefreshGroups}
+          />
+          <div className="flex items-center">
+            <NewList handleRefreshGroups={reports.handleRefreshGroups} />
+          </div>
         </div>
-      </div>
+      </AutoCompliteProvider>
       <div className="h-full overflow-y-scroll">
         <table className="table-fixed table h-full  bg-blue-800 rounded-lg p-2 shadow-xl text-white w-full border-collapse text-center">
           <thead className="">
@@ -60,7 +60,6 @@ export default function ListGroup() {
             {reports.isLoading ? (
               <tr>
                 <td className="absolute h-full w-full">
-
                   <Loading />
                 </td>
               </tr>

@@ -1,7 +1,7 @@
 import Header from "@/app/components/Header";
 import Link from "next/link";
 import styles from "@/app/components/dashboard.module.css";
-function page() {
+function Dashboard() {
   return (
     <div className="h-screen ]">
       <Header title="Welcome back! 👋" extra="Pero que día!" />
@@ -46,4 +46,4 @@ function page() {
   );
 }
 
-export default page;
+export default Dashboard;

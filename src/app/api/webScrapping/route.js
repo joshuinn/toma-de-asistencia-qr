@@ -41,9 +41,8 @@ function getFormatedName(name) {
 async function getLastNumberStudent(boleta, id_lista_asistencia){
   try {
       const response = await conn.query("SELECT * FROM ttb_asistencia JOIN ctb_alumno ON ctb_alumno.boleta = "+boleta+" WHERE id_lista_asistencia = "+id_lista_asistencia+" AND ttb_asistencia.id_alumno = ctb_alumno.id_alumno ORDER BY id_asistencia DESC")
-      console.log(response);
-      if(response.length>0){
-        return response[0].numero_maquina
+      if(response[0].length>0){
+        return response[0][0].numero_maquina
       }
   } catch (error) {
     console.error(error);

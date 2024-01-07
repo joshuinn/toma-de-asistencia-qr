@@ -7,7 +7,7 @@ export async function POST(req) {
     const data = await req.json();
     const key = process.env.SECRET_KEY;
     const hashed = crypto.AES.encrypt(data[0].contrasenia, key).toString();
-    const result = await conn.query("INSERT INTO ctb_usuario SET ?", {
+    const result = await conn.query("INSERT INTO `ctb_usuario` SET ?", {
       nombre_usuario: data[0].nombre,
       correo: data[0].correo,
       boleta: data[0].boleta,
@@ -23,25 +23,26 @@ export async function POST(req) {
 export async function PUT(req) {
   try {
     const data = await req.json();
-    if (data[0].dataPass.contrasenia == data[0].dataPass.confirmarContrasenia) {
+    console.log("data: ",data);
+    if (data.dataPass.contrasenia == data.dataPass.confirmarContrasenia) {
       const key = process.env.SECRET_KEY;
       const hashed = crypto.AES.encrypt(
-        data[0].dataPass.contrasenia,
+        data.dataPass.contrasenia,
         key
       ).toString();
       const result = await conn.query(
-        'UPDATE ctb_usuario SET contrasenia= "' +
+        'UPDATE `ctb_usuario` SET `contrasenia`= "' +
           hashed +
-          '" WHERE id_usuario = ' +
-          data[0].id_usuario
+          '" WHERE `id_usuario` = ' +
+          data.id_usuario
       );
-      if (result.affectedRows > 0) {
+      if (result[0].affectedRows > 0) {
         return NextResponse.json({ isValid: true });
       }
     }
     return NextResponse.json({ isValid: false });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
   return NextResponse.json({ status: 500 });
 }

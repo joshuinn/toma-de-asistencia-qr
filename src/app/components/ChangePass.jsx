@@ -18,7 +18,7 @@ const showPassreducer = (state, action) => {
   }
 };
 
-function changePass() {
+function ChangePass() {
   const [showChangePass, setShowChangePass] = useState(false);
   const { dataUser } = useContext(SessionContext);
   const [isError, setIsError] = useState(false)
@@ -48,7 +48,7 @@ function changePass() {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-        const response = await axios.put("/api/users",[{dataPass, id_usuario: dataUser.id_usuario}])
+        const response = await axios.put("/api/users",{dataPass, id_usuario: dataUser.id_usuario})
         if(response.data.isValid){
             succesChangePass()
             setIsError(false)
@@ -77,7 +77,7 @@ function changePass() {
           showChangePass ? "opacity-100 relative" : "opacity-0 hidden"
         }`}
         onSubmit={handleSubmit}>
-        <div className="flex w-fit justify-center items-center relative">
+        <div className="flex w-fit justify-end items-center relative">
           <InputStyled
             type={showPass.pass1 ? "text" : "password"}
             placeholder="Contraseña"
@@ -87,7 +87,7 @@ function changePass() {
             onChange={handleInput}
             required
           />
-          <div className="w-full flex justify-end items-center absolute pr-3">
+          <div className="flex justify-end items-center absolute pr-3">
             {showPass.pass1 ? (
               <FaRegEyeSlash
                 className="cursor-pointer"
@@ -103,7 +103,7 @@ function changePass() {
             )}
           </div>
         </div>
-        <div className="flex w-fit justify-center items-center relative">
+        <div className="flex w-fit justify-end items-center relative">
           <InputStyled
             type={showPass.pass2 ? "text" : "password"}
             placeholder="Confirmar contraseña"
@@ -113,7 +113,7 @@ function changePass() {
             className="w-56"
             required
           />
-          <div className="w-full flex justify-end items-center absolute pr-3">
+          <div className="flex justify-end items-center absolute pr-3">
             {showPass.pass2 ? (
               <FaRegEyeSlash
                 className=" cursor-pointer"
@@ -138,4 +138,4 @@ function changePass() {
   );
 }
 
-export default changePass;
+export default ChangePass;

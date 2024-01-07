@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { formatText } from "./helpers/formatTextList.helper";
-import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
+import AutoCompliteProvider, { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineReload } from "react-icons/ai";
 import InputStyled from "./styled/InputStyled";
@@ -47,14 +47,12 @@ function Search({
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(dataSearch);
     if (dataSearch.fecha_min.length > 0 || dataSearch.fecha_max.length > 0) {
       setIsLoading(true);
       const dataFormated = await getReportsWithDate(
         dataSearch.fecha_min,
         dataSearch.fecha_max
       );
-      console.log(dataFormated);
       if (dataFormated) {
         setReports(dataFormated);
       }

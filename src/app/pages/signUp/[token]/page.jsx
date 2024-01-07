@@ -21,7 +21,7 @@ const showPassreducer = (state, action) => {
   }
 };
 
-function page({ params }) {
+function Page({ params }) {
   const [isRegistered, setIsRegistered] = useState("");
   const [error, setError] = useState(false);
   const router = useRouter();
@@ -62,7 +62,6 @@ function page({ params }) {
         .then((res) => res)
         .catch((e) => e);
       if (response.status == 200) {
-        console.log(response);
       } else {
         return setError("Ha ocurrido un error vuelva intentar");
       }
@@ -243,4 +242,4 @@ function page({ params }) {
   );
 }
 
-export default page;
+export default Page;

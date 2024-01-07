@@ -7,7 +7,7 @@ import { SessionContext } from "@/app/components/SessionContext";
 import Loading from "@/app/components/Loading";
 import InputStyled from "@/app/components/styled/InputStyled";
 
-function page() {
+function Config() {
   const [dataUser, setDataUser] = useState({
     nombre: "",
     boleta: "",
@@ -76,4 +76,4 @@ function page() {
   );
 }
 
-export default page;
+export default Config;

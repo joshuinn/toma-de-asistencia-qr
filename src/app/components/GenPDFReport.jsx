@@ -112,7 +112,6 @@ function GenPDFReport({ list, fecha_min,fecha_max }) {
       const { data } = await axios.post("/api/listReports", {list, fecha_min,fecha_max});
       let dataFormated = [];
       for (let i = 0; i < data.length; i++) {
-        console.log(data[i]);
         if (data[i].length > 0) {
           dataFormated[i] = {
             id: data[i][0].id_lista_asistencia,

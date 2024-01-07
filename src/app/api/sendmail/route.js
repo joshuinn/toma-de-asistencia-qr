@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import jwt, { verify } from "jsonwebtoken";
-import crypto from "crypto-js";
+import jwt from "jsonwebtoken";
 import { conn } from "@/lib/mysql";
 
 export async function POST(req) {
@@ -20,25 +19,24 @@ export async function POST(req) {
     transporter.verify().then(()=>{
         console.log("Ready");
     })*/
-    console.log(data);
     const key = process.env.SECRET_KEY;
 
     if (data.type == "forgotPassword") {
       const res = await conn.query(
-        "SELECT id_usuario, correo FROM ctb_usuario WHERE boleta = ?",
+        "SELECT `id_usuario`, correo FROM `ctb_usuario` WHERE `boleta` = ?",
         [data.boleta]
       );
-      if (res.length > 0) {
+      if (res[0].length > 0) {
         const token = jwt.sign(
           {
             exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30,
-            id_usuario: res[0].id_usuario,
+            id_usuario: res[0][0].id_usuario,
           },
           key
         );
         const info = await transporter.sendMail({
           from: '"Sistema_qr" <dev@dev.com>',
-          to: res[0].correo,
+          to: res[0][0].correo,
           subject: "Recuperar cuenta",
           text: "Recuperación de la cuenta.",
           html: `<a href='http://localhost:3000/pages/forgotPassword/${token}'>Cambiar contraseña</a>`,

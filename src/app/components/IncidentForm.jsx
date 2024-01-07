@@ -1,8 +1,8 @@
 "use client";
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import GenPDFIncident from "./GenPDFIncident";
 import { formatText } from "./helpers/formatTextList.helper";
-import { FaFilePdf, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
 import ButtonStyled from "./styled/ButtonStyled";
 import InputStyled from "./styled/InputStyled";
