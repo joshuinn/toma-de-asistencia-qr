@@ -2,6 +2,8 @@ export function countStudents(students) {
   let list = students;
   let alumnos = [];
   let i = 0;
+
+  console.log(list);
   while (list.length > 0) {
     let id = list[0].id_alumno
     let count = list.filter((list)=>(list.id_alumno)== id).length

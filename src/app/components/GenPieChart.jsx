@@ -77,16 +77,16 @@ const GenPieChart = ({
     <div className="bg-blue-600 rounded-lg shadow-lg p-4 flex justify-evenly items-center h-72 mt-4">
       <div className="flex flex-col justify-around text-center h-full">
         <div>
-          <h3 className="text-xl text-pink">{title}</h3>
+          <h3 className={`text-xl font-bold text-${mainColor}`}>{title}</h3>
         </div>
         <div>
           <p>
-            Porcentaje de asitencia: <br />
-            <span className="text-pink text-xl">{data[0]}%</span>
+            Porcentaje de asistencia: <br />
+            <span className={`text-${mainColor} text-xl`}>{data[0]}%</span>
           </p>
           <p>
             Porcentaje de inasistencia: <br />
-            <span className="text-purple text-xl">{data[1]}%</span>
+            <span className={`text-${secondColor} text-xl`}>{data[1]}%</span>
           </p>
         </div>
       </div>

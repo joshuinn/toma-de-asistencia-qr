@@ -76,7 +76,7 @@ export default function ListGroup() {
                       <td className="">{item.ciclo}</td>
                       <td className="">{item.grupo}</td>
                       <td className="">{item.maestro}</td>
-                      <td className=" p-3 flex justify-center ">
+                      <td className="h-full p-3 flex justify-center items-center">
                         <ButtonStyled
                           onClick={() => handleLoad(item.id_lista_asistencia)}
                           className={`p-[3px] flex-wrap ${
