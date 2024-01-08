@@ -112,7 +112,7 @@ function NewList({ handleRefreshGroups }) {
             <div className="flex gap-1 items-center justify-between w-full">
               <input
                 type="text"
-                placeholder="grupo"
+                placeholder="Grupo"
                 name="grupo"
                 className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 value={data.grupo}

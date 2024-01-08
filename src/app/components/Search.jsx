@@ -1,7 +1,9 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import { formatText } from "./helpers/formatTextList.helper";
-import AutoCompliteProvider, { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
+import AutoCompliteProvider, {
+  AutoCompliteContext,
+} from "./ContextDataAutoCompliteInput";
 import { CiSearch } from "react-icons/ci";
 import { AiOutlineReload } from "react-icons/ai";
 import InputStyled from "./styled/InputStyled";
@@ -16,14 +18,18 @@ function Search({
   handleRefresh,
   isChangeInput = false,
   setIsLoading = false,
+  searchByOtherType = "",
 }) {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [typeSearch, setChangeTypeSearch] = useState("text");
   const date = new Date();
   const todayDate =
-  date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+    date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
   const handleInput = (e) => {
-    const text = formatText(e.target.name, e.target.value);
+    let text = e.target.value;
+    if (!(e.target.name == "grupo" && searchByOtherType.length > 5)) {
+      text = formatText(e.target.name, e.target.value);
+    }
     setDataSearch({
       ...dataSearch,
       [e.target.name]: text,
@@ -31,9 +37,9 @@ function Search({
   };
   async function getReportsWithDate(fecha_min = "", fecha_max = "") {
     try {
-      if(fecha_min.length==0 || fecha_max.length ==0){
-        fecha_min = fecha_min.length==0? fecha_max : fecha_min
-        fecha_max = fecha_min
+      if (fecha_min.length == 0 || fecha_max.length == 0) {
+        fecha_min = fecha_min.length == 0 ? fecha_max : fecha_min;
+        fecha_max = fecha_min;
       }
       const response = await axios.post("/api/reports", {
         fecha_min,
@@ -68,7 +74,8 @@ function Search({
     let newList = data.filter((item) => {
       if (
         item.ciclo.includes(dataSearch.ciclo) &&
-        item.grupo.includes(dataSearch.grupo)
+        (item.grupo.includes(dataSearch.grupo) ||
+          item.materia.includes(dataSearch.grupo))
       )
         return item;
     });
@@ -83,7 +90,7 @@ function Search({
     });
     setChangeTypeSearch(typeSearch == "text" ? "date" : "text");
   };
-  
+
   return (
     <>
       <form
@@ -111,11 +118,12 @@ function Search({
                 <option value={ciclo.ciclo} key={ciclo.id_ciclo}></option>
               ))
             : null}
+          reports
         </datalist>
         <div className="flex items-center gap-2">
           <InputStyled
             type={typeSearch}
-            placeholder="Grupo"
+            placeholder={searchByOtherType ? searchByOtherType : "Grupo"}
             name={typeSearch == "text" ? "grupo" : "fecha_min"}
             value={
               typeSearch == "text" ? dataSearch.grupo : dataSearch.fecha_min

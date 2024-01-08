@@ -43,6 +43,7 @@ function ChartIndex() {
                 data={reports.data}
                 setReports={reports.setGroups}
                 handleRefresh={reports.handleRefreshGroups}
+                searchByOtherType="Grupo o materia"
               />
             </AutoCompliteProvider>
           </div>
@@ -71,6 +72,9 @@ function ChartIndex() {
                   <h3 className="text-xl font-bold text-green">Maestro</h3>
                 </th>
                 <th className="p-3">
+                  <h3 className="text-xl font-bold text-green">Materia</h3>
+                </th>
+                <th className="p-3">
                   <h3 className="text-xl font-bold text-green">Seleccionar</h3>
                 </th>
               </tr>
@@ -94,6 +98,7 @@ function ChartIndex() {
                           <td className="">{report.ciclo}</td>
                           <td className="">{report.grupo}</td>
                           <td className="">{report.maestro}</td>
+                          <td className="">{report.materia}</td>
                           <td className="">
                             <div className="p-2">
                               <div className={style.checkboxWrapper}>
@@ -122,9 +127,15 @@ function ChartIndex() {
                       );
                     })
                   ) : (
-                    <div className="text-center mt-6">
-                      <h3 className="font-bold text-2xl">No hay elementos</h3>
-                    </div>
+                    <tr className="absolute w-full flex justify-center items-center h-full">
+                      <td>
+                        <div>
+                          <h3 className="font-bold text-2xl">
+                            No hay elementos
+                          </h3>
+                        </div>
+                      </td>
+                    </tr>
                   )}
                 </Suspense>
               )}

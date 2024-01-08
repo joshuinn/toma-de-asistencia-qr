@@ -131,8 +131,16 @@ export async function GET(request) {
       " JOIN `ctb_ciclo` ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
     const joinMestro =
       " JOIN `ctb_maestro` ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
+    const joinMateria =
+      " JOIN `ctb_materia` ON ctb_lista_asistencia.id_materia = ctb_materia.id_materia ";
+
     const data = await conn.query(
-      "SELECT * FROM `ctb_lista_asistencia`  " + joinGrupo + joinCiclo + joinMestro + " ORDER BY id_lista_asistencia DESC"
+      "SELECT * FROM `ctb_lista_asistencia`  " +
+        joinGrupo +
+        joinCiclo +
+        joinMestro +
+        joinMateria +
+        " ORDER BY id_lista_asistencia DESC"
     );
     return NextResponse.json(data[0]);
   } catch (error) {
