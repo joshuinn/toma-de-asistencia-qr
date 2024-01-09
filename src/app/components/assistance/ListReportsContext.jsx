@@ -1,8 +1,10 @@
-"use client";
+"use client"
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
-function useReports() {
+export const ReportListContext = createContext(null);
+
+function ReportListProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [groups, setGroups] = useState([]);
   const [data, setData] = useState([]);
@@ -11,8 +13,8 @@ function useReports() {
   const [dataSearch, setDataSearch] = useState({
     ciclo: "",
     grupo: "",
-    fecha_min:"",
-    fecha_max:""
+    fecha_min: "",
+    fecha_max: "",
   });
   useEffect(() => {
     const getGroup = async () => {
@@ -23,7 +25,7 @@ function useReports() {
         setData(response.data);
       } catch (e) {
         console.log(e);
-      } 
+      }
       const timer = setTimeout(() => {
         setIsLoading(false);
       }, 500);
@@ -36,8 +38,8 @@ function useReports() {
     setDataSearch({
       ciclo: "",
       grupo: "",
-      fecha_min:"",
-      fecha_max:""  
+      fecha_min: "",
+      fecha_max: "",
     });
   };
   const handleSearch = (e) => {
@@ -69,20 +71,26 @@ function useReports() {
       groups.filter((report) => (report.checked ? report : null))
     );
   }, [groups]);
-  
-  return {
-    isLoading,
-    groups,
-    handleRefreshGroups,
-    handleSearch,
-    data,
-    setGroups,
-    dataSearch,
-    setDataSearch,
-    listToExport,
-    handleCheked, 
-    setIsLoading
-  };
+
+  return (
+    <ReportListContext.Provider
+      value={{
+        isLoading,
+        groups,
+        handleRefreshGroups,
+        handleSearch,
+        data,
+        setGroups,
+        dataSearch,
+        setDataSearch,
+        listToExport,
+        handleCheked,
+        setIsLoading,
+      }}
+    >
+      {children}
+    </ReportListContext.Provider>
+  );
 }
 
-export default useReports;
+export default ReportListProvider;

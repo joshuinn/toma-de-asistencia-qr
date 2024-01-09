@@ -1,11 +1,10 @@
 "use client";
-import ReactPDF, {
+import {
   Page,
   Text,
   View,
   Document,
   StyleSheet,
-  PDFDownloadLink,
   PDFViewer,
 } from "@react-pdf/renderer";
 import { useState } from "react";

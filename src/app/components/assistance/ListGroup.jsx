@@ -1,27 +1,30 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
 import NewList from "./NewList";
-import { BiListCheck } from "react-icons/bi";
-import Loading from "../Loading";
-import Link from "next/link";
-import useReports from "../hooks/useReports";
 import Search from "../Search";
-import ButtonStyled from "../styled/ButtonStyled";
-import loadingIndividual from "./LoadingIndividual.module.css";
 import AutoCompliteProvider from "../ContextDataAutoCompliteInput";
+import TableGroups from "../TableGroups";
+import ReportListProvider, { ReportListContext } from "./ListReportsContext";
 
 export default function ListGroup() {
-  const reports = useReports();
-  const [isLoading, setIsLoading] = useState(false);
-  const handleLoad = (id_lista_asistencia) => {
-    reports.setGroups((prev) =>
-      prev.map((report) =>
-        report.id_lista_asistencia === id_lista_asistencia
-          ? { ...report, loading: !report.loading }
-          : report
-      )
-    );
-  };
+  
+  return (
+    <ReportListProvider>
+      <div className="flex flex-col gap-3 h-[calc(100vh-5rem)] ">
+        <AutoCompliteProvider>
+          <div className="flex justify-between text-white items-center flex-wrap gap-2">
+            <Search />
+            <div className="flex items-center">
+              <NewList />
+            </div>
+          </div>
+        </AutoCompliteProvider>
+        <div className="w-full h-[80vh]">
+          <TableGroups colorHeaders="purple" typeSelect="takeList" />
+        </div>
+      </div>
+    </ReportListProvider>
+  );
+  /*
   return (
     <div className="flex flex-col gap-3 h-[calc(100vh-5rem)] ">
       <AutoCompliteProvider>
@@ -117,4 +120,5 @@ export default function ListGroup() {
       </div>
     </div>
   );
+  */
 }

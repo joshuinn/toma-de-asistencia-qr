@@ -19,6 +19,7 @@ function Invite() {
           type: "invite",
         });
         if (response.status == 200) {
+          setEmail("")
           toast.success("Se ha mandado correctamente la invitación🎉");
           return;
         }
@@ -41,13 +42,13 @@ function Invite() {
   return (
     <Suspense fallback={<Loading />}>
       <Header title="Inviar a encargado" />
-      <div className="flex justify-center pt-20 text-white ">
-        <div className="flex justify-center items-center p-4 bg-blue-600 rounded-lg w-10/12 h-[50vh] flex-col gap-4 shadow-lg">
+      <div className="flex h-full justify-center 2xl:items-center pt-20 text-white ">
+        <div className="flex justify-center items-center p-4 bg-blue-600 rounded-lg w-10/12 h-[50vh] flex-col gap-4 shadow-lg text-center">
           <h2 className="text-2xl font-bold text-purple">Ingrese un correo </h2>
           <form
             className="flex flex-col gap-3 justify-center items-center"
             onSubmit={handlesubmit}>
-            <div className="flex gap-3 items-center">
+            <div className="flex flex-wrap gap-3 items-center justify-center">
               <label htmlFor="correo">Correo </label>
               <input
                 type="email"

@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useState, useEffect, Suspense } from "react";
+import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Loading from "./Loading";
@@ -28,7 +28,6 @@ const SessionProvider = ({ children }) => {
         }
       } catch (error) {
         setIsLogged(false);
-        console.log(error);
       } finally {
         setIsLoading(false);
       }

@@ -4,24 +4,27 @@ import { formatText } from "./helpers/formatTextList.helper";
 import AutoCompliteProvider, {
   AutoCompliteContext,
 } from "./ContextDataAutoCompliteInput";
-import { CiSearch } from "react-icons/ci";
+import { CiCircleMinus, CiCirclePlus, CiSearch } from "react-icons/ci";
 import { AiOutlineReload } from "react-icons/ai";
 import InputStyled from "./styled/InputStyled";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import axios from "axios";
 import reportsFormatedWithDate from "./helpers/reportsFormatedWithDate";
-function Search({
-  dataSearch,
-  setDataSearch,
-  setReports,
-  data,
-  handleRefresh,
-  isChangeInput = false,
-  setIsLoading = false,
-  searchByOtherType = "",
-}) {
+import { ReportListContext } from "./assistance/ListReportsContext";
+import ButtonStyled from "./styled/ButtonStyled";
+function Search({ isChangeInput = false, searchByOtherType = "" }) {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [typeSearch, setChangeTypeSearch] = useState("text");
+  const [isShow, setIsShow] = useState(false);
+  const {
+    dataSearch,
+    setDataSearch,
+    setGroups,
+    data,
+    handleRefreshGroups,
+    setIsLoading,
+  } = useContext(ReportListContext);
+
   const date = new Date();
   const todayDate =
     date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
@@ -53,6 +56,9 @@ function Search({
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(isShow){
+      handleShow()
+    }
     if (dataSearch.fecha_min.length > 0 || dataSearch.fecha_max.length > 0) {
       setIsLoading(true);
       const dataFormated = await getReportsWithDate(
@@ -60,15 +66,13 @@ function Search({
         dataSearch.fecha_max
       );
       if (dataFormated) {
-        setReports(dataFormated);
+        setGroups(dataFormated);
       }
-      /*if(dataFormated.length >0){
-        }*/
       setIsLoading(false);
       return;
     }
     if (dataSearch.grupo.length == 0 && dataSearch.ciclo.length == 0) {
-      setReports(data);
+      setGroups(data);
       return;
     }
     let newList = data.filter((item) => {
@@ -79,7 +83,7 @@ function Search({
       )
         return item;
     });
-    setReports(newList);
+    setGroups(newList);
   };
   const handleChangeTypeSearch = () => {
     setDataSearch({
@@ -90,11 +94,25 @@ function Search({
     });
     setChangeTypeSearch(typeSearch == "text" ? "date" : "text");
   };
-
+  const handleShow = () => {
+    setIsShow(!isShow);
+  };
   return (
-    <>
+    <div className="flex flex-grow gap-2 justify-center flex-wrap sm:flex-nowrap">
+      <div className={`sm:hidden`}>
+        <button
+          onClick={handleShow}
+          className={`p-6 bg-blue-600 justify-center items-center rounded-xl shadow-lg flex gap-2 h-full flex-grow border-none transition-all hover:text-opacity-70 ${isShow?"text-pink":"text-white"}`}
+        >
+          Buscador
+          {isShow ? <CiCirclePlus size={20} /> : <CiCircleMinus size={20} />}
+        </button>
+      </div>
+
       <form
-        className="flex justify-center gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-lg flex-grow"
+        className={`flex gap-3 items-center flex-wrap bg-blue-600 p-4 rounded-xl shadow-2xl sm:shadow-lg flex-grow z-[2] ${
+          isShow ? "inline-block" : "hidden"
+        } w-[80%] h-fit translate-y-1/2 justify-between lg:justify-center sm:w-full sm:h-fit sm:translate-y-0 absolute sm:static sm:flex`}
         onSubmit={handleSubmit}
       >
         {typeSearch == "date" ? null : (
@@ -173,7 +191,7 @@ function Search({
         </button>
       </form>
       <button
-        onClick={handleRefresh}
+        onClick={handleRefreshGroups}
         className="p-6 bg-blue-600 flex gap-2 items-center rounded-xl shadow-lg hover:text-purple  group transition-all flex-grow justify-center"
       >
         <span>Refrescar</span>
@@ -182,7 +200,7 @@ function Search({
           size={20}
         />
       </button>
-    </>
+    </div>
   );
 }
 

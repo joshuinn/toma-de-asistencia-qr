@@ -1,14 +1,14 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import GenPieChart from "./GenPieChart";
 import Loading from "./Loading";
 import { calculateAssistance } from "./helpers/calculateAssistance.helper";
 function Chart({ list }) {
   const [isLoading, setIsloading] = useState(false);
   const [dataChart, setDataChart] = useState([]);
-  useEffect(() => {
-    const calculateData = async () => {
-      setIsloading(true);
+
+  const memoAsistance = useMemo(async () => {
+    const calculated = async () => {
       if (list.length > 0) {
         try {
           const dataCalculated = await calculateAssistance(list);
@@ -16,16 +16,14 @@ function Chart({ list }) {
           if (dataCalculated) {
             setDataChart(dataCalculated);
           }
+          console.log(data);
+          return data;
         } catch (error) {}
       }
-      setIsloading(false);
+      return [];
     };
-    calculateData();
-  }, []);
-  useEffect(() => {
-    //console.log(dataChart);
-  }, [dataChart]);
-
+    return calculated();
+  }, [list]);
   if (isLoading) {
     return (
       <div className="h-5/6 p-4">
@@ -33,7 +31,6 @@ function Chart({ list }) {
       </div>
     );
   }
-
   function randomColor() {
     const colors = ["pink", "blue", "yellow", "green", "purple"];
     let colorRand = Math.floor(Math.random() * 4);
@@ -52,17 +49,30 @@ function Chart({ list }) {
       color1 = randomColor();
       color2 = randomColor();
     }
+
     return (
       <GenPieChart
         data={item.data}
         mainColor={color1}
         secondColor={color2}
         titleColor={randomColor()}
-        key={item.id}
         title={title}
       />
     );
   };
+  if (dataChart.length == 0) {
+    return (
+      <div className="h-5/6 overflow-y-scroll shadow-lg p-4 flex items-center justify-center">
+        <section>
+          <div className="w-full bg-blue-600 p-3 rounded-lg shadow-lg text-center">
+            <h3 className="text-2xl font-bold text-pink">
+              No hay asistencias registradas para lo seleccionado
+            </h3>
+          </div>
+        </section>
+      </div>
+    );
+  }
   return (
     <div className="h-5/6 overflow-y-scroll shadow-lg p-4">
       <div>
@@ -76,9 +86,7 @@ function Chart({ list }) {
                 </h2>
               </div>
               {dataChart.total.map((item) => {
-                return (
-                    <CustomeChart item={item} title="Total" />
-                );
+                return <CustomeChart key={item.id} item={item} title="Total" />;
               })}
             </div>
           )}
@@ -94,7 +102,9 @@ function Chart({ list }) {
             : dataChart.groups.length == 0
             ? null
             : dataChart.groups.map((item) => {
-                return <CustomeChart item={item} title={item.grupo} />;
+                return (
+                  <CustomeChart item={item} key={item.id} title={item.grupo} />
+                );
               })}
         </section>
         <section className="my-3">
@@ -106,7 +116,13 @@ function Chart({ list }) {
                 </h2>
               </div>
               {dataChart.materia.map((item) => {
-                return <CustomeChart item={item} title={item.materia} />;
+                return (
+                  <CustomeChart
+                    item={item}
+                    key={item.id}
+                    title={item.materia}
+                  />
+                );
               })}
             </div>
           )}

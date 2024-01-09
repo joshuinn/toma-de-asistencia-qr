@@ -66,7 +66,7 @@ function ChangePass() {
   };
 
   return (
-    <div className="bg-blue-600 w-1/2 h-full flex flex-col justify-center items-center rounded-lg shadow-lg p-4">
+    <div className="bg-blue-600 w-11/12 sm:w-1/2 h-[300px] flex flex-col justify-center items-center rounded-lg shadow-lg p-4 ">
       <ButtonStyled
        color="yellow"
         onClick={handleShow}>
@@ -74,7 +74,7 @@ function ChangePass() {
       </ButtonStyled>
       <form
         className={`mt-3 flex flex-col gap-3 transtion-all ${
-          showChangePass ? "opacity-100 relative" : "opacity-0 hidden"
+          showChangePass ? "opacity-100 static" : "opacity-0 hidden"
         }`}
         onSubmit={handleSubmit}>
         <div className="flex w-fit justify-end items-center relative">

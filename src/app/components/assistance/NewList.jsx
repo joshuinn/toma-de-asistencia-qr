@@ -11,7 +11,9 @@ import { toast } from "sonner";
 import { formatText } from "../helpers/formatTextList.helper";
 import { AutoCompliteContext } from "../ContextDataAutoCompliteInput";
 import ButtonStyled from "../styled/ButtonStyled";
-function NewList({ handleRefreshGroups }) {
+import { ReportListContext } from "./ListReportsContext";
+function NewList() {
+  const {handleRefreshGroups} = useContext(ReportListContext)
   const [data, setData] = useState({
     grupo: "",
     maestro: "",
@@ -81,7 +83,7 @@ function NewList({ handleRefreshGroups }) {
     <>
       <div
         className={`
-        mt-10 w-[calc(100%-13rem)] flex flex-col items-center justify-center overflow-hidden
+        mt-10 w-full sm:w-[calc(100%-13rem)] flex flex-col items-center justify-center overflow-hidden
         p-3 top-[-2.5rem] h-full
         transition-all
         delay-100
@@ -92,7 +94,7 @@ function NewList({ handleRefreshGroups }) {
         bg-black
         ${
           
-          show ? "bg-opacity-50 left-[12.5rem]" : "right-full opacity-0 "
+          show ? "bg-opacity-50 left-0 sm:left-[12.5rem]" : "right-full opacity-0 "
         } 
         `}
       >

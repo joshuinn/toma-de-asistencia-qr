@@ -1,20 +1,20 @@
 "use client";
-import React, { useCallback, useState } from "react";
-import ReactPDF, {
+import React, { useContext, useState } from "react";
+import {
   Page,
   Text,
   View,
   Document,
   StyleSheet,
-  PDFDownloadLink,
   PDFViewer,
 } from "@react-pdf/renderer";
-import { FaDownload, FaFilePdf } from "react-icons/fa";
+import { FaFilePdf } from "react-icons/fa";
 import { toast } from "sonner";
 import { IoMdCloseCircle } from "react-icons/io";
 import axios from "axios";
 import { countStudents } from "./helpers/countStudents.helper";
 import ButtonStyled from "./styled/ButtonStyled";
+import { ReportListContext } from "./assistance/ListReportsContext";
 
 const styles = StyleSheet.create({
   page: {
@@ -52,19 +52,11 @@ const styles = StyleSheet.create({
   },
 });
 
-function GenPDFReport({ list, fecha_min,fecha_max }) {
+function GenPDFReport({ fecha_min, fecha_max }) {
   const [listToExport, setListToExport] = useState([]);
   const [isShow, setIsShow] = useState(false);
-  const downloadRef = null;
-
-  /*const handlePDF = () => {
-    if (!listToExport.length) {
-      toast.error(");
-      return;
-    }
-    downloadRef.current.click();
-  };
-*/
+  const reports = useContext(ReportListContext);
+  const list = reports.listToExport;
   const ReportPDF = ({ list }) => {
     return (
       <Document>
@@ -109,7 +101,11 @@ function GenPDFReport({ list, fecha_min,fecha_max }) {
   };
   const extracData = async () => {
     try {
-      const { data } = await axios.post("/api/listReports", {list, fecha_min,fecha_max});
+      const { data } = await axios.post("/api/listReports", {
+        list,
+        fecha_min,
+        fecha_max,
+      });
       let dataFormated = [];
       for (let i = 0; i < data.length; i++) {
         if (data[i].length > 0) {
@@ -129,19 +125,7 @@ function GenPDFReport({ list, fecha_min,fecha_max }) {
       console.error(error);
     }
   };
-
-  const BtnDownload = useCallback(() => {
-    return (
-      <PDFDownloadLink
-        document={<ReportPDF list={listToExport} />}
-        fileName="reporte.pdf"
-        className="hidden">
-        <input type="button" ref={downloadRef}></input>
-      </PDFDownloadLink>
-    );
-  }, []);
   const handleShow = async () => {
-    console.log(list);
     if (list.length == 0) {
       toast.error("No se han escogido listas para exportar");
       return;

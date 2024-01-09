@@ -24,7 +24,6 @@ function Sidebar({ children }) {
   const indicatorRef = useRef();
   const topPagesRef = useRef();
   const { isShow, handleShow } = useContext(SidebarContext);
-  const [isChangedPage, setChangedPage] = useState(false);
   const pages = [
     "dashboard",
     "assistence",
@@ -47,6 +46,9 @@ function Sidebar({ children }) {
     if (isLogged) {
       const actualPage = pathname.split("/");
       if (actualPage[2]) {
+        if (isShow) {
+          handleShow();
+        }
         setPage(actualPage[2]);
       }
     }
@@ -62,18 +64,14 @@ function Sidebar({ children }) {
       handleIndicator();
     }
   }, [page, isLogged]);
-  useEffect(() => {
-    setIsLoading(true);
-  }, [isChangedPage]);
-  const handleChanged = (name) => {
-    const actualPage = pathname.split("/");
-    if (name !== actualPage[2]) {
-      setPage(name);
-      setChangedPage(!isChangedPage);
-    }
-  };
+
   if (!isLogged) {
-    return <div>{children}</div>;
+    return (
+      <div>
+        {children}
+        <Toaster richColors />
+      </div>
+    );
   }
 
   return (
@@ -86,22 +84,22 @@ function Sidebar({ children }) {
                 isShow
                   ? "absolute translate-x-0 bg-opacity-90 opacity-100"
                   : "translate-x-[-100%] opacity-0"
-              } sm:flex sm:bg-opacity-100 sm:opacity-100 sm:translate-x-0 sm:w-[12rem] justify-evenly`}
+              } sm:flex sm:bg-opacity-100 sm:opacity-100 sm:translate-x-0 sm:w-[12rem] justify-evenly items-center sm:items-start text-xl sm:text-base`}
         >
-          <div className="absolute sm:hidden top-0 right-0 text-white p-2">
+          <div className="absolute sm:hidden top-0 right-0 text-white p-4">
             <button onClick={handleShow}>
               <IoMdClose size={35} />
             </button>
           </div>
-          <button onClick={() => handleChanged("dashboard")}>
+          <div className="w-full flex justify-center items-center">
             <Link href="/">
-              <div className="flex justify-center items-center text-white rounded-lg">
+              <div className="text-white ">
                 <BiSolidDashboard size={80} />
               </div>
             </Link>
-          </button>
-          <div className="flex flex-col gap-2 bg-" ref={topPagesRef}>
-            <button onClick={() => handleChanged("dashboard")}>
+          </div>
+          <div className="flex flex-col gap-4 sm:gap-2 bg-" ref={topPagesRef}>
+            <button>
               <Link href="/">
                 <div
                   className={`flex items-center p-2 gap-2
@@ -125,7 +123,6 @@ function Sidebar({ children }) {
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={() => handleChanged("assistence")}
               >
                 <BiListPlus />
                 <p>Asistencia</p>
@@ -139,7 +136,6 @@ function Sidebar({ children }) {
                     ? " text-blue "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={() => handleChanged("reports")}
               >
                 <BiListUl />
                 Reportes
@@ -153,7 +149,6 @@ function Sidebar({ children }) {
                     ? " text-yellow "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={() => handleChanged("incident")}
               >
                 <AiFillWarning />
                 <p>Incidencia</p>
@@ -167,7 +162,6 @@ function Sidebar({ children }) {
                     ? " text-green "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={() => handleChanged("graphs")}
               >
                 <BsFileEarmarkBarGraph />
                 <p>Gráficas</p>
@@ -182,7 +176,6 @@ function Sidebar({ children }) {
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={() => handleChanged("invite")}
               >
                 <IoMdPersonAdd />
 
@@ -197,7 +190,6 @@ function Sidebar({ children }) {
                     ? " text-white "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
-                onClick={() => handleChanged("config")}
               >
                 <BsFillGearFill />
                 <p>Cuenta</p>

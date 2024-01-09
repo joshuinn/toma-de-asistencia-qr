@@ -24,7 +24,6 @@
     "react-csv": "^2.2.2",
     "react-dom": "^18",
     "react-icons": "^4.11.0",
-    "serverless-mysql": "^1.5.5",
     "sonner": "^1.1.0"
   },
   "devDependencies": {

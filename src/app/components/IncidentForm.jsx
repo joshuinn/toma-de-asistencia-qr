@@ -58,7 +58,7 @@ function IncidentForm() {
     <>
       <form onSubmit={handleSubmit}>
         <div className="bg-blue-600 rounded-lg p-4 shadow-lg flex flex-wrap gap-3">
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 justify-between w-full flex-wrap sm:w-fit items-center">
             <label>Grupo</label>
             <InputStyled
               type="text"
@@ -76,7 +76,7 @@ function IncidentForm() {
                 : null}
             </datalist>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 justify-between w-full sm:w-fit flex-wrap items-center">
             <label>Maestro</label>
             <InputStyled
               type="text"
@@ -96,7 +96,7 @@ function IncidentForm() {
             </datalist>
           </div>
 
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 justify-between w-full sm:w-fit flex-wrap items-center">
             <label>Ciclo</label>
             <InputStyled
               type="text"
@@ -115,7 +115,7 @@ function IncidentForm() {
                 : null}
             </datalist>
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 justify-between w-full sm:w-fit flex-wrap items-center">
             <label>Nombre</label>
             <InputStyled
               type="text"
@@ -125,7 +125,7 @@ function IncidentForm() {
               value={data.nombre}
             />
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 justify-between w-full sm:w-fit flex-wrap items-center">
             <label>Boleta</label>
             <InputStyled
               type="text"
@@ -135,7 +135,7 @@ function IncidentForm() {
               value={data.boleta}
             />
           </div>
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-3 justify-between w-full sm:w-fit flex-wrap items-center">
             <label>#laboratorio</label>
             <InputStyled
               type="text"
@@ -161,11 +161,11 @@ function IncidentForm() {
           <textarea
             type="text"
             placeholder="Observaciones"
-            className="bg-blue-800 p-4 rounded-lg outline-none max-h-[calc(50vh)]"
+            className="bg-blue-800 p-4 rounded-lg outline-none h-[200px] max-h-[calc(50vh)]"
             name="observaciones"
             onChange={handleInput}
             value={data.observaciones}></textarea>
-          <div className="flex justify-end gap-4">
+          <div className="flex flex-wrap justify-center sm:justify-end gap-4">
             <ButtonStyled onClick={handleClean} color="purple" type="reset">
               Limpiar
               <FaTrash size={20} />

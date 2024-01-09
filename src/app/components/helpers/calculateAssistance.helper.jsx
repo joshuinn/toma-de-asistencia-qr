@@ -8,24 +8,26 @@ export async function calculateAssistance(list) {
 
     const dataCalculated = calculateGroups(data);
     const materiaCalculated = calculateMateria(dataCalculated);
-    const total = calculateTotal(dataCalculated)
-    return {groups:dataCalculated, materia:materiaCalculated, total};
+    const total = calculateTotal(dataCalculated);
+    return { groups: dataCalculated, materia: materiaCalculated, total };
   } catch (error) {
     console.error(error);
   }
-  return false;
+  return [];
 }
 
-function calculateTotal(dataCalculated){
-  let suma = 0
+function calculateTotal(dataCalculated) {
+  let suma = 0;
   for (let i = 0; i < dataCalculated.length; i++) {
-    if(dataCalculated[i].data[0] == "NaN"){continue}
-    suma+=(parseFloat(dataCalculated[i].data[0]))
+    if(!dataCalculated[i]){continue}
+    if (dataCalculated[i].data[0] == "NaN") {
+      continue;
+    }
+    suma += parseFloat(dataCalculated[i].data[0]);
   }
-  console.log(suma);
-  const total = (suma/dataCalculated.length).toFixed(2)
-  const data = [total, (100-total).toFixed(2)]
-  return [{data, id:crypto.randomUUID()}]
+  const total = (suma / dataCalculated.length).toFixed(2);
+  const data = [total, (100 - total).toFixed(2)];
+  return [{ data, id: crypto.randomUUID() }];
 }
 
 function calculateMateria(dataCalculated) {
@@ -40,19 +42,25 @@ function calculateMateria(dataCalculated) {
       materias[nombreMateria] = {
         porcentaje: parseFloat(grupoCalculado.data[0]),
         cantidad: 1,
-        id: crypto.randomUUID()
+        id: crypto.randomUUID(),
       };
     }
   });
-  let keys = Object.keys(materias)
+  let keys = Object.keys(materias);
   if (keys.length > 1) {
     for (let i = 0; i < keys.length; i++) {
-      let asistencia = (materias[keys[i]].porcentaje / materias[keys[i]].cantidad).toFixed(2)
-      let inasistencia = (100-asistencia)
-      materiaCalcular[i] = {data:([asistencia, inasistencia]),materia:keys[i], id:materias[keys[i]].id};
+      let asistencia = (
+        materias[keys[i]].porcentaje / materias[keys[i]].cantidad
+      ).toFixed(2);
+      let inasistencia = (100 - asistencia).toFixed(2);
+      materiaCalcular[i] = {
+        data: [asistencia, inasistencia],
+        materia: keys[i],
+        id: materias[keys[i]].id,
+      };
     }
   }
-  return materiaCalcular
+  return materiaCalcular;
 }
 
 function calculateGroups(data) {
@@ -60,13 +68,15 @@ function calculateGroups(data) {
   let grupos = [];
   for (let i = 0; i < data.length; i++) {
     listStudents[i] = { countStudents: countStudents(data[i]) };
-    if(!data[i][0]){continue}
+    if (!data[i][0]) {
+      continue;
+    }
     if (!grupos.includes(data[i][0].id_lista_asistencia)) {
       listStudents[i] = {
         ...listStudents[i],
         id: data[i][0].id_lista_asistencia,
         materia: data[i][0].materia,
-        grupo:data[i][0].grupo,
+        grupo: data[i][0].grupo,
       };
     }
   }
@@ -76,7 +86,9 @@ function calculateGroups(data) {
   for (let i = 0; i < listStudents.length; i++) {
     let count = 0;
     mostAssistance = 0;
-    if(!listStudents[i]){continue}
+    if (listStudents[i].countStudents.length == 0) {
+      continue;
+    }
     for (let j = 0; j < listStudents[i].countStudents.length; j++) {
       count += listStudents[i].countStudents[j].count;
       if (listStudents[i].countStudents[j].count > mostAssistance) {

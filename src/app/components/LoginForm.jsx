@@ -8,16 +8,16 @@ import ButtonStyled from "@/app/components/styled/ButtonStyled";
 import InputStyled from "@/app/components/styled/InputStyled";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 function LoginForm() {
   const [credentials, setCredentials] = useState({
     boleta: "",
     contrasenia: "",
   });
-  const [isError, setIsError] = useState(false);
   const [showPass, setShowPass] = useState(false);
-  const { handleLogin,  isLogged } = useContext(SessionContext);
-  const router = useRouter()
+  const { handleLogin, isLogged } = useContext(SessionContext);
+  const router = useRouter();
   const handleChange = (e) => {
     setCredentials({
       ...credentials,
@@ -32,19 +32,18 @@ function LoginForm() {
         handleLogin();
       }
     } catch (e) {
-      setIsError(true);
+      toast.error("Boleta o contraseña incorrectos")
     }
   };
   const handleShowPass = () => {
     setShowPass(!showPass);
   };
-  useEffect(()=>{
-    if(isLogged){
-      router.push("/")
-      router.refresh()
+  useEffect(() => {
+    if (isLogged) {
+      router.push("/");
+      router.refresh();
     }
-  },[])
-
+  }, []);
 
   return (
     <form onSubmit={handelSubmit} className="flex flex-col gap-5 ">
@@ -83,9 +82,8 @@ function LoginForm() {
             />
           )}
         </div>
+        
       </div>
-
-      {isError && <p className="text-pink">Boleta o contraseña incorrectos</p>}
       <ButtonStyled color="pink">Iniciar sesión</ButtonStyled>
       <Link href="/pages/forgotPassword">
         <p className="text-sm text-right text-white hover:text-gray-300 transition-all">

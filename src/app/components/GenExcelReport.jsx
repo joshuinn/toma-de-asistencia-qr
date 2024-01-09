@@ -1,16 +1,19 @@
 "use client";
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import { SiMicrosoftexcel } from "react-icons/si";
 import { countStudents } from "./helpers/countStudents.helper";
 import ButtonStyled from "./styled/ButtonStyled";
 import { toast } from "sonner";
+import { ReportListContext } from "./assistance/ListReportsContext";
 
-function GenExcelReport({ list, fecha_min, fecha_max }) {
+function GenExcelReport({ fecha_min, fecha_max }) {
   const [listToExport, setListToExport] = useState([]);
   const [allList, setAllList] = useState([]);
   const refExport = useRef(null);
+  const reports = useContext(ReportListContext);
+const list = reports.listToExport
   const extracData = async () => {
     try {
       const { data } = await axios.post("/api/listReports", {
