@@ -18,7 +18,7 @@ export default function ListGroup() {
             </div>
           </div>
         </AutoCompliteProvider>
-        <div className="w-full h-[80vh]">
+        <div className="w-full h-[78vh]">
           <TableGroups colorHeaders="purple" typeSelect="takeList" />
         </div>
       </div>

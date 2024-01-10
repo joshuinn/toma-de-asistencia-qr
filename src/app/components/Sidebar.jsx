@@ -25,7 +25,6 @@ function Sidebar({ children }) {
   const topPagesRef = useRef();
   const { isShow, handleShow } = useContext(SidebarContext);
   const pages = [
-    "dashboard",
     "assistence",
     "reports",
     "incident",
@@ -99,22 +98,23 @@ function Sidebar({ children }) {
             </Link>
           </div>
           <div className="flex flex-col gap-4 sm:gap-2 bg-" ref={topPagesRef}>
-            <button>
-              <Link href="/">
-                <div
-                  className={`flex items-center p-2 gap-2
+            {/*
+              <button>
+                <Link href="/">
+                  <div
+                    className={`flex items-center p-2 gap-2
                 ${
                   page == "dashboard"
                     ? "text-pink "
                     : " text-gray-500 hover:text-gray-300"
                 }`}
-                >
-                  <BiSolidDashboard />
-                  <p>Dashboard</p>
-                </div>
-              </Link>
-            </button>
-
+                  >
+                    <BiSolidDashboard />
+                    <p>Dashboard</p>
+                  </div>
+                </Link>
+              </button>
+              */}
             <Link href="/pages/assistence">
               <button
                 className={`flex items-center p-2 gap-2
@@ -125,7 +125,7 @@ function Sidebar({ children }) {
                 }`}
               >
                 <BiListPlus />
-                <p>Asistencia</p>
+                <p>Tomar Asistencia</p>
               </button>
             </Link>
             <Link href="/pages/reports">
@@ -192,7 +192,7 @@ function Sidebar({ children }) {
                 }`}
               >
                 <BsFillGearFill />
-                <p>Cuenta</p>
+                <p>Mi Cuenta</p>
               </button>
             </Link>
           </div>

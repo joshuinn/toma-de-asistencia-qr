@@ -32,7 +32,7 @@ function LoginForm() {
         handleLogin();
       }
     } catch (e) {
-      toast.error("Boleta o contraseña incorrectos")
+      toast.error("Boleta o contraseña incorrectos");
     }
   };
   const handleShowPass = () => {
@@ -82,14 +82,13 @@ function LoginForm() {
             />
           )}
         </div>
-        
       </div>
       <ButtonStyled color="pink">Iniciar sesión</ButtonStyled>
-      <Link href="/pages/forgotPassword">
-        <p className="text-sm text-right text-white hover:text-gray-300 transition-all">
-          Olvidé mi contraseña
-        </p>
-      </Link>
+      <div className="flex justify-center">
+        <Link href="/pages/forgotPassword">
+          <ButtonStyled color="purple">Olvidé mi contraseña</ButtonStyled>
+        </Link>
+      </div>
     </form>
   );
 }

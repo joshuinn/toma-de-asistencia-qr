@@ -46,7 +46,7 @@ export async function POST(req) {
         : " WHERE ttb_asistencia.id_lista_asistencia =  ";
     for (let i = 0; i < data.list.length; i++) {
       let dataResponse = await conn.query(
-        bodyQuery + bodyWhere + data.list[i].id_lista_asistencia
+        bodyQuery + bodyWhere + data.list[i].id_lista_asistencia + " ORDER BY 15 ASC"
       );
       newData[i] = dataResponse[0]
     }
