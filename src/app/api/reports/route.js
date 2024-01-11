@@ -14,15 +14,20 @@ export async function POST(req) {
       " JOIN `ctb_ciclo` ON ctb_lista_asistencia.id_ciclo = ctb_ciclo.id_ciclo ";
     const joinMestro =
       " JOIN `ctb_maestro` ON ctb_lista_asistencia.id_maestro = ctb_maestro.id_maestro ";
-    const joinLista =
+      const joinMateria =
+      " JOIN `ctb_materia` ON ctb_lista_asistencia.id_materia = ctb_materia.id_materia ";
+
+      const joinLista =
       " JOIN `ctb_lista_asistencia` ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
     const joinFecha = fecha_min + " AND " + fecha_max;
+    
     newData = await conn.query(
       "SELECT * FROM `ttb_asistencia` " +
         joinLista +
         joinGrupo +
         joinMestro +
         joinCiclo +
+        joinMateria +
         " WHERE `fecha_asistencia` BETWEEN" +
         joinFecha
     );

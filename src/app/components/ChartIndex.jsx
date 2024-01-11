@@ -52,7 +52,7 @@ function ChartIndex() {
             </ButtonStyled>
           </div>
         </div>
-        <div className="w-full h-4/6 sm:h-[75vh] 2xl:h-[90vh] shadow-lg">
+        <div className="w-full h-4/6 sm:h-[78vh] 2xl:h-[80vh] shadow-lg">
           <TableGroups colorHeaders="green" />
         </div>
       </div>

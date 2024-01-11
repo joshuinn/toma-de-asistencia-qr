@@ -63,7 +63,7 @@ function Page({ params }) {
         .catch((e) => e);
       if (response.status == 200) {
       } else {
-        return setError("Ha ocurrido un error vuelva intentar");
+        return setError("Boleta ya registrada");
       }
       setIsRegistered(true);
     } catch (error) {}
@@ -233,7 +233,7 @@ function Page({ params }) {
             </div>
             <p className="text-pink">{error}</p>
             <button className="p-3 rounded-lg shadow-md bg-yellow border border-yellow hover:text-yellow hover:bg-blue-600 transition-all">
-              Registrarme
+              Registrarse
             </button>
           </form>
         )}

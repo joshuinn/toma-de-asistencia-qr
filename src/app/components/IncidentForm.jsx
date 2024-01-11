@@ -77,10 +77,10 @@ function IncidentForm() {
             </datalist>
           </div>
           <div className="flex gap-3 justify-between w-full sm:w-fit flex-wrap items-center">
-            <label>Maestro</label>
+            <label>Nombre del profesor</label>
             <InputStyled
               type="text"
-              placeholder="Maestro"
+              placeholder="Nombre del profesor"
               className="bg-blue-800 p-2 rounded-full outline-none"
               name="maestro"
               onChange={handleInput}
@@ -136,10 +136,10 @@ function IncidentForm() {
             />
           </div>
           <div className="flex gap-3 justify-between w-full sm:w-fit flex-wrap items-center">
-            <label>#laboratorio</label>
+            <label>No. laboratorio</label>
             <InputStyled
               type="text"
-              placeholder="#Laboratorio"
+              placeholder="No. Laboratorio"
               name="laboratorio"
               onChange={handleInput}
               value={data.laboratorio}

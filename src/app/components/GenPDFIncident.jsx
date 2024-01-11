@@ -25,6 +25,11 @@ const styles = StyleSheet.create({
     width: "16.6666%",
     fontWeight: "bold",
   },
+  textName: {
+    width: "16.6666%",
+    fontWeight: "bold",
+    textOverflow:"balance",
+  },
   textData: {
     width: "16.6666%",
     fontSize: "15px",
@@ -35,6 +40,8 @@ const styles = StyleSheet.create({
     padding: "8px",
     fontSize: "15px",
     borderRadius: "5px",
+    minHeight:"200px",
+    marginTop:"5px"
   },
   title: {
     fontWeight: "bold",
@@ -78,9 +85,9 @@ function GenPDFIncident({ data }) {
           </View>
           <View style={styles.data}>
             <Text style={styles.text}>Grupo:</Text>
-            <Text style={styles.text}>Maestro:</Text>
+            <Text style={styles.textName}>Maestro:</Text>
             <Text style={styles.text}>Ciclo:</Text>
-            <Text style={styles.text}>Nombre:</Text>
+            <Text style={styles.textName}>Nombre:</Text>
             <Text style={styles.text}>Boleta:</Text>
             <Text style={styles.text}>Laboratorio:</Text>
           </View>

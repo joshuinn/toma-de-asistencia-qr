@@ -13,6 +13,7 @@ function GenExcelReport({ fecha_min, fecha_max }) {
   const [allList, setAllList] = useState([]);
   const refExport = useRef(null);
   const reports = useContext(ReportListContext);
+  const date = new Date();
 const list = reports.listToExport
   const extracData = async () => {
     try {
@@ -59,7 +60,6 @@ const list = reports.listToExport
     }
   }, [allList]);
   useEffect(() => {
-    //console.log("data:", listToExport);
     if (listToExport) {
       if (listToExport.length > 0) {
         refExport.current.click();
@@ -71,6 +71,7 @@ const list = reports.listToExport
     { label: "Nombre", key: "nombre_alumno" },
     { label: "boleta", key: "boleta" },
     { label: "Conteo Asistencia", key: "count" },
+    { label: "No. lista", key: "numero_maquina" },
   ];
   const dataExample = [
     {
@@ -92,7 +93,8 @@ const list = reports.listToExport
       newData[indexData] = [
         "Ciclo: " + list[i].ciclo,
         "Grupo: " + list[i].grupo,
-        "Maestro: " + list[i].maestro,
+        "Nombre del profesor: " + list[i].maestro,
+        "Fecha: "+date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
       ];
       let alumnos = list[i].alumnos;
       indexData++;
@@ -101,6 +103,7 @@ const list = reports.listToExport
         "Nombre",
         "Boleta",
         "conteo de asistencia",
+        "Numero de maquina"
       ];
       for (let j = 0; j < alumnos.length; j++) {
         indexData++;
@@ -109,6 +112,7 @@ const list = reports.listToExport
           alumnos[j].nombre_alumno,
           alumnos[j].boleta,
           alumnos[j].count,
+          alumnos[j].numero_maquina,
         ];
       }
       indexData++;
@@ -127,7 +131,6 @@ const list = reports.listToExport
         filename="lista_asistencia.csv"
         data={listToExport}
         className="hidden"
-        target="_blank"
       >
         <input type="button" ref={refExport} />
       </CSVLink>

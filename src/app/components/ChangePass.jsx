@@ -131,7 +131,7 @@ function ChangePass() {
         </div>
         <h3 className={`text-pink ${isError?"block":"hidden"} `} >Las contraseñas no son iguales</h3>
         <ButtonStyled color="pink" >
-          <span>Cambiar</span>
+          <span>Confirmar</span>
         </ButtonStyled>
       </form>
     </div>

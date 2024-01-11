@@ -102,7 +102,7 @@ function ForgotPassword({ params }) {
           className="flex flex-col gap-4 w-1/2 justify-between"
         >
           <div className="flex gap-3 items-center justify-between w-80">
-            <label htmlFor="contrasenia">Contraseña</label>
+            <label htmlFor="contrasenia">Nueva contraseña</label>
             <div className="flex w-fit justify-center items-center">
               <input
                 type={showPass.pass1 ? "text" : "password"}
@@ -167,7 +167,7 @@ function ForgotPassword({ params }) {
           </div>
           <div className="flex justify-center m-4">
             <button className="p-3 rounded-lg shadow-md border border-pink bg-pink hover:bg-blue-600 hover:text-pink">
-              Cambiar
+              Confirmar
             </button>
           </div>
         </form>

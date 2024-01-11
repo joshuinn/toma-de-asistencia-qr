@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Page,
   Text,
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
   student: {
     flexDirection: "row",
     justifyContent: "space-between",
+    height:"40px"
   },
   studentContainer: {
     marginBottom: "10px",
@@ -44,42 +45,67 @@ const styles = StyleSheet.create({
   textStudent: {
     width: "25%",
     border: "1px",
-    fontSize: "12px",
+    fontSize: "9px",
     padding: "3px",
   },
   textHeaders: {
     width: "25%",
+    fontSize:"15px",
+    lineHeight:"2px"
   },
+  firma:{
+    justifyContent:"center",
+    alignItems:"center",
+    marginTop:"20px",
+    height:"100%"
+  },
+  line:{
+    width:"200px",
+    height:"1px",
+    backgroundColor:"#000"
+  }
 });
-
 function GenPDFReport({ fecha_min, fecha_max }) {
+  const date = new Date();
   const [listToExport, setListToExport] = useState([]);
   const [isShow, setIsShow] = useState(false);
   const reports = useContext(ReportListContext);
   const list = reports.listToExport;
+
+  useEffect(()=>{
+    //console.log(listToExport);
+  },[listToExport])
+
   const ReportPDF = ({ list }) => {
     return (
       <Document>
         <Page size="A4" style={styles.page} orientation="landscape">
-          {list.map((reports) => {
+          {list.map((reports,i) => {
             return (
               <View key={reports.id} style={styles.section}>
                 <View style={styles.info}>
-                  <Text>Ciclo:{reports.ciclo}</Text>
+                  {/*<Text>Ciclo:{reports.ciclo}</Text>*/}
                   <Text>Grupo:{reports.grupo}</Text>
-                  <Text>Maestro: {reports.maestro}</Text>
+                  <Text>Nombre del profesor: {reports.maestro}</Text>
                   <Text>Laboratorio: {reports.laboratorio}</Text>
+                  <Text>Fecha: {date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()}</Text>
                 </View>
                 <View style={styles.tableHeaders}>
+                <Text style={styles.textHeaders}>No. lista</Text>
                   <Text style={styles.textHeaders}>Apellido</Text>
                   <Text style={styles.textHeaders}>Nombre</Text>
                   <Text style={styles.textHeaders}>Boleta</Text>
-                  <Text style={styles.textHeaders}>Conteo de asistencia</Text>
+                  <Text style={styles.textHeaders}>No. maquina</Text>
+                  <View style={styles.textHeaders} >
+                  <Text>Conteo de</Text>
+                  <Text>asistencia</Text>
+                  </View>
                 </View>
                 <View style={styles.studentContainer}>
-                  {reports.alumnos.map((alumno) => {
+                  {reports.alumnos.map((alumno,i ) => {
                     return (
                       <View key={alumno.id_alumno} style={styles.student}>
+                          <Text style={styles.textStudent} >No. {(i+1)}</Text>
                         <Text style={styles.textStudent}>
                           {alumno.apellido_alumno}
                         </Text>
@@ -87,10 +113,15 @@ function GenPDFReport({ fecha_min, fecha_max }) {
                           {alumno.nombre_alumno}
                         </Text>
                         <Text style={styles.textStudent}>{alumno.boleta}</Text>
+                        <Text style={styles.textStudent}>{alumno.numero_maquina}</Text>
                         <Text style={styles.textStudent}>{alumno.count}</Text>
                       </View>
                     );
                   })}
+                </View>
+                <View style={styles.firma}>
+                  <View style={styles.line}></View>
+                  <Text>Firma del profesor</Text>
                 </View>
               </View>
             );
@@ -106,6 +137,7 @@ function GenPDFReport({ fecha_min, fecha_max }) {
         fecha_min,
         fecha_max,
       });
+      //console.log("data from base: ",data);
       let dataFormated = [];
       for (let i = 0; i < data.length; i++) {
         if (data[i].length > 0) {
@@ -120,6 +152,8 @@ function GenPDFReport({ fecha_min, fecha_max }) {
           };
         }
       }
+      //console.log("data", dataFormated);
+      //console.log(dataFormated);
       setListToExport(dataFormated);
     } catch (error) {
       console.error(error);

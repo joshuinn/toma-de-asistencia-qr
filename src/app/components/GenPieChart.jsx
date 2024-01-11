@@ -81,12 +81,12 @@ const GenPieChart = ({
         </div>
         <div>
           <p>
-            Porcentaje de asistencia: <br />
+            Porcentaje de asistencia: 
             <span className={`text-${mainColor} text-xl`}>{data[0]}%</span>
           </p>
           <p>
-            Porcentaje de inasistencia: <br />
-            <span className={`text-${secondColor} text-xl`}>{data[1]}%</span>
+            Porcentaje de inasistencia: 
+            <span className={`mr-2px text-${secondColor} text-xl`}>{data[1]}%</span>
           </p>
         </div>
       </div>

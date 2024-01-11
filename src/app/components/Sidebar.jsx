@@ -117,91 +117,91 @@ function Sidebar({ children }) {
               */}
             <Link href="/pages/assistence">
               <button
-                className={`flex items-center p-2 gap-2
+                className={`flex items-center justify-start p-2 h-10 text-sm text-center
                 ${
                   page == "assistence"
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BiListPlus />
-                <p>Tomar Asistencia</p>
+                <BiListPlus className="mr-3 text-start" size={25}/>
+                <p>Toma de Asistencia</p>
               </button>
             </Link>
             <Link href="/pages/reports">
               <button
-                className={`flex items-center p-2 gap-2
+                className={`flex justify-start items-center p-2 gap-2 h-10 text-sm text-center
                 ${
                   page == "reports"
                     ? " text-blue "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BiListUl />
-                Reportes
+                <BiListUl className="mr-3" size={25} />
+                Reportes de asistencias
               </button>
             </Link>
             <Link href="/pages/incident" prefetch={false}>
               <button
-                className={`flex items-center  p-2 gap-2
+                className={`flex sm:justify-between text-center  items-center  p-2 gap-2 h-10 text-sm w-10/12
                 ${
                   page == "incident"
                     ? " text-yellow "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <AiFillWarning />
-                <p>Incidencia</p>
+                <AiFillWarning className="mr-3" size={20} />
+                <p>Incidencias</p>
               </button>
             </Link>
             <Link href="/pages/graphs" prefetch={false}>
               <button
-                className={`flex items-center  p-2 gap-2
+                className={`flex items-center  p-2 gap-2 h-10 text-sm text-center
                 ${
                   page == "graphs"
                     ? " text-green "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BsFileEarmarkBarGraph />
-                <p>Gráficas</p>
+                <BsFileEarmarkBarGraph className="mr-3" size={20} />
+                <p>Porcentaje de asistencia</p>
               </button>
             </Link>
 
             <Link href="/pages/invite">
               <button
-                className={`flex items-center p-2 gap-2
+                className={`flex items-center p-2 gap-2 h-10 text-sm text-center
                 ${
                   page == "invite"
                     ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <IoMdPersonAdd />
+                <IoMdPersonAdd className="mr-3" size={20} />
 
-                <p>Invitar</p>
+                <p>Invitar a encargado</p>
               </button>
             </Link>
             <Link href="/pages/config" prefetch={false}>
               <button
-                className={`flex items-center p-2 gap-2
+                className={`flex items-center p-2 gap-2 h-10 text-sm sm:justify-between w-10/12
                 ${
                   page == "config"
                     ? " text-white "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BsFillGearFill />
+                <BsFillGearFill className="mr-3" size={20} />
                 <p>Mi Cuenta</p>
               </button>
             </Link>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 p-2 text-gray-500 hover:text-gray-300"
+            className="flex items-center justify-between  h-10 text-left p-2 text-gray-500 hover:text-gray-300 text-sm"
           >
-            <BiLogOut size={20} />
-            Cerrar Sesión
+            <BiLogOut size={20} className="mr-3" />
+            <p>Salir de la cuenta</p>
           </button>
           <div className="hidden sm:flex justify-end bg-gray-300 absolute top-0 w-full">
             <div

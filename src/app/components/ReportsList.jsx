@@ -42,7 +42,7 @@ function ReportsList() {
           />
         </div>
       </div>
-      <div className="w-full h-4/6 sm:h-[60vh] 2xl:h-[86vh] mt-5 shadow-lg">
+      <div className="w-full h-4/6 sm:h-[65vh] 2xl:h-[80vh] mt-5 shadow-lg">
         <TableGroups colorHeaders="blue" />
       </div>
     </div>

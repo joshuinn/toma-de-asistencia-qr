@@ -22,7 +22,12 @@ export async function POST(req) {
           " WHERE ttb_asistencia.id_lista_asistencia = ?",
         [data[i].id_lista_asistencia]
       );
-      list[i] = queryResponse[0];
+      let lastListNumber = await conn.query(
+        "SELECT numero_lista FROM ttb_asistencia WHERE id_lista_asistencia = " +
+          data[i].id_lista_asistencia +
+          " ORDER BY numero_lista DESC LIMIT 1"
+      );
+      list[i] = {lista:queryResponse[0], numero_lista:lastListNumber[0]};
     }
     return NextResponse.json(list);
   } catch (error) {

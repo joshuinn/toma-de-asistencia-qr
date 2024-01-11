@@ -17,6 +17,7 @@ import { SessionContext } from "../SessionContext";
 import { formatText } from "../helpers/formatTextList.helper";
 import { CiCircleRemove } from "react-icons/ci";
 import ButtonStyled from "../styled/ButtonStyled";
+import { FaCheckCircle } from "react-icons/fa";
 
 function ListStudent({ id_lista_asistencia }) {
   const [students, setStudents] = useState([]);
@@ -43,7 +44,7 @@ function ListStudent({ id_lista_asistencia }) {
           nombre: data.nombre.nombre,
           apellido: data.nombre.apellido,
           boleta: data.boleta,
-          numero_maquina:data.numero_maquina
+          numero_maquina: data.numero_maquina,
         };
       }
     } catch (e) {
@@ -93,7 +94,7 @@ function ListStudent({ id_lista_asistencia }) {
                   boleta: data.boleta,
                   apellido_alumno: data.apellido,
                   nombre_alumno: data.nombre,
-                  numero_maquina:data.numero_maquina
+                  numero_maquina: data.numero_maquina,
                 };
               }
               return student;
@@ -121,6 +122,18 @@ function ListStudent({ id_lista_asistencia }) {
       );
       if (newList.length !== students.length) {
         setStudents(newList);
+      } else {
+        const newList = students.reduce((student, object) => {
+          if (student.boleta == "waiting") {
+            return [...student, object];
+          }
+          return student.some((datos) => datos.boleta === object.boleta)
+            ? student
+            : [...student, object];
+        }, []);
+        if (newList.length !== students.length) {
+          setStudents(newList);
+        }
       }
       localStorage.setItem(
         "listStudents",
@@ -199,13 +212,15 @@ function ListStudent({ id_lista_asistencia }) {
   const setFocusedInput = (e) => {
     setCurrentInputId(e.target.id);
   };
-  const handleDeleteStudent=(id)=>{
-    let newList = students.filter((student)=>student.id !== id? student :null)
-    setStudents(newList)
-    if(newList.length == 0){
+  const handleDeleteStudent = (id) => {
+    let newList = students.filter((student) =>
+      student.id !== id ? student : null
+    );
+    setStudents(newList);
+    if (newList.length == 0) {
       localStorage.removeItem("listStudents");
     }
-  }
+  };
   const FormRegister = () => {
     return (
       <div
@@ -258,11 +273,11 @@ function ListStudent({ id_lista_asistencia }) {
       </div>
     );
   };
-  
+
   return (
     <Suspense fallback={<Loading />}>
       <div className="bg-blue-800 rounded-lg p-3 shadow-lg z-10 text-white">
-        <div className="flex justify-end">
+        <div className="flex justify-start">
           <button
             className="transition-all bg-purple border border-purple hover:bg-blue-800 hover:text-purple p-3 rounded-lg flex items-center"
             onClick={handleForm}
@@ -271,34 +286,52 @@ function ListStudent({ id_lista_asistencia }) {
             <p>Iniciar registro con QR</p>
           </button>
         </div>
-        <ul className="grid grid-cols-4 text-center text-purple font-bold text-xl">
+        <ul className="grid grid-cols-6 text-center text-purple font-bold text-xl">
+          <li>No. lista</li>
           <li>Apellido</li>
           <li>Nombre</li>
           <li>Boleta</li>
           <li>No. maquina</li>
+          <li>Asistencia</li>
         </ul>
         <ul className=" h-full sm:h-[calc(100vh-25rem)] lg:h-[calc(100vh-20rem)]  overflow-y-scroll">
           {students.map((student, i) => (
             <li key={student.id}>
               {student.boleta == "waiting" ? (
-                <div className="grid grid-cols-4 text-center justify-center items-center">
+                <div className="grid grid-cols-8 text-center justify-center items-center">
+                  <div className={loaderIndividual.loader}></div>
+                  <div className={loaderIndividual.loader}></div>
                   <div className={loaderIndividual.loader}></div>
                   <div className={loaderIndividual.loader}></div>
                   <div className={loaderIndividual.loader}></div>
                   <div className={loaderIndividual.loader}></div>
                 </div>
               ) : (
-                <div className="grid sm:grid-cols-4 grid-cols-2 text-center justify-center mb-2">
-                  <div className="w-11/12 flex items-center gap-2 justify-center">
-                    <button onClick={()=>handleDeleteStudent(student.id)} className="hover:text-pink transition-all">
-                      <span title="Eliminar">
+                <div className="grid sm:grid-cols-6 grid-cols-2 text-center justify-center mb-2">
+                  <div className="flex justify-center">
+
+
+                  <div className="flex items-center justify-between w-2/3 ">
+                  <button
+                      onClick={() => handleDeleteStudent(student.id)}
+                      className="hover:text-pink transition-all"
+                    >
                       <CiCircleRemove size={20} />
-                      </span>
                     </button>
+                    <span title="Eliminar"></span>
+                    <p>{i + 1}</p>
+                  </div>
+                  </div>
+                  <div className="w-11/12 flex items-center gap-2 justify-start">
+                   
                     <p>{student.apellido_alumno}</p>
                   </div>
-                  <p className="w-11/12">{student.nombre_alumno}</p>
-                  <p>{student.boleta}</p>
+                  <div className="flex items-center justify-start text-start">
+                    <p className="w-11/12">{student.nombre_alumno}</p>
+                  </div>
+                  <div className="flex items-center  justify-center">
+                    <p>{student.boleta}</p>
+                  </div>
                   <div className="flex justify-evenly">
                     <input
                       key={student.id}
@@ -314,6 +347,11 @@ function ListStudent({ id_lista_asistencia }) {
                       onFocus={setFocusedInput}
                       name="numero_maquina"
                     />
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <span title="" className="text-green">
+                      <FaCheckCircle size={25} />
+                    </span>
                   </div>
                 </div>
               )}

@@ -6,6 +6,11 @@ export async function POST(request) {
     const data = await request.json();
     const id_usuario = data[1].id_usuario;
     const id_lista_asistencia = parseInt(data[2]);
+    const lastList = await conn.query(
+      "SELECT numero_lista FROM ttb_asistencia WHERE id_lista_asistencia =" +
+        id_lista_asistencia +
+        " ORDER BY numero_lista DESC LIMIT 1"
+    );
     data[0].map(async (student) => {
       const id_alumno = await getIdStudent(student);
       await conn.query("INSERT INTO `ttb_asistencia` SET ?", {
@@ -13,6 +18,9 @@ export async function POST(request) {
         id_lista_asistencia: id_lista_asistencia,
         id_usuario: id_usuario,
         numero_maquina: student.numero_maquina ?? 0,
+        numero_lista: lastList[0][0]
+          ? lastList[0][0].numero_lista + 1
+          : 1,
       });
     });
     //console.log(idStudent);
@@ -35,5 +43,4 @@ async function getIdStudent(student) {
     boleta: student.boleta,
   });
   return getIdStudent(student);
-  
 }

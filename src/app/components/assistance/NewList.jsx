@@ -133,7 +133,7 @@ function NewList() {
             <div className="flex gap-1 items-center justify-between w-full">
               <input
                 type="text"
-                placeholder="Maestro"
+                placeholder="Nombre del profesor"
                 name="maestro"
                 className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 value={data.maestro}
@@ -155,7 +155,7 @@ function NewList() {
             <div className="flex gap-1 items-center justify-between w-full">
               <input
                 type="text"
-                placeholder="#Laboratorio"
+                placeholder="No. Laboratorio"
                 name="laboratorio"
                 className="rounded-full p-2 bg-blue-800 outline-none text-white"
                 required

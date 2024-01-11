@@ -83,7 +83,7 @@ function LoginForm() {
           )}
         </div>
       </div>
-      <ButtonStyled color="pink">Iniciar sesión</ButtonStyled>
+      <ButtonStyled color="pink">Ingresar</ButtonStyled>
       <div className="flex justify-center">
         <Link href="/pages/forgotPassword">
           <ButtonStyled color="purple">Olvidé mi contraseña</ButtonStyled>

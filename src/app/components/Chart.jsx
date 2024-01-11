@@ -4,22 +4,26 @@ import GenPieChart from "./GenPieChart";
 import Loading from "./Loading";
 import { calculateAssistance } from "./helpers/calculateAssistance.helper";
 function Chart({ list }) {
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsloading] = useState(true);
   const [dataChart, setDataChart] = useState([]);
 
   const memoAsistance = useMemo(async () => {
     const calculated = async () => {
+      setIsloading(true)
       if (list.length > 0) {
         try {
           const dataCalculated = await calculateAssistance(list);
 
           if (dataCalculated) {
             setDataChart(dataCalculated);
+            setIsloading(false)
           }
-          console.log(data);
-          return data;
-        } catch (error) {}
+          return dataCalculated;
+        } catch (error) {
+          console.error(error);
+        }
       }
+      setIsloading(false)
       return [];
     };
     return calculated();
@@ -82,7 +86,7 @@ function Chart({ list }) {
             <div>
               <div className="w-full bg-blue-600 p-3 rounded-lg shadow-lg text-center">
                 <h2 className="text-xl font-bold text-pink">
-                  Porcentaje de asistencia Total
+                  Porcentaje total de lo seleccionado
                 </h2>
               </div>
               {dataChart.total.map((item) => {

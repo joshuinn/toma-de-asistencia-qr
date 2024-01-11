@@ -67,44 +67,42 @@ function calculateGroups(data) {
   let listStudents = [];
   let grupos = [];
   for (let i = 0; i < data.length; i++) {
-    listStudents[i] = { countStudents: countStudents(data[i]) };
-    if (!data[i][0]) {
+    listStudents[i] = { countStudents: countStudents(data[i].lista) };
+    if (!data[i].lista[0]) {
       continue;
     }
-    if (!grupos.includes(data[i][0].id_lista_asistencia)) {
+    if (!grupos.includes(data[i].lista[0].id_lista_asistencia)) {
       listStudents[i] = {
         ...listStudents[i],
-        id: data[i][0].id_lista_asistencia,
-        materia: data[i][0].materia,
-        grupo: data[i][0].grupo,
+        id: data[i].lista[0].id_lista_asistencia,
+        materia: data[i].lista[0].materia,
+        grupo: data[i].lista[0].grupo,
       };
     }
   }
   const arrDataChart = [];
-  let mostAssistance = 0;
   //console.log(listStudents);
   for (let i = 0; i < listStudents.length; i++) {
+
     let count = 0;
-    mostAssistance = 0;
+    if(!data[i].numero_lista[0]){continue}
+    let numero_lista = data[i].numero_lista[0].numero_lista??1
     if (listStudents[i].countStudents.length == 0) {
       continue;
     }
     for (let j = 0; j < listStudents[i].countStudents.length; j++) {
       count += listStudents[i].countStudents[j].count;
-      if (listStudents[i].countStudents[j].count > mostAssistance) {
-        mostAssistance = listStudents[i].countStudents[j].count;
-      }
     }
     let percentageAssistance = (
       ((count / listStudents[i].countStudents.length) * 100) /
-      mostAssistance
-    ).toFixed(2);
-    arrDataChart[i] = {
-      data: [percentageAssistance, (100 - percentageAssistance).toFixed(2)],
-      id: listStudents[i].id,
-      materia: listStudents[i].materia,
-      grupo: listStudents[i].grupo,
-    };
-  }
+      numero_lista
+      ).toFixed(2);
+      arrDataChart[i] = {
+        data: [percentageAssistance, (100 - percentageAssistance).toFixed(2)],
+        id: listStudents[i].id,
+        materia: listStudents[i].materia,
+        grupo: listStudents[i].grupo,
+      };
+    }
   return arrDataChart;
 }

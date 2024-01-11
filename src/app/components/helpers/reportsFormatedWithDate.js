@@ -1,5 +1,4 @@
 export default async function reportsFormatedWithDate(dataArr) {
-
   if (dataArr.length == 0) {
     return [];
   }
@@ -18,6 +17,7 @@ export default async function reportsFormatedWithDate(dataArr) {
       ciclo: filterData[0].ciclo,
       maestro: filterData[0].maestro,
       id_lista_asistencia: filterData[0].id_lista_asistencia,
+      materia:filterData[0].materia
     };
     data = data.filter((report) =>
       report.id_lista_asistencia !== id_lista_asistencia ? report : null
