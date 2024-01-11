@@ -15,6 +15,7 @@ import axios from "axios";
 import { countStudents } from "./helpers/countStudents.helper";
 import ButtonStyled from "./styled/ButtonStyled";
 import { ReportListContext } from "./assistance/ListReportsContext";
+import { getDateFormated } from "./helpers/dateFormated";
 
 const styles = StyleSheet.create({
   page: {
@@ -77,6 +78,7 @@ function GenPDFReport({ fecha_min, fecha_max }) {
   },[listToExport])
 
   const ReportPDF = ({ list }) => {
+    const date = getDateFormated()
     return (
       <Document>
         <Page size="A4" style={styles.page} orientation="landscape">
@@ -88,7 +90,7 @@ function GenPDFReport({ fecha_min, fecha_max }) {
                   <Text>Grupo:{reports.grupo}</Text>
                   <Text>Nombre del profesor: {reports.maestro}</Text>
                   <Text>Laboratorio: {reports.laboratorio}</Text>
-                  <Text>Fecha: {date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()}</Text>
+                  <Text>Fecha: {date}</Text>
                 </View>
                 <View style={styles.tableHeaders}>
                 <Text style={styles.textHeaders}>No. lista</Text>

@@ -7,6 +7,7 @@ import { countStudents } from "./helpers/countStudents.helper";
 import ButtonStyled from "./styled/ButtonStyled";
 import { toast } from "sonner";
 import { ReportListContext } from "./assistance/ListReportsContext";
+import { getDateFormated } from "./helpers/dateFormated";
 
 function GenExcelReport({ fecha_min, fecha_max }) {
   const [listToExport, setListToExport] = useState([]);
@@ -86,6 +87,7 @@ const list = reports.listToExport
   function formatedDataExport(list) {
     let newData = [];
     let indexData = 0;
+    const date = getDateFormated()
     for (let i = 0; i < list.length; i++) {
       if (!list[i]) {
         continue;
@@ -94,7 +96,7 @@ const list = reports.listToExport
         "Ciclo: " + list[i].ciclo,
         "Grupo: " + list[i].grupo,
         "Nombre del profesor: " + list[i].maestro,
-        "Fecha: "+date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate()
+        "Fecha: "+date
       ];
       let alumnos = list[i].alumnos;
       indexData++;

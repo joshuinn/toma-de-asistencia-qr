@@ -1,3 +1,4 @@
+import { getDateFormated } from "@/app/components/helpers/dateFormated";
 import { conn } from "@/lib/mysql";
 import { NextResponse } from "next/server";
 
@@ -11,12 +12,14 @@ export async function POST(request) {
         id_lista_asistencia +
         " ORDER BY numero_lista DESC LIMIT 1"
     );
+    const date = getDateFormated()
     data[0].map(async (student) => {
       const id_alumno = await getIdStudent(student);
       await conn.query("INSERT INTO `ttb_asistencia` SET ?", {
         id_alumno: id_alumno,
         id_lista_asistencia: id_lista_asistencia,
         id_usuario: id_usuario,
+        fecha_asistencia:date,
         numero_maquina: student.numero_maquina ?? 0,
         numero_lista: lastList[0][0]
           ? lastList[0][0].numero_lista + 1

@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { SessionContext } from "../SessionContext";
 import { formatText } from "../helpers/formatTextList.helper";
 import { CiCircleRemove } from "react-icons/ci";
-import ButtonStyled from "../styled/ButtonStyled";
 import { FaCheckCircle } from "react-icons/fa";
 
 function ListStudent({ id_lista_asistencia }) {
@@ -124,7 +123,7 @@ function ListStudent({ id_lista_asistencia }) {
         setStudents(newList);
       } else {
         const newList = students.reduce((student, object) => {
-          if (student.boleta == "waiting") {
+          if (object.boleta == "waiting") {
             return [...student, object];
           }
           return student.some((datos) => datos.boleta === object.boleta)
@@ -298,7 +297,7 @@ function ListStudent({ id_lista_asistencia }) {
           {students.map((student, i) => (
             <li key={student.id}>
               {student.boleta == "waiting" ? (
-                <div className="grid grid-cols-8 text-center justify-center items-center">
+                <div className="grid grid-cols-6 text-center justify-center items-center">
                   <div className={loaderIndividual.loader}></div>
                   <div className={loaderIndividual.loader}></div>
                   <div className={loaderIndividual.loader}></div>
@@ -309,21 +308,18 @@ function ListStudent({ id_lista_asistencia }) {
               ) : (
                 <div className="grid sm:grid-cols-6 grid-cols-2 text-center justify-center mb-2">
                   <div className="flex justify-center">
-
-
-                  <div className="flex items-center justify-between w-2/3 ">
-                  <button
-                      onClick={() => handleDeleteStudent(student.id)}
-                      className="hover:text-pink transition-all"
-                    >
-                      <CiCircleRemove size={20} />
-                    </button>
-                    <span title="Eliminar"></span>
-                    <p>{i + 1}</p>
-                  </div>
+                    <div className="flex items-center justify-between w-2/3 ">
+                      <button
+                        onClick={() => handleDeleteStudent(student.id)}
+                        className="hover:text-pink transition-all"
+                      >
+                        <CiCircleRemove size={20} />
+                      </button>
+                      <span title="Eliminar"></span>
+                      <p>{i + 1}</p>
+                    </div>
                   </div>
                   <div className="w-11/12 flex items-center gap-2 justify-start">
-                   
                     <p>{student.apellido_alumno}</p>
                   </div>
                   <div className="flex items-center justify-start text-start">
@@ -359,23 +355,24 @@ function ListStudent({ id_lista_asistencia }) {
           ))}
         </ul>
         <div className="flex justify-end">
-          <ButtonStyled
-            className={`mt-2
+          <button
+            className={` p-3 flex rounded-lg border mt-2 gap-2 transition-all
                 ${
                   studentQueue.length > 0 || students.length == 0
-                    ? "text-gray-500 border-gray-500"
-                    : ""
+                    ? " text-gray-500 border-gray-500 cursor-not-allowed"
+                    : "bg-pink text-white hover:text-pink border-pink  hover:bg-blue-800"
                 }
             `}
             color="pink"
             onClick={() => {
+              //console.log();
               handleEndList();
             }}
-            disabled={students.length == 0 || studentQueue.length > 0}
+            disabled={studentQueue.length > 0}
           >
             <p>Terminar registro</p>
             <RiInboxUnarchiveFill size={25} />
-          </ButtonStyled>
+          </button>
         </div>
       </div>
       <FormRegister />
