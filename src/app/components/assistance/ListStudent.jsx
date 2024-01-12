@@ -35,7 +35,7 @@ function ListStudent({ id_lista_asistencia }) {
   });
   const getDataStudent = async (student) => {
     try {
-      const { data } = await axios.post("http://65a090b8c462cd00087f424e--toma-de-asistencia-qr.netlify.app/api/webScrapping", {
+      const { data } = await axios.post("/api/webScrapping", {
         student,
         id_lista_asistencia,
       });
