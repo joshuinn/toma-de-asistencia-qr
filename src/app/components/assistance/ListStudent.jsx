@@ -170,13 +170,13 @@ function ListStudent({ id_lista_asistencia }) {
   useEffect(() => {
     if (studentQueue.length == 0) {
       if (students.length > 0) {
-        console.log("students: ", students);
+        //console.log("students: ", students);
         const newList = students.filter((student) => {
-          console.log(student.boleta);
+          //console.log(student.boleta);
 
           return student.boleta == "waiting" ? null : student;
         });
-        console.log("newLisT: ", newList);
+        //console.log("newLisT: ", newList);
         if (students.length !== newList) {
           setStudents(newList);
         }
@@ -266,7 +266,7 @@ function ListStudent({ id_lista_asistencia }) {
             />
           </div>
           <h2>Ingrese manual de momento</h2>
-          {
+          {/*
             <button
               onClick={() =>
                 setDataForm({
@@ -277,7 +277,7 @@ function ListStudent({ id_lista_asistencia }) {
             >
               Example
             </button>
-          }
+            */}
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-2"

@@ -39,7 +39,7 @@ export async function POST(req) {
           to: res[0][0].correo,
           subject: "Recuperar cuenta",
           text: "Recuperación de la cuenta.",
-          html: `<a href='http://localhost:3000/pages/forgotPassword/${token}'>Cambiar contraseña</a>`,
+          html: `<a href='https://toma-de-asistencia-qr.netlify.app/pages/forgotPassword/${token}'>Cambiar contraseña</a>`,
         });
         if (info.messageId) {
           return NextResponse.json("ok");
@@ -61,7 +61,7 @@ export async function POST(req) {
         to: data.email,
         subject: "Invitación",
         text: "Un encargado te invitado a unirte: ",
-        html: `<a href='http://localhost:3000/pages/signUp/${token}'>Irme a registrar</a>`,
+        html: `<a href='https://toma-de-asistencia-qr.netlify.app/pages/signUp/${token}'>Irme a registrar</a>`,
       });
       if (info.messageId) {
         return NextResponse.json("ok");

@@ -8,7 +8,7 @@ import React, { Suspense } from "react";
 const loadGroup = async (listaId) => {
   try {
     const response = await axios.get(
-      "http://localhost:3000/api/groups/" + listaId
+      "https://toma-de-asistencia-qr.netlify.app/groups/" + listaId
     );
     if (response.status == 404) {
       return { status: 404 };
