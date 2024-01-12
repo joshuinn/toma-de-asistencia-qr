@@ -28,6 +28,7 @@ function ListStudent({ id_lista_asistencia }) {
   const focusedInputRef = useRef(null);
   const [currentInputId, setCurrentInputId] = useState(null);
   const formRef = useRef(null);
+  const [isProcessingStudent, setIsProcessingStudent] = useState(false);
   const [dataForm, setDataForm] = useState({
     url: "",
     id_lista_asistencia: id_lista_asistencia,
@@ -73,7 +74,11 @@ function ListStudent({ id_lista_asistencia }) {
   useEffect(() => {
     const updateStudent = async () => {
       if (studentQueue.length > 0) {
+        if (isProcessingStudent) {
+          return;
+        }
         const id_queue = await studentQueue[0].id;
+        setIsProcessingStudent(true);
         try {
           const data = await getDataStudent(studentQueue[0].data)
             .then((res) => res)
@@ -106,6 +111,7 @@ function ListStudent({ id_lista_asistencia }) {
           });
           setIsNewStudent(!isNewStudent);
           setStudentQueue(NewQue);
+          setIsProcessingStudent(false);
         } catch (e) {
           console.error(e);
         }
@@ -132,6 +138,7 @@ function ListStudent({ id_lista_asistencia }) {
         }, []);
         if (newList.length !== students.length) {
           setStudents(newList);
+          toast.warning("Alumno ya registrado");
         }
       }
       localStorage.setItem(
@@ -140,6 +147,7 @@ function ListStudent({ id_lista_asistencia }) {
       );
     }
   }, [students]);
+
   useEffect(() => {
     const storageList = JSON.parse(localStorage.getItem("listStudents"));
     if (storageList) {
@@ -159,6 +167,22 @@ function ListStudent({ id_lista_asistencia }) {
       setStudents(newList);
     }
   }, [isNewStudent]);
+  useEffect(() => {
+    if (studentQueue.length == 0) {
+      if (students.length > 0) {
+        console.log("students: ", students);
+        const newList = students.filter((student) => {
+          console.log(student.boleta);
+
+          return student.boleta == "waiting" ? null : student;
+        });
+        console.log("newLisT: ", newList);
+        if (students.length !== newList) {
+          setStudents(newList);
+        }
+      }
+    }
+  }, [studentQueue]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id_queue = crypto.randomUUID();
