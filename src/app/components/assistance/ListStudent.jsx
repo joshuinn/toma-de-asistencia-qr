@@ -266,16 +266,18 @@ function ListStudent({ id_lista_asistencia }) {
             />
           </div>
           <h2>Ingrese manual de momento</h2>
-          <button
-            onClick={() =>
-              setDataForm({
-                url: "https://servicios.dae.ipn.mx/vcred/?h=b65180be30f3f9dcf9713f09a04a799d88ceec72341b468c9336c38acf3dc2bf",
-              })
-            }
-            className="m-2 bg-blue p-3 rounded"
-          >
-            Example
-          </button>
+          {
+            <button
+              onClick={() =>
+                setDataForm({
+                  url: "https://servicios.dae.ipn.mx/vcred/?h=b65180be30f3f9dcf9713f09a04a799d88ceec72341b468c9336c38acf3dc2bf",
+                })
+              }
+              className="m-2 bg-blue p-3 rounded"
+            >
+              Example
+            </button>
+          }
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-2"
