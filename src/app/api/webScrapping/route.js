@@ -59,7 +59,7 @@ async function serchData(url) {
     const page = await browser.newPage();
     await page.goto(url);
     const result = await page.evaluate(() => {
-      const name = document.querySelector('div[class="nombre"]').innerText;
+      const name =  document.querySelector('div[class="nombre"]').innerText;
       const boleta = document.querySelector('div[class="boleta"]').innerText;
       return { name, boleta };
     });

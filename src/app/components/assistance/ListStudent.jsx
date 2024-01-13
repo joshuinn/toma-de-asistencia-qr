@@ -104,17 +104,21 @@ function ListStudent({ id_lista_asistencia }) {
               return student;
             });
           });
+          console.log("students: ", studentQueue);
+          console.log("id: ", id_queue);
           const NewQue = studentQueue.filter((student) => {
             if (student.id !== id_queue) {
               return student;
             }
           });
+          console.log("new list",NewQue);
           setIsNewStudent(!isNewStudent);
           setStudentQueue(NewQue);
           setIsProcessingStudent(false);
         } catch (e) {
           console.error(e);
         }
+      } else {
       }
     };
     updateStudent();
@@ -168,18 +172,22 @@ function ListStudent({ id_lista_asistencia }) {
     }
   }, [isNewStudent]);
   useEffect(() => {
-    if (studentQueue.length == 0) {
-      if (students.length > 0) {
-        //console.log("students: ", students);
-        const newList = students.filter((student) => {
-          //console.log(student.boleta);
+    console.log("lista:" ,studentQueue);
+    if (!isProcessingStudent) {
+      if (studentQueue.length == 0) {
+        if (students.length > 0) {
+          //console.log("students: ", students);
+          const newList = students.filter((student) => {
+            //console.log(student.boleta);
 
-          return student.boleta == "waiting" ? null : student;
-        });
-        //console.log("newLisT: ", newList);
-        if (students.length !== newList) {
-          setStudents(newList);
-        }
+              return student.boleta == "waiting" ? null : student;
+            });
+            //console.log("newLisT: ", newList);
+
+            if (students.length !== newList) {
+              setStudents(newList);
+            }
+          }
       }
     }
   }, [studentQueue]);
@@ -265,8 +273,8 @@ function ListStudent({ id_lista_asistencia }) {
               onClick={handleForm}
             />
           </div>
-          <h2>Ingrese manual de momento</h2>
           {/*
+            <h2>Ingrese manual de momento</h2>
             <button
               onClick={() =>
                 setDataForm({
