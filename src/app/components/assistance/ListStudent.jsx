@@ -307,11 +307,11 @@ function ListStudent({ id_lista_asistencia }) {
   };
   const handleIncident = (student) => {
     if(isProcessingStudent){
-      toast.warning("Recomendamos esperar que se termine de obtener los datos")
+      toast.warning("Recomendamos esperar que se termine de obtener los datos de los alumnos")
     }else{
       router.push(`/pages/incident/${student.apellido_alumno+" "+student.nombre_alumno}/${student.boleta}/${id_lista_asistencia}`);
       router.refresh();
-      toast.success("La lista se guardo temporalmete 🔒")
+      toast.info("La lista se guardo temporalmete! 🔒")
     }
   };
   const FormRegister = () => {
