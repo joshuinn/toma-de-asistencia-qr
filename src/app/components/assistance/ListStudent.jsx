@@ -118,7 +118,6 @@ function ListStudent({ id_lista_asistencia }) {
                 }
               });
               setStudents(newStudents);
-              return;
             } else {
               setStudents((prevStudents) => {
                 return prevStudents.map((student) => {
@@ -137,7 +136,11 @@ function ListStudent({ id_lista_asistencia }) {
               });
             }
           }
-
+          /*const NewQue = studentQueue.filter((student) => {
+            if (student.id !== id_queue) {
+              return student;
+            }
+          });*/
           const NewQue = studentQueue.filter((student) => {
             if (student.id !== id_queue) {
               return student;
@@ -158,7 +161,7 @@ function ListStudent({ id_lista_asistencia }) {
     } finally {
       setIsProcessingStudent(false);
     }
-    console.log("queue: ",studentQueue);
+    console.log("queue: ", studentQueue);
   }, [studentQueue]);
 
   useEffect(() => {
@@ -316,12 +319,13 @@ function ListStudent({ id_lista_asistencia }) {
             ref={formRef}
           >
             <input
-              onFocus={handleFocusInput}
+              //onFocus={handleFocusInput}
+              autoFocus
               type="text"
               name="url"
               placeholder="URL"
               ref={inputURL}
-              onBlur={handleBlurInput}
+              //onBlur={handleBlurInput}
               onChange={handleInput}
               className="bg-blue-800 p-2 rounded-full outline-none "
               value={dataForm.url}

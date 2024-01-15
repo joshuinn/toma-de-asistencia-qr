@@ -2,10 +2,12 @@ import { NextResponse } from "next/server";
 //import puppeteer from "puppeteer";
 import { conn } from "@/lib/mysql";
 import { JSDOM } from "jsdom";
+import axios from "axios";
 export async function POST(request) {
   try {
     const data = await request.json();
     let result = {};
+    console.log(data.student.url);
     result = await getStudent(data.student.url, data.id_lista_asistencia);
     if (!result) {
       result = await serchData(data.student.url)
@@ -112,7 +114,7 @@ async function serchData(url) {
   try {
     let response = {};
     try {
-      response = await fetch(url)
+      response = await fetch(url,{})
         .then((data) => data)
         .catch((e) => {
           console.log(e);
