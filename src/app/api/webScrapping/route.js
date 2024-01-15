@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+//import puppeteer from "puppeteer";
 import { conn } from "@/lib/mysql";
-
+import { JSDOM } from "jsdom";
 export async function POST(request) {
   try {
     const data = await request.json();
     let result = {};
-
     result = await getStudent(data.student.url, data.id_lista_asistencia);
-
     if (!result) {
       result = await serchData(data.student.url)
         .then((data) => data)
@@ -111,18 +109,23 @@ async function getLastNumberStudent(boleta, id_lista_asistencia) {
 }
 
 async function serchData(url) {
-  let options = {};
-  /*
-  if(process.env.AWS_LAMBDA_FUNCTION_VERSION){
-    options = {
-      args:["--hide-scrollbars", "--disable-web-security"],
-      defaultViewPort:chrome.defaultViewPort,
-      executablePath:await chrome.executablePath,
-      headless:"new",
-      ignoreHTTPSErrors:true
-    }
+  try {
+    const response = await fetch(url);
+    const html = await response.text();
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+
+    const name = document.querySelector('div[class="nombre"]')?.textContent;
+    const boleta = document.querySelector('div[class="boleta"]')?.textContent;
+    return { name, boleta };
+  } catch (error) {
+    console.error(error);
   }
-  */
+}
+
+/*
+async function serchData(url) {
+  let options = {};
   //headless = "new"
   try {
     const browser = await puppeteer.launch({ headless: "new"});
@@ -151,10 +154,11 @@ async function serchData(url) {
     await browser.close();
     if (!result.status == 500) {
       return result;
-    }*/
+    }
     return result.status;
   } catch (e) {
     console.log(e);
     return { error: "error" };
   }
 }
+*/
