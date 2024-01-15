@@ -2,7 +2,7 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Loading from "./Loading";
+import Loading from "../Loading";
 
 export const SessionContext = createContext(null);
 

@@ -1,8 +1,8 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import GenPieChart from "./GenPieChart";
-import Loading from "./Loading";
-import { calculateAssistance } from "./helpers/calculateAssistance.helper";
+import Loading from "../Loading";
+import { calculateAssistance } from "../helpers/calculateAssistance.helper";
 function Chart({ list }) {
   const [isLoading, setIsloading] = useState(true);
   const [dataChart, setDataChart] = useState([]);

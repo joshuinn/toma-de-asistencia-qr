@@ -3,11 +3,11 @@ import { useContext } from "react";
 import { FaListCheck } from "react-icons/fa6";
 import GenPDFReport from "./GenPDFReport";
 import GenExcelReport from "./GenExcelReport";
-import ButtonStyled from "./styled/ButtonStyled";
-import Search from "./Search";
-import AutoCompliteProvider from "./ContextDataAutoCompliteInput";
-import { ReportListContext } from "./assistance/ListReportsContext";
-import TableGroups from "./TableGroups";
+import ButtonStyled from "../styled/ButtonStyled";
+import Search from "../search/Search";
+import AutoCompliteProvider from "../context/ContextDataAutoCompliteInput";
+import { ReportListContext } from "../assistance/ListReportsContext";
+import TableGroups from "../TableGroups";
 
 function ReportsList() {
   const reports = useContext(ReportListContext);

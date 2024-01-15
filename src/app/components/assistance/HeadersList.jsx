@@ -11,10 +11,8 @@ function HeadersList({id}) {
   });
   useEffect(() => {
     const loadGroup = async () => {
-        console.log(id);
       try {
         const response = await axios.get("/api/groups/" + id);
-        console.log(response);
         if(response.status == 200){
             setData(response.data)
         }

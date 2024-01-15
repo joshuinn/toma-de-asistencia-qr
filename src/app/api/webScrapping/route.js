@@ -11,7 +11,7 @@ export async function POST(request) {
       result = await serchData(data.student.url)
         .then((data) => data)
         .catch((e) => {
-          console.log(e);
+          console.error(e);
           return e;
         });
     }
@@ -34,7 +34,6 @@ export async function POST(request) {
         numero_maquina: numero_maquina,
       });
     } else {
-      console.log(result);
       return NextResponse.json(
         { message: "No found information" },
         { status: 404 }
@@ -111,16 +110,31 @@ async function getLastNumberStudent(boleta, id_lista_asistencia) {
 
 async function serchData(url) {
   try {
-    const response = await fetch(url);
+    let response = {};
+    try {
+      response = await fetch(url)
+        .then((data) => data)
+        .catch((e) => {
+          console.log(e);
+          return { status: 404 };
+        });
+    } catch (error) {
+      console.error(error);
+    }
+    if (response.status == 404) {
+      return {};
+    }
     const html = await response.text();
     const dom = new JSDOM(html);
     const document = dom.window.document;
 
-    const name = document.querySelector('div[class="nombre"]')?.textContent;
-    const boleta = document.querySelector('div[class="boleta"]')?.textContent;
+    const name =
+      document.querySelector('div[class="nombre"]')?.textContent ?? "";
+    const boleta =
+      document.querySelector('div[class="boleta"]')?.textContent ?? "";
     return { name, boleta };
   } catch (error) {
-    console.error(error);
+    console.error("searchData", error);
   }
 }
 

@@ -1,6 +1,6 @@
 import "./globals.css";
-import SessionProvider from "./components/SessionContext";
-import SidebarProvider from "./components/SideBarResponsiveContext";
+import SessionProvider from "./components/context/SessionContext";
+import SidebarProvider from "./components/context/SideBarResponsiveContext";
 import Sidebar from "./components/Sidebar";
 
 

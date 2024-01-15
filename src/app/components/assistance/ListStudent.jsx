@@ -6,6 +6,9 @@ import React, {
   Suspense,
   useContext,
   useRef,
+  useCallback,
+  useMemo,
+  memo,
 } from "react";
 import { AiFillCloseCircle, AiOutlineQrcode } from "react-icons/ai";
 import { RiInboxUnarchiveFill } from "react-icons/ri";
@@ -13,27 +16,31 @@ import Loading from "../Loading";
 import { toast } from "sonner";
 import loaderIndividual from "./LoadingIndividual.module.css";
 import { useRouter } from "next/navigation";
-import { SessionContext } from "../SessionContext";
+import { SessionContext } from "../context/SessionContext";
 import { formatText } from "../helpers/formatTextList.helper";
-import { CiCircleRemove } from "react-icons/ci";
+import { CiCircleRemove, CiWarning } from "react-icons/ci";
 import { FaCheckCircle } from "react-icons/fa";
 
 function ListStudent({ id_lista_asistencia }) {
+  const router = useRouter();
+  const formRef = useRef(null);
+  const inputURL = useRef(null);
+  const focusedInputRef = useRef(null);
   const [students, setStudents] = useState([]);
   const [studentQueue, setStudentQueue] = useState([]);
   const [isNewStudent, setIsNewStudent] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const router = useRouter();
+  const [isBlurInput, setIsBlurInput] = useState(false);
   const { dataUser } = useContext(SessionContext);
-  const focusedInputRef = useRef(null);
   const [currentInputId, setCurrentInputId] = useState(null);
-  const formRef = useRef(null);
   const [isProcessingStudent, setIsProcessingStudent] = useState(false);
   const [dataForm, setDataForm] = useState({
+    url: "",
     id_lista_asistencia: id_lista_asistencia,
   });
   const getDataStudent = async (student) => {
     try {
+      console.log(student);
       const isRegister = students.filter((_student) => {
         if (_student.url == student.url) {
           return _student;
@@ -58,9 +65,9 @@ function ListStudent({ id_lista_asistencia }) {
         }
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
-    return {error:"some error"}
+    return { error: "some error" };
   };
   const handleEndList = async () => {
     try {
@@ -96,57 +103,62 @@ function ListStudent({ id_lista_asistencia }) {
             .catch((e) => e);
           if (data.isRegister) {
             toast.warning("Alumno ya registrado");
-            console.log(students);
             let newStudents = students.filter((student) => {
-              if(student.id !== studentQueue[0].id){
-                return student
+              if (student.id !== studentQueue[0].id) {
+                return student;
               }
             });
-            setStudents(newStudents)
+            setStudents(newStudents);
           } else {
-            if(!data.boleta){
-              toast.error("Ha ocurrudo un error con uno de los estudiantes")
+            if (!data.boleta) {
+              toast.error("Ha ocurrudo un error con uno de los estudiantes");
               let newStudents = students.filter((student) => {
-                if(student.id !== studentQueue[0].id){
-                  return student
+                if (student.id !== studentQueue[0].id) {
+                  return student;
                 }
               });
-              setStudents(newStudents)
-              return
+              setStudents(newStudents);
+              return;
+            } else {
+              setStudents((prevStudents) => {
+                return prevStudents.map((student) => {
+                  if (student.id == id_queue) {
+                    return {
+                      ...student,
+                      boleta: data.boleta,
+                      apellido_alumno: data.apellido,
+                      nombre_alumno: data.nombre,
+                      numero_maquina: data.numero_maquina,
+                      url: data.url,
+                    };
+                  }
+                  return student;
+                });
+              });
             }
-            setStudents((prevStudents) => {
-              return prevStudents.map((student) => {
-                if (student.id == id_queue) {
-                  return {
-                    ...student,
-                    boleta: data.boleta,
-                    apellido_alumno: data.apellido,
-                    nombre_alumno: data.nombre,
-                    numero_maquina: data.numero_maquina,
-                    url: data.url,
-                  };
-                }
-                return student;
-              });
-            });
           }
-          console.log("queue: ", studentQueue);
+
           const NewQue = studentQueue.filter((student) => {
             if (student.id !== id_queue) {
               return student;
             }
           });
-          console.log("NewQueue: ", NewQue);
           setIsNewStudent(!isNewStudent);
           setStudentQueue(NewQue);
-          setIsProcessingStudent(false);
         } catch (e) {
           console.error(e);
         }
       } else {
       }
     };
-    updateStudent();
+    try {
+      updateStudent();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsProcessingStudent(false);
+    }
+    console.log("queue: ",studentQueue);
   }, [studentQueue]);
 
   useEffect(() => {
@@ -191,6 +203,10 @@ function ListStudent({ id_lista_asistencia }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (dataForm.url.length == 0) {
+      toast.warning("Ningun alumno escaneado");
+      return;
+    }
     const id_queue = crypto.randomUUID();
     setStudents([
       ...students,
@@ -212,17 +228,11 @@ function ListStudent({ id_lista_asistencia }) {
       id_lista_asistencia: "",
       url: "",
     });
+    setTimeout(() => {
+      inputURL.current.focus();
+    }, 500);
   };
-  const handleForm = () => {
-    setShowForm(!showForm);
-  };
-  const handleInput = (e) => {
-    setDataForm({
-      ...dataForm,
-      [e.target.name]: e.target.value,
-    });
-    //formRef.current.submit()
-  };
+
   const handleMaquina = (e) => {
     const val = formatText(e.target.name, e.target.value);
     setStudents((prevStudents) => {
@@ -250,6 +260,30 @@ function ListStudent({ id_lista_asistencia }) {
       localStorage.removeItem("listStudents");
     }
   };
+  const focusInputURL = () => {
+    inputURL.current.focus();
+  };
+  const handleInput = (e) => {
+    setDataForm({
+      ...dataForm,
+      [e.target.name]: e.target.value,
+    });
+    //formRef.current.submit()
+  };
+
+  const handleFocusInput = (e) => {
+    setIsBlurInput(false);
+    setTimeout(() => {
+      inputURL.current.focus();
+    }, 500);
+  };
+  const handleBlurInput = (e) => {
+    setIsBlurInput(true);
+  };
+  const handleForm = () => {
+    setShowForm(!showForm);
+  };
+
   const FormRegister = () => {
     return (
       <div
@@ -265,41 +299,55 @@ function ListStudent({ id_lista_asistencia }) {
       >
         <div className="bg-blue-700 text-white p-5 flex flex-col items-center justify-center rounded-lg">
           <div className="flex justify-end w-full">
-            <AiFillCloseCircle
-              size={30}
-              className="text-indigo-950 cursor-pointer"
-              onClick={handleForm}
-            />
-          </div>
-          {/*
-            <h2>Ingrese manual de momento</h2>
             <button
-              onClick={() =>
-                setDataForm({
-                  url: "https://servicios.dae.ipn.mx/vcred/?h=b65180be30f3f9dcf9713f09a04a799d88ceec72341b468c9336c38acf3dc2bf",
-                })
-              }
-              className="m-2 bg-blue p-3 rounded"
+              onClick={() => {
+                handleForm();
+              }}
+              className="text-white hover:text-white/60 cursor-pointer z-10"
+              role="dialog"
             >
-              Example
+              <AiFillCloseCircle size={30} />
             </button>
-            */}
+          </div>
+
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-2 relative"
             ref={formRef}
           >
             <input
-              className="bg-blue-800 p-2 rounded-full outline-none "
+              onFocus={handleFocusInput}
               type="text"
               name="url"
               placeholder="URL"
+              ref={inputURL}
+              onBlur={handleBlurInput}
               onChange={handleInput}
+              className="bg-blue-800 p-2 rounded-full outline-none "
               value={dataForm.url}
-              autoFocus
             />
-            <button className="bg-green p-2 rounded-lg">Agregar</button>
+            <button className="bg-green p-2 rounded-lg" type="submit">
+              Agregar
+            </button>
           </form>
+          {isBlurInput ? (
+            <button
+              onClick={focusInputURL}
+              className="absolute bg-blue-800 text-yellow shadow-2xl p-5 rounded-lg translate-y-[-150px] "
+            >
+              <span title="Enfocar">
+                <div className="flex flex-col items-center text-center">
+                  <CiWarning size={40} />
+                  Pestaña desenfocada
+                </div>
+              </span>
+            </button>
+          ) : (
+            <div className="absolute bg-blue-800 shadow-2xl p-4 rounded-lg translate-y-[-150px] flex flex-col items-center gap-2 text-green">
+              <FaCheckCircle size={35} />
+              Todo listo para escanear
+            </div>
+          )}
         </div>
       </div>
     );
@@ -307,17 +355,23 @@ function ListStudent({ id_lista_asistencia }) {
 
   return (
     <Suspense fallback={<Loading />}>
+      <FormRegister />
       <div className="bg-blue-800 rounded-lg p-3 shadow-lg z-10 text-white">
         <div className="flex justify-start">
           <button
             className="transition-all bg-purple border border-purple hover:bg-blue-800 hover:text-purple p-3 rounded-lg flex items-center"
-            onClick={handleForm}
+            onClick={async () => {
+              setTimeout(() => {
+                inputURL.current.focus();
+              }, 1000);
+              handleForm();
+            }}
           >
             <AiOutlineQrcode size={25} />
             <p>Iniciar registro con QR</p>
           </button>
         </div>
-        <ul className="grid grid-cols-6 text-center text-purple font-bold text-xl">
+        <ul className="grid grid-cols-6 text-center text-pink font-bold text-xl">
           <li>No. lista</li>
           <li>Apellido</li>
           <li>Nombre</li>
@@ -341,11 +395,16 @@ function ListStudent({ id_lista_asistencia }) {
                 <div className="grid sm:grid-cols-6 grid-cols-2 text-center justify-center mb-2">
                   <div className="flex justify-center">
                     <div className="flex items-center justify-between w-2/3 ">
+                      <button className="bg-yellow p-1 rounded-lg hover:bg-opacity-0 border border-yellow transition-all hover:text-yellow">
+                        <span title="Registrar incidente">
+                          <CiWarning size={25} />
+                        </span>
+                      </button>
                       <button
                         onClick={() => handleDeleteStudent(student.id)}
                         className="hover:text-pink transition-all"
                       >
-                        <CiCircleRemove size={20} />
+                        <CiCircleRemove size={25} />
                       </button>
                       <span title="Eliminar"></span>
                       <p>{i + 1}</p>
@@ -407,7 +466,6 @@ function ListStudent({ id_lista_asistencia }) {
           </button>
         </div>
       </div>
-      <FormRegister />
     </Suspense>
   );
 }

@@ -1,11 +1,11 @@
 "use client";
 import React, { useContext, useState } from "react";
 import GenPDFIncident from "./GenPDFIncident";
-import { formatText } from "./helpers/formatTextList.helper";
+import { formatText } from "../helpers/formatTextList.helper";
 import { FaTrash } from "react-icons/fa";
-import { AutoCompliteContext } from "./ContextDataAutoCompliteInput";
-import ButtonStyled from "./styled/ButtonStyled";
-import InputStyled from "./styled/InputStyled";
+import { AutoCompliteContext } from "../context/ContextDataAutoCompliteInput";
+import ButtonStyled from "../styled/ButtonStyled";
+import InputStyled from "../styled/InputStyled";
 
 function IncidentForm() {
   const { dataAutoComplite } = useContext(AutoCompliteContext);

@@ -1,17 +1,17 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { formatText } from "./helpers/formatTextList.helper";
+import { formatText } from "../helpers/formatTextList.helper";
 import AutoCompliteProvider, {
   AutoCompliteContext,
-} from "./ContextDataAutoCompliteInput";
+} from "../context/ContextDataAutoCompliteInput";
 import { CiCircleMinus, CiCirclePlus, CiSearch } from "react-icons/ci";
 import { AiOutlineReload } from "react-icons/ai";
-import InputStyled from "./styled/InputStyled";
+import InputStyled from "../styled/InputStyled";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import axios from "axios";
-import reportsFormatedWithDate from "./helpers/reportsFormatedWithDate";
-import { ReportListContext } from "./assistance/ListReportsContext";
-import ButtonStyled from "./styled/ButtonStyled";
+import reportsFormatedWithDate from "../helpers/reportsFormatedWithDate";
+import { ReportListContext } from "../assistance/ListReportsContext";
+import ButtonStyled from "../styled/ButtonStyled";
 function Search({ isChangeInput = false, searchByOtherType = "" }) {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [typeSearch, setChangeTypeSearch] = useState("text");

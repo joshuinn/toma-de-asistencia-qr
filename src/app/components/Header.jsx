@@ -1,7 +1,7 @@
 "use client"
 import React, { useContext } from "react";
 import { CiMenuBurger } from "react-icons/ci";
-import { SidebarContext } from "./SideBarResponsiveContext";
+import { SidebarContext } from "./context/SideBarResponsiveContext";
 
 function Header({ title, extra, colorTitle }) {
   const {isShow, handleShow} = useContext(SidebarContext)

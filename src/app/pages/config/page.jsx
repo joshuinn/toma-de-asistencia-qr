@@ -1,9 +1,9 @@
 "use client";
 import Header from "@/app/components/Header";
-import ChangePass from "@/app/components/ChangePass";
+import ChangePass from "@/app/components/config/ChangePass";
 import { Suspense, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { SessionContext } from "@/app/components/SessionContext";
+import { SessionContext } from "@/app/components/context/SessionContext";
 import Loading from "@/app/components/Loading";
 import InputStyled from "@/app/components/styled/InputStyled";
 

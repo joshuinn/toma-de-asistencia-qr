@@ -6,7 +6,7 @@ import Link from "next/link";
 import ButtonStyled from "./styled/ButtonStyled";
 import loadingIndividual from "./assistance/LoadingIndividual.module.css";
 import { ReportListContext } from "./assistance/ListReportsContext";
-import style from "./ReportsList.module.css";
+import style from "./reports/ReportsList.module.css";
 
 function TableGroups({ colorHeaders, typeSelect = "check" }) {
   const reports = useContext(ReportListContext);

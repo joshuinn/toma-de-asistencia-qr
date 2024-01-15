@@ -1,5 +1,5 @@
 import Header from "@/app/components/Header";
-import ReportsList from "@/app/components/ReportsList";
+import ReportsList from "@/app/components/reports/ReportsList";
 import ReportListProvider from "@/app/components/assistance/ListReportsContext";
 
 function ReportsPage() {

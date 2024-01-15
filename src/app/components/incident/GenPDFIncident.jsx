@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import { FaFilePdf } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
-import ButtonStyled from "./styled/ButtonStyled";
+import ButtonStyled from "../styled/ButtonStyled";
 
 const styles = StyleSheet.create({
   page: {

@@ -1,15 +1,15 @@
 "use client";
 import { useState, useContext } from "react";
-import Chart from "@/app/components/Chart";
+import Chart from "@/app/components/graphs/Chart";
 import { IoMdCloseCircle } from "react-icons/io";
 import { toast } from "sonner";
 import { FaListCheck } from "react-icons/fa6";
 import { BiMath } from "react-icons/bi";
-import ButtonStyled from "./styled/ButtonStyled";
-import Search from "./Search";
-import AutoCompliteProvider from "./ContextDataAutoCompliteInput";
-import TableGroups from "./TableGroups";
-import {ReportListContext} from "./assistance/ListReportsContext";
+import ButtonStyled from "../styled/ButtonStyled";
+import Search from "../search/Search";
+import AutoCompliteProvider from "../context/ContextDataAutoCompliteInput";
+import TableGroups from "../TableGroups";
+import {ReportListContext} from "../assistance/ListReportsContext";
 
 function ChartIndex() {
   const [isShowGraph, setIsShowGraph] = useState(false);

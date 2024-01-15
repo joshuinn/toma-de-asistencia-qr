@@ -3,7 +3,7 @@ import ReportListProvider from "@/app/components/assistance/ListReportsContext";
 import dynamic from "next/dynamic";
 import React from "react";
 
-const ChartIndex = dynamic(() => import("@/app/components/ChartIndex"));
+const ChartIndex = dynamic(() => import("@/app/components/graphs/ChartIndex"));
 
 function Graph() {
   return (

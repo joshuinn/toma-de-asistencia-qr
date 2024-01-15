@@ -3,11 +3,11 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import { SiMicrosoftexcel } from "react-icons/si";
-import { countStudents } from "./helpers/countStudents.helper";
-import ButtonStyled from "./styled/ButtonStyled";
+import { countStudents } from "../helpers/countStudents.helper";
+import ButtonStyled from "../styled/ButtonStyled";
 import { toast } from "sonner";
-import { ReportListContext } from "./assistance/ListReportsContext";
-import { getDateFormated } from "./helpers/dateFormated";
+import { ReportListContext } from "../assistance/ListReportsContext";
+import { getDateFormated } from "../helpers/dateFormated";
 
 function GenExcelReport({ fecha_min, fecha_max }) {
   const [listToExport, setListToExport] = useState([]);

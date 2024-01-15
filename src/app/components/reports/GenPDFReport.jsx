@@ -12,10 +12,10 @@ import { FaFilePdf } from "react-icons/fa";
 import { toast } from "sonner";
 import { IoMdCloseCircle } from "react-icons/io";
 import axios from "axios";
-import { countStudents } from "./helpers/countStudents.helper";
-import ButtonStyled from "./styled/ButtonStyled";
-import { ReportListContext } from "./assistance/ListReportsContext";
-import { getDateFormated } from "./helpers/dateFormated";
+import { countStudents } from "../helpers/countStudents.helper";
+import ButtonStyled from "../styled/ButtonStyled";
+import { ReportListContext } from "../assistance/ListReportsContext";
+import { getDateFormated } from "../helpers/dateFormated";
 
 const styles = StyleSheet.create({
   page: {

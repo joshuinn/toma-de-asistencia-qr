@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import { conn } from "@/lib/mysql";
-
 export async function POST(req) {
-  const data = await req.json();
   try {
+    const data = await req.json();
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -13,7 +12,7 @@ export async function POST(req) {
       auth: {
         user: "delmonteo.joshua@gmail.com",
         pass: process.env.EMAIL_PASSWORD,
-      },  
+      },
     });
     /*
     transporter.verify().then(()=>{
@@ -39,7 +38,7 @@ export async function POST(req) {
           to: res[0][0].correo,
           subject: "Recuperar cuenta",
           text: "Recuperación de la cuenta.",
-          html: `<a href='http://localhost:3000//pages/forgotPassword/${token}'>Cambiar contraseña</a>`,
+          html: `<a href='https://toma-de-asistencia-qr.vercel.app/pages/forgotPassword/${token}'>Cambiar contraseña</a>`,
         });
         if (info.messageId) {
           return NextResponse.json("ok");
@@ -61,7 +60,7 @@ export async function POST(req) {
         to: data.email,
         subject: "Invitación",
         text: "Un encargado te invitado a unirte: ",
-        html: `<a href='http://localhost:3000/pages/signUp/${token}'>Irme a registrar</a>`,
+        html: `<a href='https://toma-de-asistencia-qr.vercel.app/pages/signUp/${token}'>Irme a registrar</a>`,
       });
       if (info.messageId) {
         return NextResponse.json("ok");

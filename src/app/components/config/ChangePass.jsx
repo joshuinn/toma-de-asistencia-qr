@@ -1,11 +1,11 @@
 "use client";
 import { useContext, useEffect, useReducer, useState } from "react";
 import { FaEye, FaRegEyeSlash } from "react-icons/fa";
-import { SessionContext } from "./SessionContext";
+import { SessionContext } from "../context/SessionContext";
 import axios from "axios";
 import { toast } from "sonner";
-import ButtonStyled from "./styled/ButtonStyled";
-import InputStyled from "./styled/InputStyled";
+import ButtonStyled from "../styled/ButtonStyled";
+import InputStyled from "../styled/InputStyled";
 
 const showPassreducer = (state, action) => {
   switch (action.type) {

@@ -1,7 +1,7 @@
 "use client";
 import NewList from "./NewList";
-import Search from "../Search";
-import AutoCompliteProvider from "../ContextDataAutoCompliteInput";
+import Search from "../search/Search";
+import AutoCompliteProvider from "../context/ContextDataAutoCompliteInput";
 import TableGroups from "../TableGroups";
 import ReportListProvider from "./ListReportsContext";
 
@@ -19,7 +19,7 @@ export default function ListGroup() {
           </div>
         </AutoCompliteProvider>
         <div className="w-full sm:h-[78vh] 2xl:h-[80vh]">
-          <TableGroups colorHeaders="purple" typeSelect="takeList" />
+          <TableGroups colorHeaders="pink" typeSelect="takeList" />
         </div>
       </div>
     </ReportListProvider>

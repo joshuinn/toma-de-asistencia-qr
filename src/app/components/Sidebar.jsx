@@ -10,11 +10,11 @@ import {
 import { IoMdClose, IoMdPersonAdd } from "react-icons/io";
 import { AiFillWarning } from "react-icons/ai";
 import { BsFileEarmarkBarGraph, BsFillGearFill } from "react-icons/bs";
-import { SessionContext } from "./SessionContext";
+import { SessionContext } from "./context/SessionContext";
 import { Toaster } from "sonner";
 import Loading from "./Loading";
 import { usePathname } from "next/navigation";
-import { SidebarContext } from "./SideBarResponsiveContext";
+import { SidebarContext } from "./context/SideBarResponsiveContext";
 
 function Sidebar({ children }) {
   const [page, setPage] = useState("dashboard");
@@ -117,15 +117,15 @@ function Sidebar({ children }) {
               */}
             <Link href="/pages/assistence">
               <button
-                className={`flex items-center justify-start p-2 h-10 text-sm text-center
+                className={`flex items-center justify-start gap-2 p-2 h-10 text-sm text-center
                 ${
                   page == "assistence"
-                    ? " text-purple "
+                    ? " text-pink "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BiListPlus className="mr-3 text-start" size={25}/>
-                <p>Toma de Asistencia</p>
+                <BiListPlus size={25} />
+                <p>Asistencia</p>
               </button>
             </Link>
             <Link href="/pages/reports">
@@ -137,20 +137,20 @@ function Sidebar({ children }) {
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BiListUl className="mr-3" size={25} />
-                Reportes de asistencias
+                <BiListUl size={25} />
+                Reportes
               </button>
             </Link>
             <Link href="/pages/incident" prefetch={false}>
               <button
-                className={`flex sm:justify-between text-center  items-center  p-2 gap-2 h-10 text-sm w-10/12
+                className={`flex sm:justify-between text-center  items-center p-2 gap-2 h-10 text-sm 
                 ${
                   page == "incident"
                     ? " text-yellow "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <AiFillWarning className="mr-3" size={20} />
+                <AiFillWarning size={20} />
                 <p>Incidencias</p>
               </button>
             </Link>
@@ -159,12 +159,12 @@ function Sidebar({ children }) {
                 className={`flex items-center  p-2 gap-2 h-10 text-sm text-center
                 ${
                   page == "graphs"
-                    ? " text-green "
+                    ? " text-purple "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BsFileEarmarkBarGraph className="mr-3" size={20} />
-                <p>Porcentaje de asistencia</p>
+                <BsFileEarmarkBarGraph  size={20} />
+                <p>Gráficas </p>
               </button>
             </Link>
 
@@ -173,34 +173,34 @@ function Sidebar({ children }) {
                 className={`flex items-center p-2 gap-2 h-10 text-sm text-center
                 ${
                   page == "invite"
-                    ? " text-purple "
+                    ? " text-green "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <IoMdPersonAdd className="mr-3" size={20} />
+                <IoMdPersonAdd size={20} />
 
-                <p>Invitar a encargado</p>
+                <p>Invitar</p>
               </button>
             </Link>
             <Link href="/pages/config" prefetch={false}>
               <button
-                className={`flex items-center p-2 gap-2 h-10 text-sm sm:justify-between w-10/12
+                className={`flex items-center p-2 gap-2 h-10 text-sm sm:justify-between 
                 ${
                   page == "config"
                     ? " text-white "
                     : "text-gray-500 hover:text-gray-300"
                 }`}
               >
-                <BsFillGearFill className="mr-3" size={20} />
-                <p>Mi Cuenta</p>
+                <BsFillGearFill size={20} />
+                <p>Cuenta</p>
               </button>
             </Link>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center justify-between  h-10 text-left p-2 text-gray-500 hover:text-gray-300 text-sm"
+            className="flex items-center justify-between gap-2 h-10 text-left p-2 text-gray-500 hover:text-gray-300 text-sm"
           >
-            <BiLogOut size={20} className="mr-3" />
+            <BiLogOut size={20}  />
             <p>Salir de la cuenta</p>
           </button>
           <div className="hidden sm:flex justify-end bg-gray-300 absolute top-0 w-full">
@@ -213,15 +213,15 @@ function Sidebar({ children }) {
                   page == "dashboard"
                     ? "bg-pink"
                     : page == "assistence"
-                    ? "bg-purple"
+                    ? "bg-pink"
                     : page == "reports"
                     ? "bg-blue"
                     : page == "incident"
                     ? "bg-yellow"
                     : page == "graphs"
-                    ? "bg-green"
-                    : page == "invite"
                     ? "bg-purple"
+                    : page == "invite"
+                    ? "bg-green"
                     : "bg-white"
                 }`}
               ></div>

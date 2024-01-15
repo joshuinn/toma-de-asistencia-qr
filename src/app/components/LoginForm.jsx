@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { SessionContext } from "@/app/components/SessionContext";
+import { SessionContext } from "@/app/components/context/SessionContext";
 import { FaEye, FaRegEyeSlash, FaUserCircle } from "react-icons/fa";
 import ButtonStyled from "@/app/components/styled/ButtonStyled";
 import InputStyled from "@/app/components/styled/InputStyled";
