@@ -43,6 +43,7 @@ export async function POST(request) {
   } catch (e) {
     console.error(e);
   }
+  return NextResponse.json({ message: "error", status: 500 });
 }
 async function getStudent(url_student, id_lista_asistencia) {
   try {
