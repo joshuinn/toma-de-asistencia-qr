@@ -119,7 +119,13 @@ async function serchData(url) {
     let response = {};
     try {
       //response = await fetch(url, { httpsAgent })
-      response = await fetch(url, {})
+      const splitUrl = url.split("vcred/?h=");
+      let token_dae = "";
+      if (splitUrl[1]) {
+        token_dae = splitUrl[1];
+      }
+      const url_formated = "https://servicios.dae.ipn.mx/vcred/?h=" + token_dae;
+      response = await fetch(url_formated, {})
         .then((data) => data)
         .catch((e) => {
           console.log(e);

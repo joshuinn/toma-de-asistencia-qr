@@ -40,7 +40,6 @@ function ListStudent({ id_lista_asistencia }) {
   });
   const getDataStudent = async (student) => {
     try {
-      console.log(student);
       const isRegister = students.filter((_student) => {
         if (_student.url == student.url) {
           return _student;
@@ -161,7 +160,6 @@ function ListStudent({ id_lista_asistencia }) {
     } finally {
       setIsProcessingStudent(false);
     }
-    console.log("queue: ", studentQueue);
   }, [studentQueue]);
 
   useEffect(() => {
@@ -308,9 +306,13 @@ function ListStudent({ id_lista_asistencia }) {
     setShowForm(!showForm);
   };
   const handleIncident = (student) => {
-    console.log(student);
-    router.push(`/pages/incident/${student.apellido_alumno+" "+student.nombre_alumno}/${student.boleta}/${id_lista_asistencia}`);
-    router.refresh();
+    if(isProcessingStudent){
+      toast.warning("Recomendamos esperar que se termine de obtener los datos")
+    }else{
+      router.push(`/pages/incident/${student.apellido_alumno+" "+student.nombre_alumno}/${student.boleta}/${id_lista_asistencia}`);
+      router.refresh();
+      toast.success("La lista se guardo temporalmete 🔒")
+    }
   };
   const FormRegister = () => {
     return (

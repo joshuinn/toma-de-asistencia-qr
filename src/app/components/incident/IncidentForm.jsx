@@ -9,7 +9,7 @@ import InputStyled from "../styled/InputStyled";
 import { useParams } from "next/navigation";
 import axios from "axios";
 
- function IncidentForm() {
+function IncidentForm() {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [data, setData] = useState({
     grupo: "",
@@ -31,24 +31,21 @@ import axios from "axios";
         try {
           const response = await axios.get("/api/groups/" + params.id_lista);
           if (response.status == 200) {
+            let formatedName = params.nombre.split("%20");
+            formatedName = formatedName.join(" ");
             const data = response.data;
             setData({
               ...data,
-              ciclo: await data.ciclo,
-              grupo: await data.grupo,
-              maestro: await data.maestro,
-              laboratorio: await data.laboratorio,
+              ciclo: (await data.ciclo) ?? "",
+              grupo: (await data.grupo) ?? "",
+              maestro: (await data.maestro) ?? "",
+              laboratorio: (await data.laboratorio) ?? "",
+              nombre: formatedName ?? "",
+              boleta: params.boleta ?? "",
             });
           }
         } catch (error) {}
       };
-      let formatedName = params.nombre.split("%20");
-      formatedName = formatedName.join(" ");
-      setData({
-        ...data,
-        nombre: formatedName,
-        boleta: params.boleta,
-      });
       getDataList();
     }
   }, []);

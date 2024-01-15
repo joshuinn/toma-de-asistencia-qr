@@ -5,7 +5,13 @@ import { createContext, useEffect, useState } from "react";
 export const AutoCompliteContext = createContext(null);
 
 const AutoCompliteProvider = ({ children }) => {
-  const [dataAutoComplite, setDataAutoComplite] = useState([]);
+  const [dataAutoComplite, setDataAutoComplite] = useState({
+    ciclo: [],
+    grupo: [],
+    laboratorio: [],
+    maestro: [],
+    materia: [],
+  });
   const [isUpdate, setIsUpdate] = useState(false);
   const handleUpdate = () => {
     setIsUpdate(!isUpdate);
@@ -21,7 +27,6 @@ const AutoCompliteProvider = ({ children }) => {
     };
     getdataAutoComplite();
   }, [isUpdate]);
-
   return (
     <AutoCompliteContext.Provider value={{ dataAutoComplite, handleUpdate }}>
       {children}
@@ -29,4 +34,4 @@ const AutoCompliteProvider = ({ children }) => {
   );
 };
 
-export default AutoCompliteProvider
+export default AutoCompliteProvider;
