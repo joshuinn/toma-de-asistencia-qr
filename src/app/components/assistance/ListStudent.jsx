@@ -30,26 +30,37 @@ function ListStudent({ id_lista_asistencia }) {
   const formRef = useRef(null);
   const [isProcessingStudent, setIsProcessingStudent] = useState(false);
   const [dataForm, setDataForm] = useState({
-    url: "",
     id_lista_asistencia: id_lista_asistencia,
   });
   const getDataStudent = async (student) => {
     try {
-      const { data } = await axios.post("/api/webScrapping", {
+      const isRegister = students.filter((_student) => {
+        if (_student.url == student.url) {
+          return _student;
+        }
+      });
+      if (isRegister.length > 0) {
+        return { isRegister: true };
+      }
+      const response = await axios.post("/api/webScrapping", {
         student,
         id_lista_asistencia,
       });
-      if (data.nombre) {
-        return {
-          nombre: data.nombre.nombre,
-          apellido: data.nombre.apellido,
-          boleta: data.boleta,
-          numero_maquina: data.numero_maquina,
-        };
+      if (response.data) {
+        if (response.data.nombre) {
+          return {
+            nombre: response.data.nombre.nombre,
+            apellido: response.data.nombre.apellido,
+            boleta: response.data.boleta,
+            numero_maquina: response.data.numero_maquina,
+            url: student.url,
+          };
+        }
       }
     } catch (e) {
       console.log(e);
     }
+    return {error:"some error"}
   };
   const handleEndList = async () => {
     try {
@@ -83,35 +94,49 @@ function ListStudent({ id_lista_asistencia }) {
           const data = await getDataStudent(studentQueue[0].data)
             .then((res) => res)
             .catch((e) => e);
-          setStudents((prevStudents) => {
-            return prevStudents.map((student) => {
-              if (student.id == id_queue && !data) {
-                toast.error("ha ocurrudo un error con uno de los estudiantes");
-                return {
-                  ...student,
-                  boleta: "error",
-                };
+          if (data.isRegister) {
+            toast.warning("Alumno ya registrado");
+            console.log(students);
+            let newStudents = students.filter((student) => {
+              if(student.id !== studentQueue[0].id){
+                return student
               }
-              if (student.id == id_queue && data.boleta) {
-                return {
-                  ...student,
-                  boleta: data.boleta,
-                  apellido_alumno: data.apellido,
-                  nombre_alumno: data.nombre,
-                  numero_maquina: data.numero_maquina,
-                };
-              }
-              return student;
             });
-          });
-          console.log("students: ", studentQueue);
-          console.log("id: ", id_queue);
+            setStudents(newStudents)
+          } else {
+            if(!data.boleta){
+              toast.error("Ha ocurrudo un error con uno de los estudiantes")
+              let newStudents = students.filter((student) => {
+                if(student.id !== studentQueue[0].id){
+                  return student
+                }
+              });
+              setStudents(newStudents)
+              return
+            }
+            setStudents((prevStudents) => {
+              return prevStudents.map((student) => {
+                if (student.id == id_queue) {
+                  return {
+                    ...student,
+                    boleta: data.boleta,
+                    apellido_alumno: data.apellido,
+                    nombre_alumno: data.nombre,
+                    numero_maquina: data.numero_maquina,
+                    url: data.url,
+                  };
+                }
+                return student;
+              });
+            });
+          }
+          console.log("queue: ", studentQueue);
           const NewQue = studentQueue.filter((student) => {
             if (student.id !== id_queue) {
               return student;
             }
           });
-          console.log("new list",NewQue);
+          console.log("NewQueue: ", NewQue);
           setIsNewStudent(!isNewStudent);
           setStudentQueue(NewQue);
           setIsProcessingStudent(false);
@@ -131,19 +156,6 @@ function ListStudent({ id_lista_asistencia }) {
       );
       if (newList.length !== students.length) {
         setStudents(newList);
-      } else {
-        const newList = students.reduce((student, object) => {
-          if (object.boleta == "waiting") {
-            return [...student, object];
-          }
-          return student.some((datos) => datos.boleta === object.boleta)
-            ? student
-            : [...student, object];
-        }, []);
-        if (newList.length !== students.length) {
-          setStudents(newList);
-          toast.warning("Alumno ya registrado");
-        }
       }
       localStorage.setItem(
         "listStudents",
@@ -156,7 +168,12 @@ function ListStudent({ id_lista_asistencia }) {
     const storageList = JSON.parse(localStorage.getItem("listStudents"));
     if (storageList) {
       if (storageList.id_lista_asistencia == id_lista_asistencia) {
-        setStudents(storageList.students);
+        let newList = storageList.students.filter((student) => {
+          if (student.boleta !== "waiting") {
+            return student;
+          }
+        });
+        setStudents(newList);
       }
     }
   }, []);
@@ -171,26 +188,7 @@ function ListStudent({ id_lista_asistencia }) {
       setStudents(newList);
     }
   }, [isNewStudent]);
-  useEffect(() => {
-    console.log("lista:" ,studentQueue);
-    if (!isProcessingStudent) {
-      if (studentQueue.length == 0) {
-        if (students.length > 0) {
-          //console.log("students: ", students);
-          const newList = students.filter((student) => {
-            //console.log(student.boleta);
 
-              return student.boleta == "waiting" ? null : student;
-            });
-            //console.log("newLisT: ", newList);
-
-            if (students.length !== newList) {
-              setStudents(newList);
-            }
-          }
-      }
-    }
-  }, [studentQueue]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id_queue = crypto.randomUUID();

@@ -44,6 +44,7 @@ async function getIdStudent(student) {
     nombre_alumno: student.nombre_alumno,
     apellido_alumno: student.apellido_alumno,
     boleta: student.boleta,
+    url_alumno:student.url
   });
   return getIdStudent(student);
 }
