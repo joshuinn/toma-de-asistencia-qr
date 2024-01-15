@@ -1,13 +1,15 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GenPDFIncident from "./GenPDFIncident";
 import { formatText } from "../helpers/formatTextList.helper";
 import { FaTrash } from "react-icons/fa";
 import { AutoCompliteContext } from "../context/ContextDataAutoCompliteInput";
 import ButtonStyled from "../styled/ButtonStyled";
 import InputStyled from "../styled/InputStyled";
+import { useParams } from "next/navigation";
+import axios from "axios";
 
-function IncidentForm() {
+ function IncidentForm() {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [data, setData] = useState({
     grupo: "",
@@ -18,24 +20,38 @@ function IncidentForm() {
     laboratorio: "",
     observaciones: "",
   });
+  const params = useParams();
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submiting");
   };
-  /*
-  const BtnDownload = useCallback(() => {
-    return (
-      <PDFDownloadLink
-        document={<ReportPDF list={data} />}
-        fileName="reporte.pdf"
-        className="hidden"
-      >
-        <input type="button" ref={downloadRef}></input>
-      </PDFDownloadLink>
-    );
+  useEffect(() => {
+    if (params.nombre) {
+      const getDataList = async () => {
+        try {
+          const response = await axios.get("/api/groups/" + params.id_lista);
+          if (response.status == 200) {
+            const data = response.data;
+            setData({
+              ...data,
+              ciclo: await data.ciclo,
+              grupo: await data.grupo,
+              maestro: await data.maestro,
+              laboratorio: await data.laboratorio,
+            });
+          }
+        } catch (error) {}
+      };
+      let formatedName = params.nombre.split("%20");
+      formatedName = formatedName.join(" ");
+      setData({
+        ...data,
+        nombre: formatedName,
+        boleta: params.boleta,
+      });
+      getDataList();
+    }
   }, []);
-  
-  */
   const handleInput = (e) => {
     const textFomated = formatText(e.target.name, e.target.value);
     setData({
@@ -150,7 +166,8 @@ function IncidentForm() {
                 ? dataAutoComplite.laboratorio.map((item) => (
                     <option
                       value={item.laboratorio}
-                      key={item.id_laboratorio}></option>
+                      key={item.id_laboratorio}
+                    ></option>
                   ))
                 : null}
             </datalist>
@@ -164,7 +181,8 @@ function IncidentForm() {
             className="bg-blue-800 p-4 rounded-lg outline-none h-[200px] max-h-[calc(50vh)]"
             name="observaciones"
             onChange={handleInput}
-            value={data.observaciones}></textarea>
+            value={data.observaciones}
+          ></textarea>
           <div className="flex flex-wrap justify-center sm:justify-end gap-4">
             <ButtonStyled onClick={handleClean} color="purple" type="reset">
               Limpiar

@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 //import puppeteer from "puppeteer";
 import { conn } from "@/lib/mysql";
 import { JSDOM } from "jsdom";
-import axios from "axios";
+//import https from "https";
+//import path from "path";
+//import rootCast from "ssl-root-cas";
 export async function POST(request) {
   try {
     const data = await request.json();
-    let result = {};
-    console.log(data.student.url);
+    let result;
     result = await getStudent(data.student.url, data.id_lista_asistencia);
     if (!result) {
       result = await serchData(data.student.url)
@@ -112,9 +113,13 @@ async function getLastNumberStudent(boleta, id_lista_asistencia) {
 
 async function serchData(url) {
   try {
+    //const root = rootCast.create();
+    //root.addFile(path.resolve(__dirname, "intermediate.pem"));
+    //const httpsAgent = new https.Agent({ ca: root });
     let response = {};
     try {
-      response = await fetch(url,{})
+      //response = await fetch(url, { httpsAgent })
+      response = await fetch(url, {})
         .then((data) => data)
         .catch((e) => {
           console.log(e);

@@ -78,7 +78,7 @@ function ListStudent({ id_lista_asistencia }) {
       ]);
       //console.log(response);
       if (response.status == 200) {
-        localStorage.removeItem("listStudents");
+        localStorage.removeItem("listStudents"+id_lista_asistencia);
         toast.success("Se ha guardado correctamente la lista de asistencia");
         router.push("/pages/assistence");
         router.refresh();
@@ -173,14 +173,14 @@ function ListStudent({ id_lista_asistencia }) {
         setStudents(newList);
       }
       localStorage.setItem(
-        "listStudents",
+        "listStudents"+id_lista_asistencia,
         JSON.stringify({ students, id_lista_asistencia })
       );
     }
   }, [students]);
 
   useEffect(() => {
-    const storageList = JSON.parse(localStorage.getItem("listStudents"));
+    const storageList = JSON.parse(localStorage.getItem("listStudents"+id_lista_asistencia));
     if (storageList) {
       if (storageList.id_lista_asistencia == id_lista_asistencia) {
         let newList = storageList.students.filter((student) => {
@@ -203,11 +203,31 @@ function ListStudent({ id_lista_asistencia }) {
       setStudents(newList);
     }
   }, [isNewStudent]);
-
+  const isValidURL = (urlString) => {
+    const patroURL = new RegExp(
+      "^(https?:\\/\\/)?" +
+        // valida nombre de dominio
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" +
+        // valida OR direccion ip (v4)
+        "((\\d{1,3}\\.){3}\\d{1,3}))" +
+        // valida puerto y path
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
+        // valida queries
+        "(\\?[;&a-z\\d%_.~+=-]*)?" +
+        // valida fragment locator
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
+    );
+    return !!patroURL.test(urlString);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (dataForm.url.length == 0) {
       toast.warning("Ningun alumno escaneado");
+      return;
+    }
+    if (!isValidURL(dataForm.url)) {
+      toast.error("Es posible que el scanner tenga otro idioma");
       return;
     }
     const id_queue = crypto.randomUUID();
@@ -260,12 +280,13 @@ function ListStudent({ id_lista_asistencia }) {
     );
     setStudents(newList);
     if (newList.length == 0) {
-      localStorage.removeItem("listStudents");
+      localStorage.removeItem("listStudents"+id_lista_asistencia);
     }
   };
   const focusInputURL = () => {
     inputURL.current.focus();
   };
+
   const handleInput = (e) => {
     setDataForm({
       ...dataForm,
@@ -286,7 +307,11 @@ function ListStudent({ id_lista_asistencia }) {
   const handleForm = () => {
     setShowForm(!showForm);
   };
-
+  const handleIncident = (student) => {
+    console.log(student);
+    router.push(`/pages/incident/${student.apellido_alumno+" "+student.nombre_alumno}/${student.boleta}/${id_lista_asistencia}`);
+    router.refresh();
+  };
   const FormRegister = () => {
     return (
       <div
@@ -399,7 +424,10 @@ function ListStudent({ id_lista_asistencia }) {
                 <div className="grid sm:grid-cols-6 grid-cols-2 text-center justify-center mb-2">
                   <div className="flex justify-center">
                     <div className="flex items-center justify-between w-2/3 ">
-                      <button className="bg-yellow p-1 rounded-lg hover:bg-opacity-0 border border-yellow transition-all hover:text-yellow">
+                      <button
+                        className="bg-yellow p-1 rounded-lg hover:bg-opacity-0 border border-yellow transition-all hover:text-yellow"
+                        onClick={() => handleIncident(student)}
+                      >
                         <span title="Registrar incidente">
                           <CiWarning size={25} />
                         </span>
