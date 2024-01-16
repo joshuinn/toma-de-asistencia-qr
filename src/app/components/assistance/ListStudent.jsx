@@ -6,33 +6,30 @@ import React, {
   Suspense,
   useContext,
   useRef,
-  useCallback,
-  useMemo,
-  memo,
 } from "react";
-import { AiFillCloseCircle, AiOutlineQrcode } from "react-icons/ai";
-import { RiInboxUnarchiveFill } from "react-icons/ri";
 import Loading from "../Loading";
 import { toast } from "sonner";
 import loaderIndividual from "./LoadingIndividual.module.css";
+import ButtonStyled from "../styled/ButtonStyled";
+import FormRegister from "./FormRegister";
+import FormManualInput from "./FormManualInput";
+import { AiOutlineQrcode } from "react-icons/ai";
+import { RiInboxUnarchiveFill } from "react-icons/ri";
+import { GoPencil } from "react-icons/go";
 import { useRouter } from "next/navigation";
 import { SessionContext } from "../context/SessionContext";
 import { formatText } from "../helpers/formatTextList.helper";
 import { CiCircleRemove, CiWarning } from "react-icons/ci";
 import { FaCheckCircle } from "react-icons/fa";
-import InputStyled from "../styled/InputStyled";
-import ButtonStyled from "../styled/ButtonStyled";
 
 function ListStudent({ id_lista_asistencia }) {
   const router = useRouter();
-  const formRef = useRef(null);
-  const inputURL = useRef(null);
+
   const focusedInputRef = useRef(null);
   const [students, setStudents] = useState([]);
   const [studentQueue, setStudentQueue] = useState([]);
   const [isNewStudent, setIsNewStudent] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [isBlurInput, setIsBlurInput] = useState(false);
   const { dataUser } = useContext(SessionContext);
   const [currentInputId, setCurrentInputId] = useState(null);
   const [isProcessingStudent, setIsProcessingStudent] = useState(false);
@@ -259,9 +256,6 @@ function ListStudent({ id_lista_asistencia }) {
       id_lista_asistencia: "",
       url: "",
     });
-    setTimeout(() => {
-      inputURL.current.focus();
-    }, 500);
   };
 
   const handleMaquina = (e) => {
@@ -291,38 +285,29 @@ function ListStudent({ id_lista_asistencia }) {
       localStorage.removeItem("listStudents" + id_lista_asistencia);
     }
   };
-  const focusInputURL = () => {
-    inputURL.current.focus();
-  };
 
-  const handleInput = (e) => {
-    setDataForm({
-      ...dataForm,
-      [e.target.name]: e.target.value,
-    });
-    //formRef.current.submit()
-  };
-
-  const handleFocusInput = (e) => {
-    setIsBlurInput(false);
-    setTimeout(() => {
-      inputURL.current.focus();
-    }, 500);
-  };
-  const handleBlurInput = (e) => {
-    setIsBlurInput(true);
-  };
   const handleForm = () => {
     setShowForm(!showForm);
   };
   const handleSubmitManual = (e) => {
     e.preventDefault();
-  };
-  const handleManualInput = (e) => {
     setManualData({
-      [e.target.name]: e.target.value,
+      apellido_alumno: "",
+      nombre_alumno: "",
+      boleta: "",
     });
+    const id = crypto.randomUUID();
+    setStudents([
+      ...students,
+      {
+        boleta: manualData.boleta,
+        apellido_alumno: manualData.apellido_alumno,
+        nombre_alumno: manualData.nombre_alumno,
+        id: id,
+      },
+    ]);
   };
+
   const handleShowInputsManuals = () => {
     setIsShowInputsManuals(!isShowInputsManuals);
   };
@@ -341,148 +326,33 @@ function ListStudent({ id_lista_asistencia }) {
       toast.info("La lista se guardo temporalmete! 🔒");
     }
   };
-  const FormManualInput = () => {
-    return (
-      <div
-        className={`w-[calc(100%-13rem)] h-screen top-0 absolute flex justify-center items-center
-      transition-all
-      ease-in-out
-      z-30
-      ${
-        isShowInputsManuals ? " bg-[rgb(0,0,0,0.5)] left-[13rem]" : "right-full opacity-0 "
-      }`
-    }
-      >
-        <div className="mt-2 text-center absolute bg-blue-600 text-white p-4 rounded-lg">
-          <p className="text-bold ">¿Hubo algun problema con el alumno?</p>
-          <div className="flex justify-center">
-            <ButtonStyled color="purple" onClick={handleShowInputsManuals}>
-              Agregar manual{" "}
-            </ButtonStyled>
-          </div>
-          {!isShowInputsManuals ? null : (
-            <form onSubmit={handleSubmitManual}>
-              <div className="flex flex-col gap-3 p-2">
-                <InputStyled
-                  placeholder="Apellido"
-                  type="text"
-                  name="apellido"
-                  onChange={handleManualInput}
-                  value={manualData.apellido_alumno}
-                />
-                <InputStyled
-                  placeholder="Nombre"
-                  type="text"
-                  name="nombre"
-                  onChange={handleManualInput}
-                  value={manualData.apellido_alumno}
-                />
-                <InputStyled
-                  placeholder="Boleta"
-                  type="text"
-                  name="Boleta"
-                  onChange={handleManualInput}
-                  value={manualData.apellido_alumno}
-                />
-                <ButtonStyled color="purple">
-                  <p>Registrar</p>
-                </ButtonStyled>
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    );
-  };
-  const FormRegister = () => {
-    return (
-      <div
-        className={`
-       w-[calc(100%-13rem)] h-screen top-0 absolute flex justify-center items-center
-      transition-all
-      ease-in-out
-      z-30
-      ${
-        showForm ? " bg-[rgb(0,0,0,0.5)] left-[13rem]" : "right-full opacity-0 "
-      }
-      `}
-      >
-        <div className="bg-blue-700 text-white p-5 flex flex-col items-center justify-center rounded-lg">
-          <div className="flex justify-end w-full relative">
-            <button
-              onClick={() => {
-                handleForm();
-              }}
-              className="text-white hover:text-white/60 cursor-pointer z-10"
-              role="dialog"
-            >
-              <AiFillCloseCircle size={30} />
-            </button>
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-2"
-            ref={formRef}
-          >
-            <input
-              //onFocus={handleFocusInput}
-              autoFocus
-              type="text"
-              name="url"
-              placeholder="URL"
-              ref={inputURL}
-              //onBlur={handleBlurInput}
-              onChange={handleInput}
-              className="bg-blue-800 p-2 rounded-full outline-none "
-              value={dataForm.url}
-            />
-            <button className="bg-green p-2 rounded-lg" type="submit">
-              Agregar
-            </button>
-          </form>
-          {isBlurInput ? (
-            <button
-              onClick={focusInputURL}
-              className="absolute bg-blue-800 text-yellow shadow-2xl p-5 rounded-lg translate-y-[-150px] "
-            >
-              <span title="Enfocar">
-                <div className="flex flex-col items-center text-center">
-                  <CiWarning size={40} />
-                  Pestaña desenfocada
-                </div>
-              </span>
-            </button>
-          ) : (
-            <div className="absolute top-0 right-0 m-5 bg-blue-800 shadow-2xl p-4 rounded-lg flex flex-col items-center gap-2 text-green">
-              <FaCheckCircle size={35} />
-              Todo listo para escanear
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <Suspense fallback={<Loading />}>
-      <FormRegister />
-      <FormManualInput />
+      <FormRegister
+        handleForm={handleForm}
+        setDataForm={setDataForm}
+        showForm={showForm}
+        handleSubmit={handleSubmit}
+        dataForm={dataForm}
+      />
+      <FormManualInput
+        handleSubmitManual={handleSubmitManual}
+        handleShowInputsManuals={handleShowInputsManuals}
+        isShowInputsManuals={isShowInputsManuals}
+        manualData={manualData}
+        setManualData={setManualData}
+      />
       <div className="bg-blue-800 rounded-lg p-3 shadow-lg z-10 text-white">
         <div className="flex justify-start gap-3">
-          <button
-            className="transition-all bg-purple border border-purple hover:bg-blue-800 hover:text-purple p-3 rounded-lg flex items-center"
-            onClick={async () => {
-              setTimeout(() => {
-                inputURL.current.focus();
-              }, 1000);registro
-              handleForm();
-            }}
-          >
+          <ButtonStyled color="pink" onClick={handleForm}>
             <AiOutlineQrcode size={25} />
             <p>Iniciar registro con QR</p>
-          </button>
-          <ButtonStyled color="yellow">Registrar manual</ButtonStyled>
+          </ButtonStyled>
+          <ButtonStyled color="purple" onClick={handleShowInputsManuals}>
+            <GoPencil />
+            <p>Registro manual</p>
+          </ButtonStyled>
         </div>
         <ul className="grid grid-cols-6 text-center text-pink font-bold text-xl">
           <li>No. lista</li>
@@ -575,7 +445,7 @@ function ListStudent({ id_lista_asistencia }) {
               //console.log();
               handleEndList();
             }}
-            disabled={studentQueue.length > 0}
+            disabled={studentQueue.length > 0 || students.length == 0}
           >
             <p>Terminar registro</p>
             <RiInboxUnarchiveFill size={25} />

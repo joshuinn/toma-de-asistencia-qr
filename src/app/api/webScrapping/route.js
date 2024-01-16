@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 //import puppeteer from "puppeteer";
 import { conn } from "@/lib/mysql";
 import { JSDOM } from "jsdom";
+import { studentNameFormated } from "@/app/components/helpers/studentNameFormated";
 //import https from "https";
 //import path from "path";
 //import rootCast from "ssl-root-cas";
@@ -83,15 +84,21 @@ function getFormatedName(name) {
     for (let i = 0; i <= imax - 3; i++) {
       nombre += splitName[i] + " ";
     }
+    const apellido = studentNameFormated(
+      lastName[0] + " " + lastName[1] + " " + lastName[2]
+    );
+    const nombreFormated = studentNameFormated(nombre);
     return {
-      apellido: lastName[0] + " " + lastName[1] + " " + lastName[2],
-      nombre: nombre,
+      apellido: apellido,
+      nombre: nombreFormated,
     };
   }
   for (let i = 0; i <= imax - 2; i++) {
     nombre += splitName[i] + " ";
   }
-  return { apellido: lastName[1] + " " + lastName[2], nombre: nombre };
+  const apellido = studentNameFormated(lastName[1] + " " + lastName[2]);
+  const nombreFormated = studentNameFormated(nombre);
+  return { apellido: apellido, nombre: nombreFormated };
 }
 async function getLastNumberStudent(boleta, id_lista_asistencia) {
   try {
