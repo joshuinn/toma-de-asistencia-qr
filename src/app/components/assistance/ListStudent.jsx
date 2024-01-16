@@ -6,6 +6,8 @@ import React, {
   Suspense,
   useContext,
   useRef,
+  useMemo,
+  useCallback,
 } from "react";
 import Loading from "../Loading";
 import { toast } from "sonner";
@@ -28,7 +30,6 @@ function ListStudent({ id_lista_asistencia }) {
   const focusedInputRef = useRef(null);
   const [students, setStudents] = useState([]);
   const [studentQueue, setStudentQueue] = useState([]);
-  const [isNewStudent, setIsNewStudent] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const { dataUser } = useContext(SessionContext);
   const [currentInputId, setCurrentInputId] = useState(null);
@@ -107,21 +108,25 @@ function ListStudent({ id_lista_asistencia }) {
             .catch((e) => e);
           if (data.isRegister) {
             toast.warning("Alumno ya registrado");
-            let newStudents = students.filter((student) => {
-              if (student.id !== studentQueue[0].id) {
-                return student;
-              }
-            });
-            setStudents(newStudents);
-          } else {
-            if (!data.boleta) {
-              toast.error("Ha ocurrudo un error con uno de los estudiantes");
-              let newStudents = students.filter((student) => {
+            setStudents((prev) => {
+              let newStudents = prev.filter((student) => {
                 if (student.id !== studentQueue[0].id) {
                   return student;
                 }
               });
-              setStudents(newStudents);
+              return newStudents;
+            });
+          } else {
+            if (!data.boleta) {
+              toast.error("Ha ocurrudo un error con uno de los estudiantes");
+              setStudents(() => {
+                let newStudents = prev.filter((student) => {
+                  if (student.id !== studentQueue[0].id) {
+                    return student;
+                  }
+                });
+                return newStudents;
+              });
             } else {
               setStudents((prevStudents) => {
                 return prevStudents.map((student) => {
@@ -139,19 +144,23 @@ function ListStudent({ id_lista_asistencia }) {
                 });
               });
             }
+            //sort and save
+            sortStudent();
           }
           /*const NewQue = studentQueue.filter((student) => {
             if (student.id !== id_queue) {
               return student;
             }
           });*/
-          const NewQue = studentQueue.filter((student) => {
-            if (student.id !== id_queue) {
-              return student;
-            }
+
+          setStudentQueue((prev) => {
+            let NewQueue = prev.filter((student) => {
+              if (student.id !== id_queue) {
+                return student;
+              }
+            });
+            return NewQueue;
           });
-          setIsNewStudent(!isNewStudent);
-          setStudentQueue(NewQue);
         } catch (e) {
           console.error(e);
         }
@@ -168,21 +177,6 @@ function ListStudent({ id_lista_asistencia }) {
   }, [studentQueue]);
 
   useEffect(() => {
-    if (students.length > 0) {
-      let newList = students.filter((student) =>
-        student.boleta !== "error" ? student : null
-      );
-      if (newList.length !== students.length) {
-        setStudents(newList);
-      }
-      localStorage.setItem(
-        "listStudents" + id_lista_asistencia,
-        JSON.stringify({ students, id_lista_asistencia })
-      );
-    }
-  }, [students]);
-
-  useEffect(() => {
     const storageList = JSON.parse(
       localStorage.getItem("listStudents" + id_lista_asistencia)
     );
@@ -197,17 +191,7 @@ function ListStudent({ id_lista_asistencia }) {
       }
     }
   }, []);
-  useEffect(() => {
-    if (students.length > 1) {
-      let newList = [...students];
-      newList.sort((a, b) => {
-        let mergeNameA = a.apellido_alumno + " " + a.nombre_alumno;
-        let mergeNameB = b.apellido_alumno + " " + b.nombre_alumno;
-        return mergeNameA.localeCompare(mergeNameB);
-      });
-      setStudents(newList);
-    }
-  }, [isNewStudent]);
+
   const isValidURL = (urlString) => {
     const patroURL = new RegExp(
       "^(https?:\\/\\/)?" +
@@ -225,6 +209,50 @@ function ListStudent({ id_lista_asistencia }) {
     );
     return !!patroURL.test(urlString);
   };
+  const sortStudent = useCallback(() => {
+    setStudents((prev) => {
+      if (prev.length > 1) {
+        let newList = [...prev];
+        return newList.sort((a, b) => {
+          let mergeNameA = a.apellido_alumno + " " + a.nombre_alumno;
+          let mergeNameB = b.apellido_alumno + " " + b.nombre_alumno;
+          return mergeNameA.localeCompare(mergeNameB);
+        });
+      }
+      return prev;
+    });
+    setStudents((prev) => {
+      if (prev.length > 0) {
+        localStorage.setItem(
+          "listStudents" + id_lista_asistencia,
+          JSON.stringify({ students, id_lista_asistencia })
+        );
+        return prev;
+      }
+      return prev;
+    });
+  }, [students]);
+  const handleSubmitManual = (e) => {
+    e.preventDefault();
+    const id = crypto.randomUUID();
+    setStudents((prev) => {
+      return [
+        ...prev,
+        {
+          boleta: manualData.boleta,
+          apellido_alumno: manualData.apellido_alumno,
+          nombre_alumno: manualData.nombre_alumno,
+          id: id,
+        },
+      ];
+    });
+    setManualData({
+      apellido_alumno: "",
+      nombre_alumno: "",
+      boleta: "",
+    });
+    sortStudent();
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (dataForm.url.length == 0) {
@@ -236,22 +264,26 @@ function ListStudent({ id_lista_asistencia }) {
       return;
     }
     const id_queue = crypto.randomUUID();
-    setStudents([
-      ...students,
-      {
-        boleta: "waiting",
-        apellido_alumno: "waiting",
-        nombre_alumno: "waiting",
-        id: id_queue,
-      },
-    ]);
-    setStudentQueue([
-      ...studentQueue,
-      {
-        id: id_queue,
-        data: dataForm,
-      },
-    ]);
+    setStudents((prev) => {
+      return [
+        ...prev,
+        {
+          boleta: "waiting",
+          apellido_alumno: "waiting",
+          nombre_alumno: "waiting",
+          id: id_queue,
+        },
+      ];
+    });
+    setStudentQueue((prev) => {
+      return [
+        ...prev,
+        {
+          id: id_queue,
+          data: dataForm,
+        },
+      ];
+    });
     setDataForm({
       id_lista_asistencia: "",
       url: "",
@@ -277,35 +309,19 @@ function ListStudent({ id_lista_asistencia }) {
     setCurrentInputId(e.target.id);
   };
   const handleDeleteStudent = (id) => {
-    let newList = students.filter((student) =>
-      student.id !== id ? student : null
-    );
-    setStudents(newList);
-    if (newList.length == 0) {
-      localStorage.removeItem("listStudents" + id_lista_asistencia);
-    }
+    setStudents((prev) => {
+      let newList = prev.filter((student) =>
+        student.id !== id ? student : null
+      );
+      if (newList.length == 0) {
+        localStorage.removeItem("listStudents" + id_lista_asistencia);
+      }
+      return newList;
+    });
   };
 
   const handleForm = () => {
     setShowForm(!showForm);
-  };
-  const handleSubmitManual = (e) => {
-    e.preventDefault();
-    setManualData({
-      apellido_alumno: "",
-      nombre_alumno: "",
-      boleta: "",
-    });
-    const id = crypto.randomUUID();
-    setStudents([
-      ...students,
-      {
-        boleta: manualData.boleta,
-        apellido_alumno: manualData.apellido_alumno,
-        nombre_alumno: manualData.nombre_alumno,
-        id: id,
-      },
-    ]);
   };
 
   const handleShowInputsManuals = () => {
