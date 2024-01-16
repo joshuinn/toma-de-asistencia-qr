@@ -20,6 +20,8 @@ import { SessionContext } from "../context/SessionContext";
 import { formatText } from "../helpers/formatTextList.helper";
 import { CiCircleRemove, CiWarning } from "react-icons/ci";
 import { FaCheckCircle } from "react-icons/fa";
+import InputStyled from "../styled/InputStyled";
+import ButtonStyled from "../styled/ButtonStyled";
 
 function ListStudent({ id_lista_asistencia }) {
   const router = useRouter();
@@ -34,9 +36,15 @@ function ListStudent({ id_lista_asistencia }) {
   const { dataUser } = useContext(SessionContext);
   const [currentInputId, setCurrentInputId] = useState(null);
   const [isProcessingStudent, setIsProcessingStudent] = useState(false);
+  const [isShowInputsManuals, setIsShowInputsManuals] = useState(false);
   const [dataForm, setDataForm] = useState({
     url: "",
     id_lista_asistencia: id_lista_asistencia,
+  });
+  const [manualData, setManualData] = useState({
+    apellido_alumno: "",
+    nombre_alumno: "",
+    boleta: "",
   });
   const getDataStudent = async (student) => {
     try {
@@ -77,7 +85,7 @@ function ListStudent({ id_lista_asistencia }) {
       ]);
       //console.log(response);
       if (response.status == 200) {
-        localStorage.removeItem("listStudents"+id_lista_asistencia);
+        localStorage.removeItem("listStudents" + id_lista_asistencia);
         toast.success("Se ha guardado correctamente la lista de asistencia");
         router.push("/pages/assistence");
         router.refresh();
@@ -171,14 +179,16 @@ function ListStudent({ id_lista_asistencia }) {
         setStudents(newList);
       }
       localStorage.setItem(
-        "listStudents"+id_lista_asistencia,
+        "listStudents" + id_lista_asistencia,
         JSON.stringify({ students, id_lista_asistencia })
       );
     }
   }, [students]);
 
   useEffect(() => {
-    const storageList = JSON.parse(localStorage.getItem("listStudents"+id_lista_asistencia));
+    const storageList = JSON.parse(
+      localStorage.getItem("listStudents" + id_lista_asistencia)
+    );
     if (storageList) {
       if (storageList.id_lista_asistencia == id_lista_asistencia) {
         let newList = storageList.students.filter((student) => {
@@ -278,7 +288,7 @@ function ListStudent({ id_lista_asistencia }) {
     );
     setStudents(newList);
     if (newList.length == 0) {
-      localStorage.removeItem("listStudents"+id_lista_asistencia);
+      localStorage.removeItem("listStudents" + id_lista_asistencia);
     }
   };
   const focusInputURL = () => {
@@ -305,14 +315,84 @@ function ListStudent({ id_lista_asistencia }) {
   const handleForm = () => {
     setShowForm(!showForm);
   };
+  const handleSubmitManual = (e) => {
+    e.preventDefault();
+  };
+  const handleManualInput = (e) => {
+    setManualData({
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleShowInputsManuals = () => {
+    setIsShowInputsManuals(!isShowInputsManuals);
+  };
   const handleIncident = (student) => {
-    if(isProcessingStudent){
-      toast.warning("Recomendamos esperar que se termine de obtener los datos de los alumnos")
-    }else{
-      router.push(`/pages/incident/${student.apellido_alumno+" "+student.nombre_alumno}/${student.boleta}/${id_lista_asistencia}`);
+    if (isProcessingStudent) {
+      toast.warning(
+        "Recomendamos esperar que se termine de obtener los datos de los alumnos"
+      );
+    } else {
+      router.push(
+        `/pages/incident/${
+          student.apellido_alumno + " " + student.nombre_alumno
+        }/${student.boleta}/${id_lista_asistencia}`
+      );
       router.refresh();
-      toast.info("La lista se guardo temporalmete! 🔒")
+      toast.info("La lista se guardo temporalmete! 🔒");
     }
+  };
+  const FormManualInput = () => {
+    return (
+      <div
+        className={`w-[calc(100%-13rem)] h-screen top-0 absolute flex justify-center items-center
+      transition-all
+      ease-in-out
+      z-30
+      ${
+        isShowInputsManuals ? " bg-[rgb(0,0,0,0.5)] left-[13rem]" : "right-full opacity-0 "
+      }`
+    }
+      >
+        <div className="mt-2 text-center absolute bg-blue-600 text-white p-4 rounded-lg">
+          <p className="text-bold ">¿Hubo algun problema con el alumno?</p>
+          <div className="flex justify-center">
+            <ButtonStyled color="purple" onClick={handleShowInputsManuals}>
+              Agregar manual{" "}
+            </ButtonStyled>
+          </div>
+          {!isShowInputsManuals ? null : (
+            <form onSubmit={handleSubmitManual}>
+              <div className="flex flex-col gap-3 p-2">
+                <InputStyled
+                  placeholder="Apellido"
+                  type="text"
+                  name="apellido"
+                  onChange={handleManualInput}
+                  value={manualData.apellido_alumno}
+                />
+                <InputStyled
+                  placeholder="Nombre"
+                  type="text"
+                  name="nombre"
+                  onChange={handleManualInput}
+                  value={manualData.apellido_alumno}
+                />
+                <InputStyled
+                  placeholder="Boleta"
+                  type="text"
+                  name="Boleta"
+                  onChange={handleManualInput}
+                  value={manualData.apellido_alumno}
+                />
+                <ButtonStyled color="purple">
+                  <p>Registrar</p>
+                </ButtonStyled>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    );
   };
   const FormRegister = () => {
     return (
@@ -328,7 +408,7 @@ function ListStudent({ id_lista_asistencia }) {
       `}
       >
         <div className="bg-blue-700 text-white p-5 flex flex-col items-center justify-center rounded-lg">
-          <div className="flex justify-end w-full">
+          <div className="flex justify-end w-full relative">
             <button
               onClick={() => {
                 handleForm();
@@ -342,7 +422,7 @@ function ListStudent({ id_lista_asistencia }) {
 
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-2 relative"
+            className="flex flex-col gap-2"
             ref={formRef}
           >
             <input
@@ -374,7 +454,7 @@ function ListStudent({ id_lista_asistencia }) {
               </span>
             </button>
           ) : (
-            <div className="absolute bg-blue-800 shadow-2xl p-4 rounded-lg translate-y-[-150px] flex flex-col items-center gap-2 text-green">
+            <div className="absolute top-0 right-0 m-5 bg-blue-800 shadow-2xl p-4 rounded-lg flex flex-col items-center gap-2 text-green">
               <FaCheckCircle size={35} />
               Todo listo para escanear
             </div>
@@ -387,20 +467,22 @@ function ListStudent({ id_lista_asistencia }) {
   return (
     <Suspense fallback={<Loading />}>
       <FormRegister />
+      <FormManualInput />
       <div className="bg-blue-800 rounded-lg p-3 shadow-lg z-10 text-white">
-        <div className="flex justify-start">
+        <div className="flex justify-start gap-3">
           <button
             className="transition-all bg-purple border border-purple hover:bg-blue-800 hover:text-purple p-3 rounded-lg flex items-center"
             onClick={async () => {
               setTimeout(() => {
                 inputURL.current.focus();
-              }, 1000);
+              }, 1000);registro
               handleForm();
             }}
           >
             <AiOutlineQrcode size={25} />
             <p>Iniciar registro con QR</p>
           </button>
+          <ButtonStyled color="yellow">Registrar manual</ButtonStyled>
         </div>
         <ul className="grid grid-cols-6 text-center text-pink font-bold text-xl">
           <li>No. lista</li>
