@@ -4,8 +4,8 @@ export function getDateFormated() {
   const año = fecha.getFullYear();
   const mes = agregarCeroAlInicio(fecha.getMonth() + 1);
   const dia = agregarCeroAlInicio(fecha.getDate());
-
-  const formatoFecha = `${año}-${mes}-${dia}`;
+  
+  const formatoFecha = `${año}-${mes}-${(dia-1)}`;
   return formatoFecha;
 }
 

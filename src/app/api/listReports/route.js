@@ -1,20 +1,7 @@
 import { conn } from "@/lib/mysql";
 import { NextResponse } from "next/server";
 
-function cambiarFormatoFecha(fecha) {
-  // Dividir la fecha en día, mes y año
-  var partesFecha = fecha.split("/");
 
-  // Obtener el día, mes y año
-  var dia = partesFecha[0];
-  var mes = partesFecha[1];
-  var anio = partesFecha[2];
-
-  // Reconstruir la fecha en el formato deseado
-  var nuevaFecha = anio + "/" + mes + "/" + dia;
-
-  return nuevaFecha;
-}
 
 export async function POST(req) {
   try {
@@ -60,6 +47,12 @@ export async function POST(req) {
           fecha_max +
           " AND ttb_asistencia.id_lista_asistencia = "
         : " WHERE ttb_asistencia.id_lista_asistencia =  ";
+    console.log(
+      bodyQuery +
+        bodyWhere +
+        data.list[0].id_lista_asistencia +
+        " ORDER BY 16 ASC"
+    );
     for (let i = 0; i < data.list.length; i++) {
       let dataResponse = await conn.query(
         bodyQuery +
@@ -69,6 +62,7 @@ export async function POST(req) {
       );
       newData[i] = dataResponse[0];
     }
+
     return NextResponse.json(newData);
   } catch (error) {
     console.error(error);
