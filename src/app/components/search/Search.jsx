@@ -11,7 +11,7 @@ import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 import axios from "axios";
 import reportsFormatedWithDate from "../helpers/reportsFormatedWithDate";
 import { ReportListContext } from "../assistance/ListReportsContext";
-import ButtonStyled from "../styled/ButtonStyled";
+import {getDateFormated} from "../helpers/dateFormated"
 function Search({ isChangeInput = false, searchByOtherType = "" }) {
   const { dataAutoComplite } = useContext(AutoCompliteContext);
   const [typeSearch, setChangeTypeSearch] = useState("text");
@@ -24,10 +24,7 @@ function Search({ isChangeInput = false, searchByOtherType = "" }) {
     handleRefreshGroups,
     setIsLoading,
   } = useContext(ReportListContext);
-
-  const date = new Date();
-  const todayDate =
-    date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+  const todayDate = getDateFormated();
   const handleInput = (e) => {
     let text = e.target.value;
     if (!(e.target.name == "grupo" && searchByOtherType.length > 5)) {
