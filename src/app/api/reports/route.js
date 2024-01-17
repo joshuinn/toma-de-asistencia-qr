@@ -42,16 +42,6 @@ export async function POST(req) {
     const joinLista =
       " JOIN `ctb_lista_asistencia` ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
     const joinFecha = fecha_min + " AND " + fecha_max;
-    console.log(
-      "SELECT * FROM `ttb_asistencia` " +
-        joinLista +
-        joinGrupo +
-        joinMestro +
-        joinCiclo +
-        joinMateria +
-        " WHERE `fecha_asistencia` BETWEEN " +
-        joinFecha
-    );
     newData = await conn.query(
       "SELECT * FROM `ttb_asistencia` " +
         joinLista +
