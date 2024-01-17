@@ -1,8 +1,6 @@
 import { conn } from "@/lib/mysql";
 import { NextResponse } from "next/server";
 
-
-
 export async function POST(req) {
   try {
     const data = await req.json();
@@ -24,12 +22,6 @@ export async function POST(req) {
       " JOIN `ctb_lista_asistencia` ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
     let fecha_min = JSON.stringify(data.fecha_min);
     let fecha_max = JSON.stringify(data.fecha_max);
-    fecha_min = cambiarFormatoFecha(fecha_min);
-    fecha_max = cambiarFormatoFecha(fecha_max);
-    if (fecha_min.length == 2 || fecha_max.length == 2) {
-      fecha_min = fecha_min.length == 0 ? fecha_max : fecha_min;
-      fecha_max = fecha_min;
-    }
     const bodyQuery =
       "SELECT * FROM `ttb_asistencia` " +
       joinLista +
@@ -47,12 +39,6 @@ export async function POST(req) {
           fecha_max +
           " AND ttb_asistencia.id_lista_asistencia = "
         : " WHERE ttb_asistencia.id_lista_asistencia =  ";
-    console.log(
-      bodyQuery +
-        bodyWhere +
-        data.list[0].id_lista_asistencia +
-        " ORDER BY 16 ASC"
-    );
     for (let i = 0; i < data.list.length; i++) {
       let dataResponse = await conn.query(
         bodyQuery +

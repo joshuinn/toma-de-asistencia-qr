@@ -19,8 +19,8 @@ export async function POST(req) {
   try {
     const data = await req.json();
     let newData = [];
-    let fecha_min = data.fecha_min;
-    let fecha_max = data.fecha_max;
+    let fecha_min = JSON.stringify(data.fecha_min);
+    let fecha_max = JSON.stringify(data.fecha_max);
     /*
     fecha_min = cambiarFormatoFecha(fecha_min);
     fecha_max = cambiarFormatoFecha(fecha_max);
@@ -42,6 +42,14 @@ export async function POST(req) {
     const joinLista =
       " JOIN `ctb_lista_asistencia` ON ttb_asistencia.id_lista_asistencia = ctb_lista_asistencia.id_lista_asistencia ";
     const joinFecha = fecha_min + " AND " + fecha_max;
+    console.log("SELECT * FROM `ttb_asistencia` " +
+    joinLista +
+    joinGrupo +
+    joinMestro +
+    joinCiclo +
+    joinMateria +
+    " WHERE `fecha_asistencia` BETWEEN " +
+    joinFecha);
     newData = await conn.query(
       "SELECT * FROM `ttb_asistencia` " +
         joinLista +
