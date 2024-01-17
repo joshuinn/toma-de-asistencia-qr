@@ -181,14 +181,12 @@ function ListStudent({ id_lista_asistencia }) {
       localStorage.getItem("listStudents" + id_lista_asistencia)
     );
     if (storageList) {
-      if (storageList.id_lista_asistencia == id_lista_asistencia) {
-        let newList = storageList.students.filter((student) => {
-          if (student.boleta !== "waiting") {
-            return student;
-          }
-        });
-        setStudents(newList);
-      }
+      let newList = storageList.students.filter((student) => {
+        if (student.boleta !== "waiting") {
+          return student;
+        }
+      });
+      setStudents(newList);
     }
   }, []);
 
@@ -225,13 +223,13 @@ function ListStudent({ id_lista_asistencia }) {
       if (prev.length > 0) {
         localStorage.setItem(
           "listStudents" + id_lista_asistencia,
-          JSON.stringify({ students, id_lista_asistencia })
+          JSON.stringify({ students: prev, id_lista_asistencia })
         );
-        return prev;
       }
       return prev;
     });
   }, [students]);
+
   const handleSubmitManual = (e) => {
     e.preventDefault();
     const id = crypto.randomUUID();
