@@ -1,4 +1,4 @@
-"use client";
+// Importa las dependencias necesarias.
 import Link from "next/link";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
@@ -16,14 +16,22 @@ import Loading from "./Loading";
 import { usePathname } from "next/navigation";
 import { SidebarContext } from "./context/SideBarResponsiveContext";
 
+// Componente de la barra lateral.
 function Sidebar({ children }) {
+  // Estado y funciones del contexto de sesión.
   const [page, setPage] = useState("dashboard");
   const { isLogged, handleLogout } = useContext(SessionContext);
+
+  // Estado y referencias para el indicador de página.
   const [isLoading, setIsLoading] = useState(true);
   const pathname = usePathname();
   const indicatorRef = useRef();
   const topPagesRef = useRef();
+
+  // Contexto para mostrar/ocultar la barra lateral.
   const { isShow, handleShow } = useContext(SidebarContext);
+
+  // Páginas disponibles en la barra lateral.
   const pages = [
     "assistence",
     "reports",
@@ -32,14 +40,17 @@ function Sidebar({ children }) {
     "invite",
     "config",
   ];
+
+  // Función para ajustar el indicador de página.
   const handleIndicator = async () => {
     const indicator = indicatorRef.current;
     const topIndicatorY =
       (await topPagesRef.current.getBoundingClientRect().y) ?? 0;
-    const ipage = pages.findIndex((item) => item == page);
+    const ipage = pages.findIndex((item) => item === page);
     indicator.style.transform = `translateY(${topIndicatorY + ipage * 47}px)`;
   };
 
+  // Efecto para inicializar la carga y establecer la página actual.
   useEffect(() => {
     setIsLoading(true);
     if (isLogged) {
@@ -52,18 +63,21 @@ function Sidebar({ children }) {
       }
     }
 
+    // Simula una carga para mostrar el componente de carga.
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
     return () => clearTimeout(timer);
   }, [pathname]);
 
+  // Efecto para ajustar el indicador de página cuando cambia la página actual.
   useEffect(() => {
     if (isLogged) {
       handleIndicator();
     }
   }, [page, isLogged]);
 
+  // Si el usuario no está autenticado, renderiza el contenido sin la barra lateral.
   if (!isLogged) {
     return (
       <div>
@@ -72,7 +86,6 @@ function Sidebar({ children }) {
       </div>
     );
   }
-
   return (
     <>
       <div className="flex bg-blue-700">

@@ -1,4 +1,4 @@
-"use client";
+// Importar React y componentes relacionados.
 import React from "react";
 import ButtonStyled from "../styled/ButtonStyled";
 import InputStyled from "../styled/InputStyled";
@@ -6,6 +6,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { studentNameFormated } from "../helpers/studentNameFormated";
 import { formatText } from "../helpers/formatTextList.helper";
 
+// Definir el componente funcional FormManualInput.
 function FormManualInput({
   isShowInputsManuals,
   handleShowInputsManuals,
@@ -13,6 +14,7 @@ function FormManualInput({
   manualData,
   setManualData,
 }) {
+  // Definir la función handleManualInput para manejar los cambios en los campos del formulario.
   const handleManualInput = (e) => {
     let text = "";
     if (e.target.name !== "boleta") {
@@ -25,6 +27,8 @@ function FormManualInput({
       [e.target.name]: text,
     });
   };
+
+  // Renderizar el componente FormManualInput.
   return (
     <div
       className={`w-[calc(100%-13rem)] h-screen top-0 absolute flex justify-center items-center
@@ -51,6 +55,7 @@ function FormManualInput({
         {!isShowInputsManuals ? null : (
           <form onSubmit={handleSubmitManual}>
             <div className="flex flex-col gap-3 p-2">
+              {/* Input para el apellido del alumno */}
               <InputStyled
                 placeholder="Apellido"
                 type="text"
@@ -58,6 +63,7 @@ function FormManualInput({
                 onChange={handleManualInput}
                 value={manualData.apellido_alumno ?? ""}
               />
+              {/* Input para el nombre del alumno */}
               <InputStyled
                 placeholder="Nombre"
                 type="text"
@@ -65,6 +71,7 @@ function FormManualInput({
                 onChange={handleManualInput}
                 value={manualData.nombre_alumno ?? ""}
               />
+              {/* Input para la boleta del alumno */}
               <InputStyled
                 placeholder="Boleta"
                 type="numeric"
@@ -73,6 +80,7 @@ function FormManualInput({
                 value={manualData.boleta ?? ""}
                 required
               />
+              {/* Botón para registrar */}
               <ButtonStyled color="purple">
                 <p>Registrar</p>
               </ButtonStyled>
@@ -84,4 +92,5 @@ function FormManualInput({
   );
 }
 
+// Exportar el componente FormManualInput como componente predeterminado.
 export default FormManualInput;

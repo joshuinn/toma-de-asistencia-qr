@@ -1,9 +1,10 @@
-"use client";
+// Importar las bibliotecas necesarias para el gráfico
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+// Definir colores de fondo y bordes para cada categoría
 const BACK_PURPLE = "rgba(130, 62, 241,0.5)";
 const BACK_BLUE = "rgba(50, 116, 245,0.5)";
 const BACK_GREEN = "rgba(79, 230, 228,0.5)";
@@ -16,6 +17,7 @@ const BORDER_GREEN = "rgba(79, 230, 228,1)";
 const BORDER_PINK = "rgba(237, 58, 152,1)";
 const BORDER_YELLOW = "rgba(247, 146, 17,1)";
 
+// Definir un conjunto de colores para todas las categorías
 const allColors = [
   {
     backgroundColor: BACK_PINK,
@@ -38,15 +40,19 @@ const allColors = [
     borderColor: BORDER_PURPLE,
   },
 ];
+
+// Función para obtener el objeto de color correspondiente a un nombre de color
 function getColor(color) {
   const colors = ["pink", "blue", "yellow", "green", "purple"];
-  const indexColor = colors.findIndex((col) => color == col);
+  const indexColor = colors.findIndex((col) => color === col);
   const newColor = allColors[indexColor] ?? {
     backgroundColor: BACK_PURPLE,
     borderColor: BORDER_PURPLE,
   };
   return newColor;
 }
+
+// Componente principal GenPieChart
 const GenPieChart = ({
   data,
   titleColor,
@@ -54,9 +60,12 @@ const GenPieChart = ({
   secondColor,
   title = "Asistencia",
 }) => {
+  // Obtener los objetos de color correspondientes
   const newMainColor = getColor(mainColor);
   const newSecondColor = getColor(secondColor);
   const newTitleColor = getColor(titleColor);
+
+  // Definir los datos del gráfico
   const chartData = {
     labels: ["Asistencia", "Inasistencia"],
     datasets: [
@@ -75,6 +84,7 @@ const GenPieChart = ({
 
   return (
     <div className="bg-blue-600 rounded-lg shadow-lg p-4 flex justify-evenly items-center h-72 mt-4">
+      {/* Sección de información del gráfico */}
       <div className="flex flex-col justify-around text-center h-full">
         <div>
           <h3 className={`text-xl font-bold text-${mainColor}`}>{title}</h3>
@@ -90,10 +100,14 @@ const GenPieChart = ({
           </p>
         </div>
       </div>
+
+      {/* Sección del gráfico */}
       <div className="h-60">
         <Pie data={chartData} />
       </div>
     </div>
   );
 };
+
+// Exportar el componente GenPieChart por defecto
 export default GenPieChart;

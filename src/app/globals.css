@@ -1,17 +1,30 @@
+/* Importar la fuente "Open Sans" desde Google Fonts. */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500;700;800&display=swap");
+
 /*
+Descomentado por si se desea usar la fuente "Montserrat" en lugar de "Open Sans".
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;500;700;900&display=swap");
 */
 
+/* Incluir estilos base de Tailwind CSS. */
 @tailwind base;
+
+/* Incluir estilos de componentes de Tailwind CSS. */
 @tailwind components;
+
+/* Incluir utilidades de Tailwind CSS. */
 @tailwind utilities;
 
+/* Aplicar estilos de fuente predeterminados para todos los elementos. */
 * {
-  /*font-family: "Montserrat", sans-serif;*/
+  /* Usar la fuente "Open Sans" como fuente predeterminada. */
   font-family: "Open Sans", sans-serif;
+
+  /* Establecer el peso de la fuente en 500 (medio). */
   font-weight: 500;
 }
+
+/* Estilo para un elemento con clase ".indicator-shadow" antes del contenido. */
 .indicator-shadow::before {
   content: "";
   position: absolute;
@@ -24,7 +37,7 @@
   rotate: 180deg;
 }
 
-
+/* Estilo para un elemento con clase ".indicator-shadow" después del contenido. */
 .indicator-shadow::after {
   content: "";
   position: absolute;
