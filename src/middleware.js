@@ -22,5 +22,6 @@ export const config = {
     "/pages/config",
     "/pages/graphs",
     "/pages/invite",
+    "/pages/incident",
   ],
 };
